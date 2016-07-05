@@ -308,8 +308,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2016/07/05/2015-10-22-lua-oop/" itemprop="url">
+                  lua 面向对象实现
                 </a>
               
             
@@ -322,7 +322,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T19:33:35+08:00" content="2016-07-05">
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
               2016-07-05
             </time>
           </span>
@@ -333,8 +333,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/hello-world/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-10-22-lua-oop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-22-lua-oop/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -344,7 +344,7 @@
 
           
           
-             <span id="/2016/07/05/hello-world/" class="leancloud_visitors" data-flag-title="Hello World">
+             <span id="/2016/07/05/2015-10-22-lua-oop/" class="leancloud_visitors" data-flag-title="lua 面向对象实现">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -368,15 +368,2583 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
+<ul>
+<li><p>类</p>
+<pre><code>Name = {}
+   function Name:new(o) 
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+ end
+
+ function Name:setName(name)
+    self.name = name
+ end
+
+ function Name:getName()
+    return self.Name
+end
+
+-- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
+</code></pre></li>
+<li><p>单继承</p>
+<pre><code>--定义继承
+SpecName = Name:New({age=25})
+function SpecName:setNewName(name)
+      if self.getAge() &gt; 9 then
+          self:setName(name)
+      else
+          error(&quot;You must give an age!&quot;)
+      end
+end
+
+function SpecName:getAge()
+       return self.age
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>多继承</p>
+<pre><code>function search(k, plist)
+    for i=1,#plist do
+         if plist[i][k] ~= nil then return plist[i][k] end
+     end
+end
+
+function createClass(...)
+    local args = {...}
+    local c = {}
+    setmetatable(c, {__index = function(self, k) 
+        return search(k, args) 
+    end})
+
+    c.__index = c
+    function c:new(o) 
+        o = o or {}
+        setmetatable(o, c)
+        return o
+    end
+    return c 
+end
+
+Balance = {balance= 10}
+function Balance:new(o) 
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+end
+
+function Balance:despoit(v)
+    self.balance = self.balance + v
+end
+
+function Balance:withDraw(v)
+    if self.balance &lt; v then
+         error(&quot;Bad case&quot;)
+    else
+        self.balance = self.balance - v
+    end
+end
+
+Name={}
+function Name:new(o) 
+     o = o or {}
+     setmetatable(o, {__index = self})
+     return o
+end
+
+function Name:setName(name)
+    self.name = name
+end
+
+function Name:getName()
+    return self.name
+end
+
+c = createClass(Balance, Name)
+c:despoit(100)
+c:withDraw(10)
+print(c.balance)  --&gt; 100
+c:setName(&quot;wbz&quot;)
+print(c:getName()) --&gt; wbz
+</code></pre></li>
+<li><p>隐藏私有变量</p>
+<pre><code> function newAccount(initBalance)
+    local self = {balance=initBalance}
+    local withdraw = function(v)
+        self.balance = self.balance - v 
+    end                    
+
+    local deposit = function (v) 
+           self.balance = self.balance + v 
+    end                    
+
+    local getBalance = function()
+           return self.balance
+    end                    
+    return {               
+        withdraw=withdraw, 
+        deposit = deposit, 
+        getBalance = getBalance,    
+     }
+end 
+</code></pre></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2016-06-29-lru-go/" itemprop="url">
+                  go语言实现LRU Cache
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2016-06-29-lru-go/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-06-29-lru-go/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2016-06-29-lru-go/" class="leancloud_visitors" data-flag-title="go语言实现LRU Cache">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是LRU-Cache"><a href="#什么是LRU-Cache" class="headerlink" title="什么是LRU Cache"></a>什么是LRU Cache</h2><blockquote>
+<p>LRU是Least Recently Used的缩写，意思是最近最少使用，它是一种Cache替换算法。 什么是Cache？狭义的Cache指的是位于CPU和主存间的快速RAM， 通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。 广义上的Cache指的是位于速度相差较大的两种硬件之间， 用于协调两者数据传输速度差异的结构。除了CPU与主存之间有Cache， 内存与硬盘之间也有Cache，乃至在硬盘与网络之间也有某种意义上的Cache── 称为Internet临时文件夹或网络内容缓存等。</p>
+</blockquote>
+<p>Cache的容量有限，因此当Cache的容量用完后，而又有新的内容需要添加进来时， 就需要挑选并舍弃原有的部分内容，从而腾出空间来放新内容。LRU Cache 的替换原则就是将最近最少使用的内容替换掉(还有一种是FIFO方式进行缓存替换)。其实，LRU译成最久未使用会更形象， 因为该算法每次替换掉的就是一段时间内最久没有使用过的内容。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>LRU一般是由双向链表结合一个hash结构实现， 双向链表用于存储数据结点，并且它是按照结点最近被使用的时间来存储的。 如果一个结点被访问了， 我们有理由相信它在接下来的一段时间被访问的概率要大于其它结点。于是， 我们把它放到双向链表的头部。当我们往双向链表里插入一个结点， 我们也有可能很快就会使用到它，同样把它插入到头部。 我们使用这种方式不断地调整着双向链表，链表尾部的结点自然也就是最近一段时间， 最久没有使用到的结点。那么，当我们的Cache满了， 需要替换掉的就是双向链表中最后的那个结点(不是尾结点，头尾结点不存储实际内容)。</p>
+<h2 id="对外暴露的接口"><a href="#对外暴露的接口" class="headerlink" title="对外暴露的接口"></a>对外暴露的接口</h2><p>LRUCache对外暴露三个接口</p>
+<pre><code class="golang">Get(K key)
+Put(K key, V value)
+</code></pre>
+<p>当我们初始化的时候只需要调用NewLRUCache(capacity)即可初始化我们的Cache的容量，需要塞数据的时候调用Put方法，需要获取数据的时候调用Get方法。</p>
+<p>当我们通过键值来访问类型为T的数据时，调用Get函数。如果键值为key的数据不存在在Cache中就返回-1；如果已经在 Cache中，那就返回该数据，同时将存储该数据的结点移到双向链表头部。 如果我们查询的数据不在Cache中，我们就可以通过Put接口将数据插入双向链表中。 如果此时的Cache还没满，那么我们将新结点插入到链表头部， 同时用哈希表保存结点的键值及结点地址对。如果Cache已经满了， 我们就将链表中的最后一个结点(注意不是尾结点)的内容替换为新内容， 然后移动到头部，更新哈希表。</p>
+<h2 id="GO-代码"><a href="#GO-代码" class="headerlink" title="GO 代码"></a>GO 代码</h2><pre><code class="golang">➜  lru cat lru.<span class="keyword">go</span> 
+<span class="keyword">package</span> lru
+
+<span class="keyword">import</span> <span class="string">"fmt"</span>
+
+<span class="keyword">type</span> Node <span class="keyword">struct</span> {
+        Key   <span class="keyword">interface</span>{}
+        Value <span class="keyword">interface</span>{}
+        Prev  *Node
+        Next  *Node
+}
+
+<span class="keyword">type</span> LRUCache <span class="keyword">struct</span> {
+        Head, Tail *Node
+        Capacity   <span class="keyword">int</span>
+        Map        <span class="keyword">map</span>[<span class="keyword">interface</span>{}]*Node
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">NewLRUCache</span><span class="params">(capacity <span class="keyword">int</span>)</span> *<span class="title">LRUCache</span></span> {
+        l := &amp;LRUCache{}
+        l.Capacity = capacity
+        l.Head = &amp;Node{}
+        l.Tail = &amp;Node{}
+        l.Head.Next = l.Tail
+        l.Tail.Prev = l.Head
+        l.Head.Prev = <span class="literal">nil</span>
+        l.Tail.Next = <span class="literal">nil</span>
+        l.Map = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">interface</span>{}]*Node)
+        <span class="keyword">return</span> l
+}
+
+<span class="comment">//分离节点</span>
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">detach</span><span class="params">(n *Node)</span></span> {
+        n.Prev.Next = n.Next
+        n.Next.Prev = n.Prev
+}
+
+<span class="comment">//节点插入头部</span>
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">attach</span><span class="params">(n *Node)</span></span> {
+        n.Prev = l.Head
+        n.Next = l.Head.Next
+        l.Head.Next = n
+        n.Next.Prev = n
+}
+
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">Put</span><span class="params">(k <span class="keyword">interface</span>{}, v <span class="keyword">interface</span>{})</span></span> {
+        oldV, ok := l.Map[k]
+        <span class="keyword">if</span> ok {
+                l.detach(oldV)
+                oldV.Value = v
+        } <span class="keyword">else</span> {
+                <span class="keyword">var</span> n *Node
+                <span class="keyword">if</span> <span class="built_in">len</span>(l.Map) &gt;= l.Capacity {
+                        n = l.Tail.Prev
+                        l.detach(n)
+                        <span class="built_in">delete</span>(l.Map, n.Key)
+                } <span class="keyword">else</span> {
+                        n = <span class="built_in">new</span>(Node)
+                }
+                n.Key = k
+                n.Value = v
+                l.Map[k] = n
+                l.attach(n)
+        }
+}
+
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">Get</span><span class="params">(k <span class="keyword">interface</span>{})</span> <span class="title">interface</span></span>{} {
+        v, ok := l.Map[k]
+        <span class="keyword">if</span> ok {
+                l.detach(v)
+                l.attach(v)
+                <span class="keyword">return</span> v.Value
+        }
+        <span class="keyword">return</span> <span class="number">-1</span>
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {
+    l := NewLRUCache(<span class="number">10</span>)
+        l.Put(<span class="string">"str"</span>, <span class="number">1</span>)
+        fmt.Println(l.Get(<span class="string">"str"</span>))
+        l.Put(<span class="number">1</span>, <span class="number">2</span>)
+        fmt.Println(l.Get(<span class="number">1</span>))
+        fmt.Println(l.Get(<span class="string">"str"</span>).(<span class="keyword">int</span>))
+}
+
+
+➜  lru cat lru_test.<span class="keyword">go</span> 
+<span class="keyword">package</span> lru
+
+<span class="keyword">import</span> (
+        <span class="string">"testing"</span>
+)
+
+<span class="function"><span class="keyword">func</span> <span class="title">testEq</span><span class="params">(a, b []<span class="keyword">int</span>)</span> <span class="title">bool</span></span> {
+        <span class="keyword">if</span> a == <span class="literal">nil</span> &amp;&amp; b == <span class="literal">nil</span> {
+                <span class="keyword">return</span> <span class="literal">true</span>
+        }
+        <span class="keyword">if</span> a == <span class="literal">nil</span> || b == <span class="literal">nil</span> {
+                <span class="keyword">return</span> <span class="literal">false</span>
+        }
+        <span class="keyword">if</span> <span class="built_in">len</span>(a) != <span class="built_in">len</span>(b) {
+                <span class="keyword">return</span> <span class="literal">false</span>
+        }
+        <span class="keyword">for</span> i := <span class="keyword">range</span> a {
+                <span class="keyword">if</span> a[i] != b[i] {
+                        <span class="keyword">return</span> <span class="literal">false</span>
+                }
+        }
+        <span class="keyword">return</span> <span class="literal">true</span>
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">Test_Get</span><span class="params">(t *testing.T)</span></span> {
+        l := NewLRUCache(<span class="number">2</span>)
+        l.Put(<span class="string">"sky"</span>, <span class="string">"SKY"</span>)
+        <span class="keyword">if</span> l.Get(<span class="string">"sky"</span>) != <span class="string">"SKY"</span> {
+                t.Error(<span class="string">"test get sky failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky success"</span>)
+        }
+        l.Put(<span class="string">"sky1"</span>, <span class="number">2</span>)
+        <span class="keyword">if</span> l.Get(<span class="string">"sky1"</span>) != <span class="number">2</span> {
+                t.Error(<span class="string">"test get sky1 failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky1 success"</span>)
+        }
+        l.Put(<span class="string">"sky2"</span>, []<span class="keyword">int</span>{<span class="number">1</span>, <span class="number">2</span>})
+        <span class="keyword">if</span> testEq(l.Get(<span class="string">"sky2"</span>).([]<span class="keyword">int</span>), []<span class="keyword">int</span>{<span class="number">1</span>, <span class="number">2</span>}) {
+                t.Log(<span class="string">"test get sky2 success"</span>)
+        } <span class="keyword">else</span> {
+                t.Error(<span class="string">"test get sky2 failed!!!"</span>)
+        }
+        <span class="keyword">if</span> l.Get(<span class="string">"sky"</span>) != <span class="number">-1</span> {
+                t.Error(<span class="string">"test get sky failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky success"</span>)
+        }
+
+        <span class="keyword">if</span> l.Get(<span class="string">"sky1"</span>) != <span class="number">2</span> {
+                t.Error(<span class="string">"test get sky1 failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky1 success"</span>)
+        }
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAdd</span><span class="params">(b *testing.B)</span></span> {
+        l := NewLRUCache(<span class="number">100</span>)
+
+        <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ {
+                l.Put(i, i*i)
+        }
+}
+
+➜  lru <span class="keyword">go</span> version
+<span class="keyword">go</span> version go1<span class="number">.5</span> linux/amd64
+
+➜  lru <span class="keyword">go</span> test -v lru.<span class="keyword">go</span> lru_test.<span class="keyword">go</span>
+=== RUN   Test_Get
+--- PASS: Test_Get (<span class="number">0.00s</span>)
+        lru_test.<span class="keyword">go</span>:<span class="number">31</span>: test get sky success
+        lru_test.<span class="keyword">go</span>:<span class="number">37</span>: test get sky1 success
+        lru_test.<span class="keyword">go</span>:<span class="number">41</span>: test get sky2 success
+        lru_test.<span class="keyword">go</span>:<span class="number">48</span>: test get sky success
+        lru_test.<span class="keyword">go</span>:<span class="number">54</span>: test get sky1 success
+PASS
+ok      command-line-arguments  <span class="number">0.003s</span>
+
+➜  lru <span class="keyword">go</span> test -test.bench=<span class="string">".*"</span> lru_test.<span class="keyword">go</span> lru.<span class="keyword">go</span> 
+PASS
+BenchmarkAdd<span class="number">-2</span>   <span class="number">3000000</span>               <span class="number">421</span> ns/op
+ok      command-line-arguments  <span class="number">1.695s</span>
+</code></pre>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.cs.uml.edu/~jlu1/doc/codes/lruCache.html" target="_blank" rel="external">http://www.cs.uml.edu/~jlu1/doc/codes/lruCache.html</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="url">
+                  10 tips for 10x application performance
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/" class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>10条建议让你的应用性能提升10倍</p>
+<p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-20-go-basic-data-structure/" itemprop="url">
+                  Go 中常用的数据结构介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-20-go-basic-data-structure/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-20-go-basic-data-structure/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-10-20-go-basic-data-structure/" class="leancloud_visitors" data-flag-title="Go 中常用的数据结构介绍">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#Array(数组)<br>内部机制</p>
+<p>在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。</p>
+<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。</p>
+<p>数组声明和初始化</p>
+<p>通过指定数据类型和元素个数(数组长度)来声明数组。</p>
+<pre><code>// 声明一个长度为5的整数数组
+var array [5]int
+</code></pre><p>一旦数组被声明了，那么它的数据类型跟长度都不能再被改变。如果你需要更多的元素，那么只能创建一个你想要长度的新的数组，然后把原有数组的元素拷贝过去。</p>
+<p>Go 语言中任何变量被声明时，都会被默认初始化为各自类型对应的 0 值，数组当然也不例外。当一个数组被声明时，它里面包含的每个元素都会被初始化为 0 值。</p>
+<p>一种快速创建和初始化数组的方法是使用数组字面值。数组字面值允许我们声明我们需要的元素个数并指定数据类型：</p>
+<pre><code>// 声明一个长度为5的整数数组
+// 初始化每个元素
+array := [5]int{7, 77, 777, 7777, 77777}
+</code></pre><p> 如果你把长度写成 …，Go 编译器将会根据你的元素来推导出长度：</p>
+<pre><code> // 通过初始化值的个数来推导出数组容量
+array := [...]int{7, 77, 777, 7777, 77777}
+</code></pre><p>如果我们知道想要数组的长度，但是希望对指定位置元素初始化，可以这样：</p>
+<pre><code>// 声明一个长度为5的整数数组
+// 为索引为1和2的位置指定元素初始化
+// 剩余元素为0值
+array := [5]int{1: 77, 2: 777}
+</code></pre><p>##使用数组</p>
+<p>使用 [] 操作符来访问数组元素：</p>
+<pre><code>array := [5]int{7, 77, 777, 7777, 77777}    
+// 改变索引为2的元素的值
+array[2] = 1
+</code></pre><p>我们可以定义一个指针数组：</p>
+<pre><code>array := [5]*int{0: new(int), 1: new(int)}
+// 为索引为0和1的元素赋值
+*array[0] = 7
+*array[1] = 77
+</code></pre><p>在 Go 语言中数组是一个值，所以可以用它来进行赋值操作。一个数组可以被赋值给任意相同类型的数组：</p>
+<pre><code>var array1 [5]string
+array2 := [5]string{&quot;Red&quot;, &quot;Blue&quot;, &quot;Green&quot;, &quot;Yellow&quot;, &quot;Pink&quot;}
+array1 = array2
+</code></pre><p>注意数组的类型同时包括数组的长度和可以被存储的元素类型，数组类型完全相同才可以互相赋值，比如下面这样就不可以：</p>
+<pre><code>var array1 [4]string
+array2 := [5]string{&quot;Red&quot;, &quot;Blue&quot;, &quot;Green&quot;, &quot;Yellow&quot;, &quot;Pink&quot;}
+array1 = array2
+// 编译器会报错
+Compiler Error:
+cannot use array2 (type [5]string) as type [4]string in assignment
+</code></pre><p>拷贝一个指针数组实际上是拷贝指针值，而不是指针指向的值：</p>
+<pre><code>var array1 [3]*string
+array2 := [3]*string{new(string), new(string), new(string)}
+*array2[0] = &quot;Red&quot;
+*array2[1] = &quot;Blue&quot;
+*array2[2] = &quot;Green&quot;
+array1 = array2
+// 赋值完成后，两组指针数组指向同一字符串
+</code></pre><p>##多维数组</p>
+<p>数组总是一维的，但是可以组合成多维的。多维数组通常用于有父子关系的数据或者是坐标系数据：</p>
+<pre><code>// 声明一个二维数组
+var array [4][2]int
+</code></pre><p>使用数组字面值声明并初始化</p>
+<p>指定外部数组索引位置初始化</p>
+<p>同时指定内外部数组索引位置初始化</p>
+<p>同样通过 [] 操作符来访问数组元素：</p>
+<pre><code>var array [2][2]int
+array[0][0] = 0
+array[0][1] = 1
+array[1][0] = 2
+array[1][1] = 3
+</code></pre><p>也同样的相同类型的多维数组可以相互赋值：</p>
+<pre><code>var array1 = [2][2]int
+var array2 = [2][2]int
+array[0][0] = 0
+array[0][1] = 1
+array[1][0] = 2
+array[1][1] = 3
+array1 = array2
+</code></pre><p>因为数组是值，我们可以拷贝单独的维：</p>
+<pre><code>var array3 [2]int = array1[1]
+var value int = array1[1][0]
+</code></pre><p>##在函数中传递数组</p>
+<p>在函数中传递数组是非常昂贵的行为，因为在函数之间传递变量永远是传递值，所以如果变量是数组，那么意味着传递整个数组，即使它很大很大很大。。。</p>
+<p>举个栗子，创建一个有百万元素的整形数组，在64位的机器上它需要8兆的内存空间，来看看我们声明它和传递它时发生了什么：</p>
+<pre><code>var array [1e6]int
+foo(array)
+func foo(array [1e6]int) {
+      ...
+}
+</code></pre><p>每一次 foo 被调用，8兆内存将会被分配在栈上。一旦函数返回，会弹栈并释放内存，每次都需要8兆空间。</p>
+<p>Go 语言当然不会这么傻，有更好的方法来在函数中传递数组，那就是传递指向数组的指针，这样每次只需要分配8字节内存：</p>
+<pre><code>var array [1e6]int
+foo(&amp;array)
+func foo(array *[1e6]int){
+      ...
+}
+</code></pre><p>但是注意如果你在函数中改变指针指向的值，那么原始数组的值也会被改变。幸运的是 slice(切片)可以帮我们处理好这些问题，来一起看看。</p>
+<p>#Slice(切片)</p>
+<p>##内部机制和基础</p>
+<p>slice 是一种可以动态数组，可以按我们的希望增长和收缩。它的增长操作很容易使用，因为有内建的 append 方法。我们也可以通过 relice 操作化简 slice。因为 slice 的底层内存是连续分配的，所以 slice 的索引，迭代和垃圾回收性能都很好。</p>
+<p>slice 是对底层数组的抽象和控制。它包含 Go 需要对底层数组管理的三种元数据，分别是：</p>
+<p>指向底层数组的指针<br>slice 中元素的长度<br>slice 的容量(可供增长的最大值)</p>
+<p>##创建和初始化</p>
+<p>Go 中创建 slice 有很多种方法，我们一个一个来看。</p>
+<p>第一个方法是使用内建的函数 make。当我们使用 make 创建时，一个选项是可以指定 slice 的长度：</p>
+<pre><code>slice := make([]string, 5)
+</code></pre><p>如果只指定了长度，那么容量默认等于长度。我们可以分别指定长度和容量：</p>
+<pre><code>slice := make([]int, 3, 5)
+</code></pre><p>当我们分别指定了长度和容量，我们创建的 slice 就可以拥有一开始并没有访问的底层数组的容量。上面代码的 slice 中，可以访问3个元素，但是底层数组有5个元素。两个与长度不相干的元素可以被 slice 来用。新创建的 slice 同样可以共享底层数组和已存在的容量。</p>
+<p>不允许创建长度大于容量的 slice：</p>
+<pre><code>slice := make([]int, 5, 3)
+Compiler Error:
+len larger than cap in make([]int)
+</code></pre><p>惯用的创建 slice 的方法是使用 slice 字面量。跟创建数组很类似，不过不用指定 []里的值。初始的长度和容量依赖于元素的个数：</p>
+<pre><code>// 创建一个字符串 slice
+// 长度和容量都是 5
+slice := []string{&quot;Red&quot;, &quot;Blue&quot;, &quot;Green&quot;, &quot;Yellow&quot;, &quot;Pink&quot;}
+</code></pre><p>在使用 slice 字面量创建 slice 时有一种方法可以初始化长度和容量，那就是初始化索引。下面是个例子：</p>
+<pre><code>// 创建一个字符串 slice
+// 初始化一个有100个元素的空的字符串 slice
+slice := []string{99: &quot;&quot;}
+</code></pre><p>##nil 和 empty slice</p>
+<p>有的时候我们需要创建一个 nil slice，创建一个 nil slice 的方法是声明它但不初始化它：</p>
+<pre><code>var slice []int
+</code></pre><p>创建一个 nil slice 是创建 slice 最基本的方法，很多标准库和内建函数都可以使用它。当我们想要表示一个并不存在的 slice 时它变得非常有用，比如一个返回 slice 的函数中发生异常的时候。</p>
+<p>创建 empty slice 的方法就是声明并初始化一下：</p>
+<pre><code>// 使用 make 创建
+silce := make([]int, 0)
+// 使用 slice 字面值创建
+slice := []int{}
+</code></pre><p>empty slice 包含0个元素并且底层数组没有分配存储空间。当我们想要表示一个空集合时它很有用处，比如一个数据库查询返回0个结果。</p>
+<p>不管我们用 nil slice 还是 empty slice，内建函数 append，len和cap的工作方式完全相同。</p>
+<p>##使用 slice</p>
+<p>为一个指定索引值的 slice 赋值跟之前数组赋值的做法完全相同。改变单个元素的值使用 [] 操作符：</p>
+<pre><code>slice := []int{10, 20, 30, 40, 50}
+slice[1] = 25
+</code></pre><p>我们可以在底层数组上对一部分数据进行 slice 操作，来创建一个新的 slice：</p>
+<pre><code>// 长度为5，容量为5
+slice := []int{10, 20, 30, 40, 50}
+// 长度为2，容量为4
+newSlice := slice[1:3]
+</code></pre><p>在 slice 操作之后我们得到了两个 slice，它们共享底层数组。但是它们能访问底层数组的范围却不同，newSlice 不能访问它头指针前面的值。</p>
+<p>计算任意 new slice 的长度和容量可以使用下面的公式：</p>
+<pre><code>对于 slice[i:j] 和底层容量为 k 的数组
+长度：j - i
+容量：k - i
+</code></pre><p>必须再次明确一下现在是两个 slice 共享底层数组，因此只要有一个 slice 改变了底层数组的值，那么另一个也会随之改变：</p>
+<pre><code>slice := []int{10, 20, 30, 40, 50}
+newSlice := slice[1:3]
+newSlice[1] = 35
+</code></pre><p>改变 newSlice 的第二个元素的值，也会同样改变 slice 的第三个元素的值。<br>一个 slice 只能访问它长度范围内的索引，试图访问超出长度范围的索引会产生一个运行时错误。容量只可以用来增长，它只有被合并到长度才可以被访问：</p>
+<pre><code>slice := []int{10, 20, 30, 40, 50}    
+newSlice := slice[1:3]
+newSlice[3] = 45
+Runtime Exception:
+panic: runtime error: index out of range
+容量可以被合并到长度里，通过内建的 append 函数。
+</code></pre><p>##slice 增长</p>
+<p>slice 比 数组的优势就在于它可以按照我们的需要增长，我们只需要使用 append 方法，然后 Go 会为我们做好一切。</p>
+<p>使用 append 方法时我们需要一个源 slice 和需要附加到它里面的值。当 append 方法返回时，它返回一个新的 slice，append 方法总是增长 slice 的长度，另一方面，如果源 slice 的容量足够，那么底层数组不会发生改变，否则会重新分配内存空间。</p>
+<pre><code>// 创建一个长度和容量都为5的 slice
+slice := []int{10, 20, 30, 40, 50}
+// 创建一个新的 slice
+newSlice := slice[1:3]
+// 为新的 slice append 一个值
+newSlice = append(newSlice, 60)
+</code></pre><p>因为 newSlice 有可用的容量，所以在 append 操作之后 slice 索引为 3 的值也变成了 60，之前说过这是因为 slice 和 newSlice 共享同样的底层数组。<br>如果没有足够可用的容量，append 函数会创建一个新的底层数组，拷贝已存在的值和将要被附加的新值：</p>
+<pre><code>// 创建长度和容量都为4的 slice
+slice := []int{10, 20, 30, 40}
+// 附加一个新值到 slice，因为超出了容量，所以会创建新的底层数组
+newSlice := append(slice, 50)
+</code></pre><p>append 函数重新创建底层数组时，容量会是现有元素的两倍(前提是元素个数小于1000)，如果元素个数超过1000，那么容量会以 1.25 倍来增长。</p>
+<p>##slice 的第三个索引参数</p>
+<p>slice 还可以有第三个索引参数来限定容量，它的目的不是为了增加容量，而是提供了对底层数组的一个保护机制，以方便我们更好的控制 append 操作，举个栗子：</p>
+<pre><code>source := []string{&quot;apple&quot;, &quot;orange&quot;, &quot;plum&quot;, &quot;banana&quot;, &quot;grape&quot;}
+// 接着我们在源 slice 之上创建一个新的 slice
+slice := source[2:3:4]
+</code></pre><p>新创建的 slice 长度为 1，容量为 2，可以看出长度和容量的计算公式也很简单：</p>
+<pre><code>对于 slice[i:j:k]  或者 [2:3:4]
+长度： j - i       或者   3 - 2
+容量： k - i       或者   4 - 2
+</code></pre><p>如果我们试图设置比可用容量更大的容量，会得到一个运行时错误：</p>
+<pre><code>slice := source[2:3:6]
+Runtime Error:
+panic: runtime error: slice bounds out of range
+</code></pre><p>限定容量最大的用处是我们在创建新的 slice 时候限定容量与长度相同，这样以后再给新的 slice 增加元素时就会分配新的底层数组，而不会影响原有 slice 的值：</p>
+<pre><code>source := []string{&quot;apple&quot;, &quot;orange&quot;, &quot;plum&quot;, &quot;banana&quot;, &quot;grape&quot;}
+// 接着我们在源 slice 之上创建一个新的 slice
+// 并且设置长度和容量相同
+slice := source[2:3:3]
+// 添加一个新元素
+slice = append(slice, &quot;kiwi&quot;)
+</code></pre><p>如果没有第三个索引参数限定，添加 kiwi 这个元素时就会覆盖掉 banana。<br>内建函数 append 是一个变参函数，意思就是你可以一次添加多个元素，比如：</p>
+<pre><code>s1 := []int{1, 2}
+s2 := []int{3, 4}
+fmt.Printf(&quot;%v\n&quot;, append(s1, s2...))
+Output:
+[1 2 3 4]
+</code></pre><p>##迭代 slice</p>
+<p>slice 也是一种集合，所以可以被迭代，用 for 配合 range 来迭代：</p>
+<pre><code>slice := []int{10, 20, 30, 40, 50}
+for index, value := range slice {
+      fmt.Printf(&quot;Index: %d  Value: %d\n&quot;, index, value)
+}
+Output:
+Index: 0  Value: 10
+Index: 1  Value: 20
+Index: 2  Value: 30
+Index: 3  Value: 40
+Index: 4  Value: 50
+</code></pre><p>当迭代时 range 关键字会返回两个值，第一个是索引值，第二个是索引位置值的拷贝。注意：返回的是值的拷贝而不是引用，如果我们把值的地址作为指针使用，会得到一个错误，来看看为啥：</p>
+<pre><code>slice := []int{10, 20, 30 ,40}
+for index, value := range slice {
+      fmt.Printf(&quot;Value: %d  Value-Addr: %X  ElemAddr: %X\n&quot;, value, &amp;value, &amp;slice[index])
+}
+Output:
+Value: 10  Value-Addr: 10500168  ElemAddr: 1052E100
+Value: 20  Value-Addr: 10500168  ElemAddr: 1052E104
+Value: 30  Value-Addr: 10500168  ElemAddr: 1052E108
+Value: 40  Value-Addr: 10500168  ElemAddr: 1052E10C
+</code></pre><p>value 变量的地址总是相同的因为它只是包含一个拷贝。如果想得到每个元素的真是地址可以使用 &amp;slice[index]。<br>如果不需要索引值，可以使用 _ 操作符来忽略它：</p>
+<pre><code>slice := []int{10, 20, 30, 40}
+for _, value := range slice {
+      fmt.Printf(&quot;Value: %d\n&quot;, value)
+}
+Output:
+Value: 10
+Value: 20
+Value: 30
+Value: 40
+</code></pre><p>range 总是从开始一次遍历，如果你想控制遍历的step，就用传统的 for 循环：</p>
+<pre><code>slice := []int{10, 20, 30, 40}
+for index := 2; index &amp;lt; len(slice); index++ {
+      fmt.Printf(&quot;Index: %d  Value: %d\n&quot;, index, slice[index])
+}
+Output:
+Index: 2  Value: 30
+Index: 3  Value: 40
+</code></pre><p>同数组一样，另外两个内建函数 len 和 cap 分别返回 slice 的长度和容量。</p>
+<p>##多维 slice</p>
+<p>也是同数组一样，slice 可以组合为多维的 slice：</p>
+<p>需要注意的是使用 append 方法时的行为，比如我们现在对 slice[0] 增加一个元素：</p>
+<p>那么只有 slice[0] 会重新创建底层数组，slice[1] 则不会。</p>
+<p>##在函数间传递 slice</p>
+<p>在函数间传递 slice 是很廉价的，因为 slice 相当于是指向底层数组的指针，让我们创建一个很大的 slice 然后传递给函数调用它：</p>
+<pre><code>slice := make([]int, 1e6)
+slice = foo(slice)
+func foo(slice []int) []int {
+    ...
+    return slice
+}
+</code></pre><p>在 64 位的机器上，slice 需要 24 字节的内存，其中指针部分需要 8 字节，长度和容量也分别需要 8 字节。</p>
+<p>#Map</p>
+<p>##内部机制<br>map 是一种无序的键值对的集合。map 最重要的一点是通过 key 来快速检索数据，key 类似于索引，指向数据的值。<br>map 是一种集合，所以我们可以像迭代数组和 slice 那样迭代它。不过，map 是无序的，我们无法决定它的返回顺序，这是因为 map 是使用 hash 表来实现的。<br>map 的 hash 表包含了一个桶集合(collection of buckets)。当我们存储，移除或者查找键值对(key/value pair)时，都会从选择一个桶开始。在映射(map)操作过程中，我们会把指定的键值(key)传递给 hash 函数(又称散列函数)。hash 函数的作用是生成索引，索引均匀的分布在所有可用的桶上。hash 表算法详见：July的博客—从头到尾彻底解析 hash 表算法</p>
+<p>##创建和初始化</p>
+<p>Go 语言中有多种方法创建和初始化 map。我们可以使用内建函数 make 也可以使用 map 字面值：</p>
+<pre><code>// 通过 make 来创建
+dict := make(map[string]int)
+// 通过字面值创建
+dict := map[string]string{&quot;Red&quot;: &quot;#da1337&quot;, &quot;Orange&quot;: &quot;#e95a22&quot;}
+</code></pre><p>使用字面值是创建 map 惯用的方法(为什么不使用make)。初始化 map 的长度依赖于键值对的数量。</p>
+<p>map 的键可以是任意内建类型或者是 struct 类型，map 的值可以是使用 ==操作符的表达式。slice，function 和 包含 slice 的 struct 类型不可以作为 map 的键，否则会编译错误：</p>
+<pre><code>dict := map[[]string]int{}
+Compiler Exception:
+invalid map key type []string
+</code></pre><p>##使用 map</p>
+<p>给 map 赋值就是指定合法类型的键，然后把值赋给键：</p>
+<pre><code>colors := map[string]string{}
+colors[&quot;Red&quot;] = &quot;#da1337&quot;
+</code></pre><p>如果不初始化 map，那么就会创建一个 nil map。nil map 不能用来存放键值对，否则会报运行时错误：</p>
+<pre><code>var colors map[string]string
+colors[&quot;Red&quot;] = &quot;#da1337&quot;
+Runtime Error:
+panic: runtime error: assignment to entry in nil map
+</code></pre><p>测试 map 的键是否存在是 map 操作的重要部分，因为它可以让我们判断是否可以执行一个操作，或者是往 map 里缓存一个值。它也可以被用来比较两个 map 的键值对是否匹配或者缺失。</p>
+<p>从 map 里检索一个值有两种选择，我们可以同时检索值并且判断键是否存在：</p>
+<pre><code>value, exists := colors[&quot;Blue&quot;]
+if exists {
+      fmt.Println(value)
+}
+</code></pre><p>另一种选择是只返回值，然后判断是否是零值来确定键是否存在。但是只有你确定零值是非法值的时候这招才管用：</p>
+<pre><code>value := colors[&quot;Blue&quot;]
+if value != &quot;&quot; {
+      fmt.Println(value)
+}
+</code></pre><p>当索引一个 map 取值时它总是会返回一个值，即使键不存在。上面的例子就返回了对应类型的零值。</p>
+<p>迭代一个 map 和迭代数组和 slice 是一样的，使用 range 关键字，不过在迭代 map 时我们不使用 index/value 而使用 key/value 结构：</p>
+<pre><code>colors := map[string]string{
+    &quot;AliceBlue&quot;:   &quot;#f0f8ff&quot;,
+    &quot;Coral&quot;:       &quot;#ff7F50&quot;,
+    &quot;DarkGray&quot;:    &quot;#a9a9a9&quot;,
+    &quot;ForestGreen&quot;: &quot;#228b22&quot;,
+}
+for key, value := range colors {
+      fmt.Printf(&quot;Key: %s  Value: %s\n&quot;, key, value)
+}
+</code></pre><p>如果我们想要从 map 中移除一个键值对，使用内建函数 delete(要是也能返回移除是否成功就好了，哎。。。)：</p>
+<pre><code>delete(colors, &quot;Coral&quot;)
+for key, value := range colors {
+      fmt.Println(&quot;Key: %s  Value: %s\n&quot;, key, value)
+}
+</code></pre><p>##在函数间传递 map</p>
+<p>在函数间传递 map 不是传递 map 的拷贝。所以如果我们在函数中改变了 map，那么所有引用 map 的地方都会改变：</p>
+<pre><code>func main() {
+      colors := map[string]string{
+         &quot;AliceBlue&quot;:   &quot;#f0f8ff&quot;,
+         &quot;Coral&quot;:       &quot;#ff7F50&quot;,
+         &quot;DarkGray&quot;:    &quot;#a9a9a9&quot;,
+         &quot;ForestGreen&quot;: &quot;#228b22&quot;,
+      }
+      for key, value := range colors {
+          fmt.Printf(&quot;Key: %s  Value: %s\n&quot;, key, value)
+      }
+      removeColor(colors, &quot;Coral&quot;)
+      for key, value := range colors {
+          fmt.Printf(&quot;Key: %s  Value: %s\n&quot;, key, value)
+      }
+}
+func removeColor(colors map[string]string, key string) {
+    delete(colors, key)
+}
+</code></pre><p>执行会得到以下结果：</p>
+<pre><code>Key: AliceBlue Value: #F0F8FF
+Key: Coral Value: #FF7F50
+Key: DarkGray Value: #A9A9A9
+Key: ForestGreen Value: #228B22
+
+Key: AliceBlue Value: #F0F8FF
+Key: DarkGray Value: #A9A9A9
+Key: ForestGreen Value: #228B22
+</code></pre><p>可以看出来传递 map 也是十分廉价的，类似 slice。</p>
+<p>#Set<br>Go 语言本身是不提供 set 的，但是我们可以自己实现它，下面就来试试：</p>
+<pre><code>package main
+import(
+      &quot;fmt&quot;
+      &quot;sync&quot;
+)
+type Set struct {
+      m map[int]bool
+      sync.RWMutex
+}
+func New() *Set {
+      return &amp;Set{
+        m: map[int]bool{},
+      }
+}
+func (s *Set) Add(item int) {
+      s.Lock()
+      defer s.Unlock()
+      s.m[item] = true
+}
+func (s *Set) Remove(item int) {
+      s.Lock()
+      s.Unlock()
+      delete(s.m, item)
+}
+func (s *Set) Has(item int) bool {
+      s.RLock()
+      defer s.RUnlock()
+      _, ok := s.m[item]
+      return ok
+}
+func (s *Set) Len() int {
+      return len(s.List())    
+}
+func (s *Set) Clear() {
+      s.Lock
+      defer s.Unlock()
+      s.m = map[int]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+      if s.Len() == 0 {
+        return true
+      }
+      return false
+}
+func (s *Set) List() []int {
+      s.RLock()
+      defer s.RUnlock()
+      list := []int{}
+      for item := range s.m {
+        list = append(list, item)
+      }
+      return list
+}
+func main() {
+      // 初始化
+     s := New()
+
+     s.Add(1)
+      s.Add(1)
+      s.Add(2)
+      s.Clear()
+      if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+      }
+
+      s.Add(1)
+      s.Add(2)
+      s.Add(3)
+
+      if s.Has(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+      }
+
+      s.Remove(2)
+      s.Remove(3)
+      fmt.Println(&quot;list of all items&quot;, S.List())
+}
+</code></pre><p>注意我们只是使用了 int 作为键，你可以自己实现用 interface{} 作为键，做成更通用的 Set，另外，这个实现是线程安全的。</p>
+<p>#总结</p>
+<ul>
+<li><p>数组是 slice 和 map 的底层结构。</p>
+</li>
+<li><p>slice 是 Go 里面惯用的集合数据的方法，map 则是用来存储键值对。</p>
+</li>
+<li><p>内建函数 make 用来创建 slice 和 map，并且为它们指定长度和容量等等。slice 和 map 字面值也可以做同样的事。</p>
+</li>
+<li><p>slice 有容量的约束，不过可以通过内建函数 append 来增加元素。</p>
+</li>
+<li><p>map 没有容量一说，所以也没有任何增长限制。</p>
+</li>
+<li><p>内建函数 len 可以用来获得 slice 和 map 的长度。</p>
+</li>
+<li><p>内建函数 cap 只能作用在 slice 上（len不能大于cap）。</p>
+</li>
+<li><p>可以通过组合方式来创建多维数组和 slice。map 的值可以是 slice 或者另一个 map。slice 不能作为 map 的键。</p>
+</li>
+<li><p>在函数之间传递 slice 和 map 是相当廉价的，因为他们不会传递底层数组的拷贝。</p>
+</li>
+</ul>
+<p>##附一份interface的Set实现</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre><p>参考：<a href="http://se77en.cc/2014/06/30/array-slice-map-and-set-in-golang/#Slice(切片" target="_blank" rel="external">http://se77en.cc/2014/06/30/array-slice-map-and-set-in-golang/#Slice(切片</a>)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-07-tuning-nginx/" itemprop="url">
+                  nginx性能调优（部分参数调整）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-07-tuning-nginx/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-tuning-nginx/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-10-07-tuning-nginx/" class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
+                  Go Set实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-10-21-go-set/" class="leancloud_visitors" data-flag-title="Go Set实现">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>利用go的interface实现的有锁Set</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-09-15-router-improve-speed/" itemprop="url">
+                  为你的路由器提速
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-09-15-router-improve-speed/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-09-15-router-improve-speed/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-09-15-router-improve-speed/" class="leancloud_visitors" data-flag-title="为你的路由器提速">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。</p>
+<p>今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上吧。后来在一个Q群里问了下群油有没有啥好办法，@ZERO（娃吊）说让我改下信道改成1。以前听说过信道，于是上网搜了下，得到如下常识：</p>
+<blockquote>
+<p>总的来说就是路由器信号不好，所以导致速度慢。<br>那么我就来回答一下另外一种可能的情况——信道拥堵。如果你在有很多无线网络覆盖的地方（比如小区）那么，你就可能遇到信道拥堵这一状况。<br>无线路由可以广播1-13个信道，大部分的集中在1,6,11这三个信道。一般路由器自动也默认是这三个信号。虽然1，6,11 三个信道号称是不会互相干扰，但是还是存在因为同一信道的无线信号太多而导致无线速度缓慢的情况（有线速度很快）</p>
+<p>你在路由器设置里面直接设置第13个信道就可以提高无线路由速度了。</p>
+<p>如果上述方法无效，请将你的无线路由发射协议从b/g/n三网混合改为b/g混合，部分终端设备不支持三网混合，会导致网络速度很慢。</p>
+</blockquote>
+<p>  于是乎开始操作，操作很简单，信道改成了13，结果发现效果不是很理想，又试着改了一下模式，改成了b/g,改完之后效果就明显了（附图）。</p>
+<p>  <img src="http://bikong0411.github.io/public/images/me_route.png" alt="router"></p>
+<p>  当然，你如果是土豪，你可以选择换一台更好的路由器。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" itemprop="url">
+                  使用nginx + lua 自定义access.log
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="external">更多nginx内置的变量</a>) , 这种咱们就不说了，这个简单，基本大家都会。</p>
+<p>那是自定义access.log的名字? 比如在一个多个虚拟主机的nginx中，我们想根据不同的server去生成不同的access.log。这样我们去查access.log的时候也方便，从名字一眼就能看出要去哪个文件去查。你也可以通过上面nginx内置的变量去给文件命名，比如我用server_name去命名，我就可以这样写:</p>
+<pre><code>log_format log/$http_host.access.log
+</code></pre><p>然后reload一下nginx就可以了。当然我要说的也不是这个。</p>
+<p>其实我想说的是这种：自定义log_format 在log_format里面添加一些自己自定义的变量（openresty群里一个朋友问到这个问题）。</p>
+<p>比如我想给每个HTTP请求的access.log中添加一个UUID字符串。你可能要问这东西有什么用呢？你想一下，对于一些POST请求（也可能是GET请求），你从URL上看不出差别，但是因为POST的body太大，你又不想记到nginx的access.log里面，还有一种可能是你POST的body里面是二进制，即便你记录到access.log里面了，等你遇到问题要去查的时候你就发现”然并卵啊”，记录这东西也没啥用（是不是想哭），不用哭，今天就是介绍这个的。</p>
+<p>我们可以通过一个唯一的字符串去标记一个请求，然后这个串可以通过HTTP的Header或者通过QueryString传给我们的A\B\C\D…服务器，直到一个请求周期结束。然后我们在需要记录log的地方可以将这个unique的串也记录下来，如果你把日志都集中存储到了一个地方（比如ELK），当你去查问题的时候，你可以通过这个字符串就搜索到了这个请求的整个生命周期，是不是有点爽呢。 不扯淡了，下面就说说怎么搞的，这里用了nginx和lua去做，至于为啥用lua，说因为任性可以不，其实就是为了玩。</p>
+<p>如果没听过lua或者nginx，再如果不敢兴趣，那只能说不好意思，这位客官，你可能只能观一下了。想了解的同学可以自行搜索一下这俩玩意。如果已经了解了这俩东西不了解ngx_lua（或者openresty）的也可以去搜索一下，这俩项目都是@agentzh (章亦春)春哥的大作。这里我为了简单，就选用了ngx_lua。</p>
+<ol>
+<li><p>先说下lua生产随机数字吧，我把代码放到util.lua里面了</p>
+<pre><code>local os = require(&apos;os&apos;)
+local math = require(&apos;math&apos;)
+local io = require(&quot;io&quot;)
+
+local _M = {} 
+_M.uuid = function()
+    local template = &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;
+    d = io.open(&quot;/dev/urandom&quot;, &quot;r&quot;):read(4)
+    math.randomseed(os.time() + d:byte(1) + (d:byte(2) * 256) + (d:byte(3) * 65536) + (d:byte(4) * 4294967296))
+    return string.gsub( template, &quot;x&quot;,function (c) 
+    local v = (c == &quot;x&quot;) and math.random(0, 0xf) or math.random(8, 0xb)
+    return string.format(&quot;%x&quot;, v)
+end)          
+end            
+return _M
+</code></pre><p>  这里采用了从/dev/urandom去读取随机数，读了前4位，然后根据时间、前四位字符的ascii分作为随机数的种子，然后去随机参数字符替换template里面的x，你也可以再加其他去作为随机数发射器的种子比如pid，不过在lua中，你可能还需要posix这个module，最终生成一个32位的字符串。</p>
+</li>
+<li><p>那就直接亮出nginx的配置吧</p>
+<pre><code>log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;
+              &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;
+              &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$uuid&quot;&apos;;
+access_log  logs/access.log  main buff=4k;
+
+sendfile        on;
+tcp_nopush     on;
+
+#keepalive_timeout  0;
+keepalive_timeout  65;
+lua_package_path &quot;$prefix/lua/?.lua;/test/lua/?.lua;&quot;;
+init_by_lua_file lua/util.lua;
+</code></pre><p>  注意看，其他字段都没改，懒得连main都没改，只是最后添加了一个自定义的字段叫’”$uuid”‘, 还有你的\lua_package_path以及init_by_lua_file位置一定要写正确，不然会因为找不到文件报错。然后看下相关server里面的配置。</p>
+<pre><code>server {
+       listen       80 backlog=512;
+    server_name  localhost;
+
+    charset utf-8;
+    underscores_in_headers on; 
+
+    set_by_lua_block $uuid {
+           local util = require(&apos;util&apos;)
+           local uniq_id, _ = util.uuid()
+           return uniq_id
+    }
+
+    location /redirect {
+           return 301 http://127.1/lua; 
+    }
+
+    location /lua {
+           default_type &quot;text/plain&quot;;
+           content_by_lua_block {
+          local args = ngx.req.get_uri_args()
+          for key, val in pairs(args) do
+             if type(val) == &quot;table&quot; then
+                     ngx.say(key, &quot;: &quot;, table.concat(val, &quot;, &quot;))
+              else
+                  ngx.say(key, &quot;: &quot;, val)
+              end
+          end
+          ngx.say(ngx.var.arg_b)
+       }
+}
+...
+</code></pre><p> 只贴这么多关键部分吧，然后去check一下配置是否有问题</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; sudo /opt/soft/nginx/sbin/nginx -t 
+nginx: [alert] lua\_code\_cache is off; this will hurt performance in /opt/soft/    nginx1.9.3/conf/nginx.conf:35
+nginx: the configuration file /opt/soft/nginx1.9.3/conf/nginx.conf syntax is ok
+nginx: configuration file /opt/soft/nginx1.9.3/conf/nginx.conf test is successful
+</code></pre><p> 这个警告是因为开发阶段lua_code_cache没开，生产环境是一定要开的，为了我们修改lua代码能及时生效。那我们去试试看下效果先</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; curl -iL &apos;http://127.1/redirect?a=1&amp;b=2&amp;c=3&apos;
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.9.3
+Date: Thu, 05 Nov 2015 16:34:03 GMT
+Content-Type: text/html
+Content-Length: 184
+Connection: keep-alive
+Location: http://127.1/lua
+</code></pre><p> 然后去看下access.log的内容</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; tail -n 2 /opt/soft/nginx/logs/access.log  
+127.0.0.1 - - [05/Nov/2015:13:32:09 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;8272ba28283350d51056995be1f0c244&quot;
+127.0.0.1 - - [05/Nov/2015:23:56:55 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;118ab63e5bf8e8c0a2d04e7ab898120d&quot;
+</code></pre></li>
+<li><p>透传给应用层</p>
+<ul>
+<li>如果你使用的是proxy模式你可以使用proxy_set_headers</li>
+<li><p>如果你通过fastcgi协议传递给后端的PHP，你可以使用fastcgi_param  </p>
+<p>   proxy_set_header  HTTP_UUID  $uuid;<br>   …<br>   fastcgi_param HTTP_UUID  $uuid;</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>注意：nginx对对header name的字符做了限制，默认 underscores_in_headers 为off，表示如果header name中包含下划线，则忽略掉。</p>
+<p>解决办法：</p>
+<ul>
+<li>配置中http部分 增加underscores_in_headers on; 配置</li>
+<li>用减号-替代下划线符号_，避免这种变态问题。        </li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/" itemprop="url">
+                  5个提高性能的Node.JS应用Tips
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-11-18-5-performance-tips-for-node-application/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/" class="leancloud_visitors" data-flag-title="5个提高性能的Node.JS应用Tips">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p> <a href="https://twitter.com/nebrius/status/505543249969176576?ref_src=twsrc%5Etfw" target="_blank" rel="external">Bryan Huges</a>在twitter中写道：如果你没有在你的node服务前加一层nginx，那么你这么做可能是不正确的。</p>
+</blockquote>
+<p>Node.js在用世界最著名的语言javascript去创建服务端应用的工具中处于领先地位。它同时提供了一个web服务器又和一个应用服务器的的功能。现在Node.js被当做开发和交付各类微服务的一个关键工具。</p>
+<p>Node.js可以替代或增强Java或.NET用作后端应用程序的开发。</p>
+<p>Node.js使用了单线程非阻塞IO，使其能够扩展并支持数万并发操作。Nginx也是使用这种架构去解决C10K(支持多于10000个并发连接)问题。Node.js以其高性能和开发人员的生产力而著称。</p>
+<p>那哪里错了呢？</p>
+<p>Node.js也有一些薄弱的环节和缺点，导致基于Node的系统容易表现的性能不好甚至崩溃。当问题频繁出现时，会引起基于Node的web应用程序流量大增。</p>
+<p>此外，Node.js是一个强大的工具能用来创建和运行应用逻辑，为你的网页产生核心的变量。但是它不那么擅长服务静态内容（比如图片，javascript文件）、在多个服务器之间进行负载均衡。</p>
+<p>为了最大化发挥Node.js的作用，你需要缓存静态内容，在多个应用服务器之间进行代理，进行负载均衡。还需要管理客户端、Node.js以及其他服务（比如一个运行Socket.IO的服务）之间的端口争用。Nginx可以被用来做这些，使之成为Node.js性能优化的一个很棒的工具。</p>
+<p>使用这些tips提高Node.js应用的性能</p>
+<ol>
+<li>部署一个反向代理服务器</li>
+<li>缓存静态文件</li>
+<li>在多个服务器之间进行负载均衡</li>
+<li>代理WebSocket连接</li>
+<li>实现SSL/TLS和HTTP/2</li>
+</ol>
+<p><em>注</em>： 一种快速解决Node.js应用程序的性能的办法是修改你的Node.js的配置，以充分利用现代多核服务器的优势。看看<a href="http://cjihrig.com/blog/scaling-node-js-applications/" target="_blank" rel="external">这篇文章</a>，以了解如何将Node.js的派生单独的子进程(在你的web服务器上子进程等于CPU的数量)，每个进程都能充分利用一个CPU，给你的应用一个很大的性能提升</p>
+<p>##1. 部署一个反向代理服务器</p>
+<p>当我们看到应用服务器直接暴露在互联网上被当作高性能网站的核心传入流量，我们（Nginx Inc.）总是有点恐惧。比如包括许多基于WordPress的，还有Node.js的网站。</p>
+<p>Node.js的扩展性在更大程度上比大多数应用服务器设计的更好，它的web服务器可以很好的处理大量的互联网流量。但是web服务不是Node.js构建的适合做的。</p>
+<p>如果你有一个高流量的站点，提高应用性能的第一步是在你的Node.js服务前放一台代理服务器，这样可以防止你的Node.js服务直接暴露在互联网的流量中，并且在你使用多台应用服务器进行负载均衡时有很高的灵活性在，并且可以用内部链接去缓存内容。</p>
+<p><img src="https://www.nginx.com/wp-content/uploads/2015/11/control2-1024x341.png" alt="Proxy Reverse"></p>
+<p>在现有的服务器前方搭建一台Nginx作为反向代理服务器，是nginx的一个核心用例，世界上已经有数以千万计的站点都这么用了。</p>
+<p>这有一篇特别的高级的文章<a href="http://www.nikola-breznjak.com/blog/nodejs/using-nginx-as-a-reverse-proxy-in-front-of-your-node-js-application/" target="_blank" rel="external">使用Nginx作为一个Node.js的反向代理服务器</a> 包括：</p>
+<ul>
+<li>简化操作权限和端口分配</li>
+<li>更有效地服务于静态图像（见下一个tips）</li>
+<li>成功管理Node.js崩溃</li>
+<li>缓解Dos攻击</li>
+</ul>
+<p><em>注</em> ： 这些教程讲解如何使用NGINX作为在Ubuntu14.04或CentOS的环境反向代理服务器，而且对那些想把NGINX放到node.js前的人来说是很有用的概述。</p>
+<p>##2. 缓存静态文件<br>随着一个基于Node.js的站点的成长，服务器开始显示的疲惫。这有亮点你希望做的:</p>
+<ol>
+<li>最大化的使用Node.js服务器 </li>
+<li>尽可能简单的添加应用服务器，并且它们之间可以进行负载均衡</li>
+</ol>
+<p>这实际上做起来很简单，就像上面第一个tips里面说的那样，部署一个Nginx作为反向代理，很简单就实现了缓存，负载均衡(当你有多台Node.js服务器的时候)等功能。</p>
+<p>一个应用容器平台Modulus（用作系数压测）的网站有一篇文章<a href="http://blog.modulus.io/supercharge-your-nodejs-applications-with-nginx" target="_blank" rel="external">压力测试nginx和Node.js应用的性能</a>，作者的网站能够为平均每秒服务近900请求。使用NGINX作为反向代理服务器，提供静态内容，同一站点提供超过每秒1600请求 - 近2倍的性能提升。</p>
+<p>如果再性能加倍你就要花费时间去采取额外的措施，以适应近一步的增长，比如审查（或者改进）一下你站点的设计，优化一下你的应用代码或者部署更多的应用服务器。</p>
+<p>以下是配置代码，适用于<a href="http://blog.modulus.io/supercharge-your-nodejs-applications-with-nginx" target="_blank" rel="external">Modulus上运行的网站</a>：</p>
+<pre><code>server {
+      listen 80;
+      server_name static-test-47242.onmodulus.net;
+
+      root /mnt/app;
+      index index.html index.htm;
+
+      location /static/ {
+           try_files $uri $uri/ =404;
+      }
+
+      location /api/ {
+           proxy_pass http://node-test-45750.onmodulus.net;
+      }
+}
+</code></pre><p>这篇详细的<a href="http://pnommensen.com/tag/ghost/" target="_blank" rel="external">文章</a>来自于NGINX公司的Patrick Nommensen，解释了他如何缓存他运行的Ghost开源博客平台Node.js应用程序的静态内容。虽然有些细节是Ghost特有的，你可以复用一些代码到很多其他的Node.js应用程序。</p>
+<p>例如，在Nginx的location块中，你可能会想不缓存某些内容。你通常不会想要缓存博客平台的管理界面，例如。下面是禁用[或不缓存]Ghost管理界面的缓存配置代码：</p>
+<pre><code>location ~ ^/(?:ghost|signout) { 
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_pass http://ghost_upstream;
+    add_header Cache-Control &quot;no-cache, private, no-store,
+    must-revalidate, max-stale=0, post-check=0, pre-check=0&quot;;
+}
+</code></pre><p>有关提供静态内容的一般信息，请参阅NGINX Plus管理指南。管理员指南包括实现更快的性能配置说明，尝试查找文件时相应成功或失败的多种选项，达到更快的性能的优化方法。</p>
+<p>缓存静态文件的NGINX服务器显著从Node.js的应用程序服务器卸载一部分工作，使其达到更高的性能。</p>
+<p><a href="https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/" target="_blank" rel="external">https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2016-05-31-lua-ffi-summary/" itemprop="url">
+                  luajit ffi 总结 <转载>
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2016-05-31-lua-ffi-summary/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-05-31-lua-ffi-summary/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2016-05-31-lua-ffi-summary/" class="leancloud_visitors" data-flag-title="luajit ffi 总结 <转载>">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。</p>
+<p>使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是使用 lua C API，另一种方法就是使用 luajit 提供的 ffi 库来调用 C 程序。本文主要是对 luajit ffi 的研究总结。</p>
+<p>#luajit ffi</p>
+<p>luajit 和 lua 一样，是可以直接安装在操作系统中的，相关介绍直接参考官网 luajit。个人测试效果来看，luajit 的执行效率远高于 lua，大概是 8 倍左右。openresty 的 lua-nginx-module 模块就是将 luajit 集成到了 Nginx 中，实现在 Nginx 中执行 Lua 脚本</p>
+<p>luajit ffi 是 luajit 提供给 Luaer 使用 Lua 调用 C 函数的 Lua 库，使用该库，Luaer 不用再去操作复杂的 Lua 栈来粘合两种程序代码，luajit ffi 官方资料。</p>
+<p>##引入 luajit ffi 库</p>
+<pre><code>local ffi = require(&quot;ffi&quot;)
+</code></pre><p>#在 Lua 中调用 C 函数</p>
+<p>和 lua 的 C API 一样，Lua 调用 C 函数，需要将 C 函数编译成链接库。区别在于 C API 查找 C 的 Lua 库是在 package.cpath 路径下进行查找，而这些库函数使用 Lua 栈接口进行编写。而 luajit 对于 C 链接库的引用遵从于普通 C 库的引用方式，先在 /usr/lib(/usr/lib64)，/lib(/lib64) 目录下查找，再到用户自定义的 LD_LIBRARY_PATH 下查找。</p>
+<p>本节涉及接口：</p>
+<pre><code> ffi.cdef[[c_function define]]
+ffi.C
+ffi.load(name [,global])
+</code></pre><ul>
+<li><p>调用 C 标准库函数</p>
+<p> 对于 C 标准库函数引用，需要引入函数，函数声明</p>
+<pre><code>ffi.cdef[[c_function define]]
+</code></pre><p>  调用 C 函数</p>
+<pre><code>ffi.C.c_function
+</code></pre><p>  如：</p>
+<pre><code>local ffi = require(&quot;ffi&quot;)
+
+ffi.cdef[[
+    int printf(const char *fmt, ...);
+    int strcasecmp(const char *s1, const char *s2);
+]]
+
+ffi.C.printf(&quot;Hello %s!\n&quot;, &quot;world&quot;)
+ret = ffi.C.strcasecmp(&quot;Hello&quot;, &quot;hello&quot;)
+print(ret)
+ret = ffi.C.strcasecmp(&quot;Hello&quot;, &quot;hello1&quot;)
+print(ret)
+</code></pre><p>  输出结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffic.lua 
+Hello world!
+0
+-49
+</code></pre></li>
+<li><p>调用自定义的 C 函数</p>
+<p>  调用自定义的 C 函数，首先要将自定义的 C 函数编译成链接库</p>
+<pre><code>[root@AlexWoo-CentOS lua]# cat ffimyc.c 
+int add(int x, int y)
+{
+    return x + y;
+}
+[root@AlexWoo-CentOS lua]# gcc -g -o libffimyc.so -fpic -shared ffimyc.c
+</code></pre></li>
+<li><p>调用 C 标准库函数</p>
+<p>   调用 C 标准库函数，需要在 Lua 中引入相应的库</p>
+<pre><code>ffi.load(name [,global])
+</code></pre><p>  这里第二个参数如果为 true，则该库被引入全局命名空间，这里使用 ffi.load 需要注意两点：</p>
+<ol>
+<li><p>链接库文件必须在 C 的动态链接库查找路径中，否则会报类似错误：</p>
+<pre><code>luajit: ffimyc.lua:3: libffimyc.so: cannot open shared object file: No such file or directory
+</code></pre><p> 引入方法：</p>
+<pre><code> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:your_lib_path
+
+在 Linux 下，库函数名的查找与 C 程序查找动态链接库相同，如上面我生成的动态链接库文件为 libffimyc.so，我在 ffi.load 中的 name 为 ffimyc
+</code></pre><p> 调用自己的函数，可以直接使用 ffi.load 返回的变量调用，下面我们看一个简单的例子：</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+myc = ffi.load(&apos;ffimyc&apos;)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ret = myc.add(1, 20)
+print(ret)
+</code></pre><p>输出结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffimyc.lua
+21
+</code></pre></li>
+<li><p>使用 ffi.C 调用自定义的 C 函数</p>
+<p> 上面的例子中，是不能直接使用 ffi.C 来调用 add 函数的，那么怎么用 ffi.C 来调用 add 函数，对，就是 ffi.load 时，第二个参数置为 true，将库加载为全局命名空间。示例：</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+
+ffi.load(&apos;ffimyc&apos;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ret = ffi.C.add(1, 10)
+print(ret)
+</code></pre><p> 输出结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffimyc.lua
+11
+</code></pre><p>本节小结</p>
+<p>在 lua 中调用 C 函数，需要使用 ffi.cdef 对 C 函数进行声明</p>
+<p>对于 C 标准库函数，已在全局命名空间，直接可以使用 ffi.C.函数名(函数参数…) 来调用函数</p>
+<p>对于自定义的 C 函数，需要将其先编译成链接库，并将链接库所在路径加入到 LD_LIBRARY_PATH 中，需要使用 ffi.load 载入链接库</p>
+<p>如果 ffi.load 第二个参数不填写，链接库以私有空间方式链入 Lua 脚本，使用时需要用 ffi.load 的返回值对函数进行调用</p>
+<p>如果 ffi.load 第二个参数设置为 true，可以使用 ffi.C 直接调用，调用方法同 C 标准库函数的调用</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>Lua 处理 cdata 对象</p>
+<p>上面对 Lua 如何调用 C 函数进行了小结，但是光能调用 C 函数是远远不够的，我们还需要对 C 的变量，变量类型进行处理。本节将对这部分进行探讨。</p>
+<p>C 类型转化为 Lua 中的 ctype</p>
+<p>C 类型转化为 Lua ctype，使用 ffi.typeof，该函数返回一个 ctype 变量类型</p>
+<pre><code>ctype = ffi.typeof(ct)
+</code></pre><p>示例：</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+
+ffi.cdef[[
+    struct s1 {
+        int a;
+         int b;
+    };
+    typedef struct {
+        int c;
+            int d;
+    } s2;
+    union u {
+           int a;
+        long b;
+        float c;
+    };
+    enum e {
+            Male,
+        Female
+    };
+]]
+
+print(ffi.typeof(&quot;int8_t&quot;))
+print(ffi.typeof(&quot;uint8_t&quot;))
+print(ffi.typeof(&quot;int16_t&quot;))
+print(ffi.typeof(&quot;uint16_t&quot;))
+print(ffi.typeof(&quot;int32_t&quot;))
+print(ffi.typeof(&quot;uint32_t&quot;))
+print(ffi.typeof(&quot;int64_t&quot;))
+print(ffi.typeof(&quot;uint64_t&quot;))
+print(ffi.typeof(&quot;double&quot;))
+print(ffi.typeof(&quot;float&quot;))
+print(ffi.typeof(&quot;bool&quot;))
+print(ffi.typeof(&quot;struct s1&quot;))
+print(ffi.typeof(&quot;s2&quot;))
+print(ffi.typeof(&quot;union u&quot;))
+print(ffi.typeof(&quot;enum e&quot;))
+print(ffi.typeof(&quot;struct s1*&quot;))
+print(ffi.typeof(&quot;struct s1[]&quot;))
+</code></pre><p>  输出：</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+ctype&lt;char&gt;
+ctype&lt;unsigned char&gt;
+ctype&lt;short&gt;
+ctype&lt;unsigned short&gt;
+ctype&lt;int&gt;
+ctype&lt;unsigned int&gt;
+ctype&lt;int64_t&gt;
+ctype&lt;uint64_t&gt;
+ctype&lt;double&gt;
+ctype&lt;float&gt;
+ctype&lt;bool&gt;
+ctype&lt;struct s1&gt;
+ctype&lt;struct 98&gt;
+ctype&lt;union u&gt;
+ctype&lt;enum e&gt;
+ctype&lt;struct s1 *&gt;
+ctype&lt;struct s1 []&gt;
+</code></pre><p>  创建并初始化 cdata 对象</p>
+<p>  使用 ctype 有以下两种构造 Lua C 对象的方法</p>
+<pre><code>cdata = ffi.new(ct [,nelem] [,init...])
+cdata = ctype([nelem,] [init...])
+</code></pre><p>  基本类型 cdata 对象</p>
+<p>  首先是一个 C 的函数，我们使用构造的 cadata 对象来调用该函数：</p>
+<pre><code>int add(int x, int y)
+{
+    return x+y;
+}
+</code></pre><p>  直接调用</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+print(t.add(10, 11))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+21
+</code></pre><p>  这种方法仅限于基本类型，lua 会将其基本类型转换为 cdata 的基本类型</p>
+<p>  使用 ffi.new 构造</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ti = ffi.typeof(&quot;int&quot;)
+a = ffi.new(ti, 10)
+b = ffi.new(&quot;int&quot;, 11)
+print(type(a), type(b))
+print(t.add(a, b))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+cdata   cdata
+21
+</code></pre><p>  这里如果执行 print(ffi.typeof(“int”))，结果就是 ctype，因此这里 ffi.new 的第一个参数直接填为 “int” 与传入一个 ctype 的类型对象是等价的</p>
+<p>  使用类型对象构造</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ti = ffi.typeof(&quot;int&quot;)
+a = ti(10)
+b = ti(11)
+print(t.add(a, b))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+21
+</code></pre><p>  基本类型指针 cdata 对象</p>
+<p>  首先是一个 C 的函数，我们使用构造的 cadata 对象来调用该函数：</p>
+<pre><code>int addp(int *x, int *y)
+{
+    return *x+*y;
+}
+</code></pre><p>  这里构造指针对象可以使用 ffi.new 和 类型构造两种方法，下面只以一种进行举例，其它举一反三</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+    int addp(int *x, int *y);
+]]
+
+a = ffi.new(&quot;int[1]&quot;, {10})
+b = ffi.new(&quot;int[1]&quot;, {10})
+print(t.addp(a, b))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+21
+</code></pre><p>  没有将 Lua 原生类型直接转换为指针类型的方法(至少我没找到)，这里使用的是将 Lua 的 table 转为只有一个元素的数组，并将数组当作指针类型参数传入addp中。</p>
+<p>结构类型 cdata 对象</p>
+<p>首先是一个 C 程序，我们使用构造的 cadata 对象来调用该函数：</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct constr_t {
+    int a;
+    int b;
+    struct innerstr {
+        int x;
+        int y;
+    } c;
+};
+
+void print_constr_t(struct constr_t t)
+{
+    printf(&quot;a:%d\n&quot;, t.a);
+    printf(&quot;b:%d\n&quot;, t.b);
+    printf(&quot;c.x:%d\n&quot;, t.c.x);
+    printf(&quot;c.y:%d\n&quot;, t.c.y);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    struct constr_t {
+        int a;
+        int b;
+        struct innerstr {
+            int x;
+            int y;
+        } c;
+    };
+    void print_constr_t(struct constr_t t);
+]]
+
+a = ffi.new(&quot;struct constr_t&quot;, {1, 2, {10, 11}})
+t.print_constr_t(a)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+a:1
+b:2
+c.x:10
+c.y:11
+</code></pre><p>这里我们看到构造一个 C 的结构类型与基本类型的方法基本类似，唯一区别就是需要使用 table 来进行构造，table 的层次结构与 C 的结构的层次必须符合</p>
+<p>结构类型指针 cdata 对象</p>
+<p>在日常使用中，对于结构体，我们更常使用的是指针。和基本类型指针 cdata 对象不同，可以直接使用与结构类型 cdata 对象相同的方式来构造结构类型指针的 cdata 对象</p>
+<p>C 程序</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct constr_t {
+    int a;
+    int b;
+    struct innerstr {
+        int x;
+        int y;
+    } c;
+};
+
+void print_pconstr_t(struct constr_t *t)
+{
+    printf(&quot;a:%d\n&quot;, t-&gt;a);
+    printf(&quot;b:%d\n&quot;, t-&gt;b);
+    printf(&quot;c.x:%d\n&quot;, t-&gt;c.x);
+    printf(&quot;c.y:%d\n&quot;, t-&gt;c.y);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    struct constr_t {
+        int a;
+        int b;
+        struct innerstr {
+            int x;
+            int y;
+        } c;
+    };
+    void print_pconstr_t(struct constr_t *t);
+]]
+
+a = ffi.new(&quot;struct constr_t&quot;, {1, 2, {10, 11}})
+t.print_pconstr_t(a)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+a:1
+b:2
+c.x:10
+c.y:11
+</code></pre><p>字符串 cdata 对象</p>
+<p>可以使用 Lua string 对象来初始化字符串 cdata 对象</p>
+<p>C 程序</p>
+<pre><code>void print(const char *s)
+{
+    printf(&quot;%s\n&quot;, s);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    void print(const char *s);
+]]
+
+a = ffi.new(&quot;const char*&quot;, &quot;Hello World&quot;)
+t.print(a)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+Hello World
+</code></pre><p>注意对字符串，ffi.new 第一个参数只能是 const char <em>、const char[size] 或 char[size]，不能是 char </em>，const char[?] 等类型</p>
+<p>使用 cdata 对象</p>
+<p>本节将探讨在 Lua 中怎么使用 cdata 对象</p>
+<p>C 程序</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct constr_t {
+    int a;
+    int b;
+    struct innerstr {
+        int x;
+        int y;
+    } c;
+};
+
+void print_pconstr_t(struct constr_t *t)
+{
+    printf(&quot;a:%d\n&quot;, t-&gt;a);
+    printf(&quot;b:%d\n&quot;, t-&gt;b);
+    printf(&quot;c.x:%d\n&quot;, t-&gt;c.x);
+    printf(&quot;c.y:%d\n&quot;, t-&gt;c.y);
+}
+
+int print_i(int x)
+{
+    printf(&quot;x: %d\n&quot;, x);
+}
+
+int print_pi(int *px)
+{
+    printf(&quot;px: %d\n&quot;, *px);
+}
+
+void print(const char *s)
+{
+    printf(&quot;%s\n&quot;, s);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    struct constr_t {
+        int a;
+        int b;
+        struct innerstr {
+            int x;
+            int y;
+        } c;
+    };
+    void print_pconstr_t(struct constr_t *t);
+    int print_i(int x);
+    int print_pi(int *px);
+    void print(const char *s);
+]]
+
+ti = ffi.new(&quot;int&quot;, 10)
+tpi = ffi.new(&quot;int[1]&quot;, {20})
+
+ts = ffi.new(&quot;struct constr_t&quot;, {1, 2, {3, 4}})
+
+tcstr = ffi.new(&quot;const char*&quot;, &quot;Hello World&quot;)
+tstr = ffi.new(&quot;char[11]&quot;, &quot;Hello World&quot;)
+
+t.print_i(ti)
+--t.print_pi(ti) --luajit: ffit.lua:29: bad argument #1 to &apos;print_pi&apos; (cannot convert &apos;int&apos; to &apos;int *&apos;)
+
+--t.print_i(tpi) --luajit: ffit.lua:31: bad argument #1 to &apos;print_i&apos; (cannot convert &apos;int [1]&apos; to &apos;int&apos;)
+t.print_pi(tpi)
+
+t.print_pconstr_t(ts)
+
+t.print(tcstr)
+t.print(tstr)
+</code></pre><p>–对基本类型操作</p>
+<pre><code>ti = 100 --change tpi to number
+tpi[0] = 21
+--tpi=22 --change tpi to number
+--tpi[1] = 2000 --luajit: ffit.lua:44: attempt to index global &apos;tpi&apos; (a number value)
+print(type(ti), type(tpi))
+t.print_i(ti)
+t.print_pi(tpi)
+</code></pre><p>–对 struct 类型操作</p>
+<pre><code>ts.b = 100
+ts.c.y = 1000
+print(type(ts))
+t.print_pconstr_t(ts)
+</code></pre><p>–对字符串类型操作</p>
+<pre><code>--tcstr[2] = 32 --luajit: ffit.lua:54: attempt to write to constant location
+tstr[2] = 32
+t.print(tstr)
+
+t.print(&quot;Hello Lua&quot;)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+x: 10
+px: 20
+a:1
+b:2
+c.x:3
+c.y:4
+Hello World
+Hello World
+number  cdata
+x: 100
+px: 21
+cdata    
+a:1
+b:100
+c.x:3
+c.y:1000
+Hello World
+Hello Lua
+</code></pre><p>从上面的例子可以看出，对基本类型，实际上不需要将其转为 cdata 类型；对于基本类型指针，操作方式与数组类似，在 Lua 中可当作 table 数组进行处理；对结构类型，在 Lua 中可当作 table 字典进行处理；对字符串，在 Lua 中可当作 table 数组进行处理</p>
+<p>本节小结</p>
+<p>Lua 可以使用 ffi.new 初始化一个 cdata 对象，也可以使用 ffi.typeof 生成的类型来初始化一个 cdata 对象</p>
+<p>对于基本类型和字符串类型，没有必要将其转为 cdata 对象，其可以作为参数传入 C 函数中。也可以接收 C 函数的返回值</p>
+<p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
+<p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
+<p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
 
           
         
@@ -408,6 +2976,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -446,7 +3018,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

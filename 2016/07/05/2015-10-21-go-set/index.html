@@ -84,16 +84,55 @@
 
 
 
-<meta name="description" content="前进，前进，不择手段的野蛮前进。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="guestbook">
-<meta property="og:url" content="http://yoursite.com/guestbook/index.html">
+<meta name="description" content="利用go的interface实现的有锁Set
+package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;amp;Set{">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go Set实现">
+<meta property="og:url" content="http://yoursite.com/2016/07/05/2015-10-21-go-set/index.html">
 <meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="前进，前进，不择手段的野蛮前进。">
-<meta property="og:updated_time" content="2016-07-05T12:11:40.000Z">
+<meta property="og:description" content="利用go的interface实现的有锁Set
+package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;amp;Set{">
+<meta property="og:updated_time" content="2016-07-05T13:29:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="guestbook">
-<meta name="twitter:description" content="前进，前进，不择手段的野蛮前进。">
+<meta name="twitter:title" content="Go Set实现">
+<meta name="twitter:description" content="利用go的interface实现的有锁Set
+package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;amp;Set{">
 
 
 
@@ -114,15 +153,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/guestbook/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/05/2015-10-21-go-set/"/>
 
-  <title>
-  
-
-  
-    guestbook | 碧云轩
-  
-</title>
+  <title> Go Set实现 | 碧云轩 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -153,7 +186,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -293,14 +326,234 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-      
-    
-    
-      <div class="comments" id="comments">
+      <header class="post-header">
+
         
-      </div>
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Go Set实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2015-10-21-go-set/" class="leancloud_visitors" data-flag-title="Go Set实现">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
     
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>利用go的interface实现的有锁Set</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/05/2015-09-15-router-improve-speed/" rel="next" title="为你的路由器提速">
+                <i class="fa fa-chevron-left"></i> 为你的路由器提速
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/05/2015-10-07-tuning-nginx/" rel="prev" title="nginx性能调优（部分参数调整）">
+                nginx性能调优（部分参数调整） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -311,8 +564,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="guestbook/index.html"
-           data-title="guestbook" data-url="http://yoursite.com/guestbook/index.html">
+      <div class="ds-thread" data-thread-key="2016/07/05/2015-10-21-go-set/"
+           data-title="Go Set实现" data-url="http://yoursite.com/2016/07/05/2015-10-21-go-set/">
       </div>
     
   </div>
@@ -336,8 +589,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -373,6 +635,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -469,6 +742,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

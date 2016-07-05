@@ -1,0 +1,1031 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是LRU Cache
+LRU是Least Recently Used的缩写，意思是最近最少使用，它是一种Cache替换算法。 什么是Cache？狭义的Cache指的是位于CPU和主存间的快速RAM， 通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。 广义上的Cache指的是位于速度相差较大的两种硬件之间， 用于协调两者数据传输速度差异的结构。除了CPU与主存之间有Ca">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go语言实现LRU Cache">
+<meta property="og:url" content="http://yoursite.com/2016/07/05/2016-06-29-lru-go/index.html">
+<meta property="og:site_name" content="碧云轩">
+<meta property="og:description" content="什么是LRU Cache
+LRU是Least Recently Used的缩写，意思是最近最少使用，它是一种Cache替换算法。 什么是Cache？狭义的Cache指的是位于CPU和主存间的快速RAM， 通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。 广义上的Cache指的是位于速度相差较大的两种硬件之间， 用于协调两者数据传输速度差异的结构。除了CPU与主存之间有Ca">
+<meta property="og:updated_time" content="2016-07-05T13:29:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go语言实现LRU Cache">
+<meta name="twitter:description" content="什么是LRU Cache
+LRU是Least Recently Used的缩写，意思是最近最少使用，它是一种Cache替换算法。 什么是Cache？狭义的Cache指的是位于CPU和主存间的快速RAM， 通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。 广义上的Cache指的是位于速度相差较大的两种硬件之间， 用于协调两者数据传输速度差异的结构。除了CPU与主存之间有Ca">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'sky'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/05/2016-06-29-lru-go/"/>
+
+  <title> go语言实现LRU Cache | 碧云轩 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?76b3ed277c6e2e5651636f036f6c1428";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">碧云轩</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'k9zMTjMng4-ypts263ZR','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                go语言实现LRU Cache
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2016-06-29-lru-go/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-06-29-lru-go/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/05/2016-06-29-lru-go/" class="leancloud_visitors" data-flag-title="go语言实现LRU Cache">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是LRU-Cache"><a href="#什么是LRU-Cache" class="headerlink" title="什么是LRU Cache"></a>什么是LRU Cache</h2><blockquote>
+<p>LRU是Least Recently Used的缩写，意思是最近最少使用，它是一种Cache替换算法。 什么是Cache？狭义的Cache指的是位于CPU和主存间的快速RAM， 通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。 广义上的Cache指的是位于速度相差较大的两种硬件之间， 用于协调两者数据传输速度差异的结构。除了CPU与主存之间有Cache， 内存与硬盘之间也有Cache，乃至在硬盘与网络之间也有某种意义上的Cache── 称为Internet临时文件夹或网络内容缓存等。</p>
+</blockquote>
+<p>Cache的容量有限，因此当Cache的容量用完后，而又有新的内容需要添加进来时， 就需要挑选并舍弃原有的部分内容，从而腾出空间来放新内容。LRU Cache 的替换原则就是将最近最少使用的内容替换掉(还有一种是FIFO方式进行缓存替换)。其实，LRU译成最久未使用会更形象， 因为该算法每次替换掉的就是一段时间内最久没有使用过的内容。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>LRU一般是由双向链表结合一个hash结构实现， 双向链表用于存储数据结点，并且它是按照结点最近被使用的时间来存储的。 如果一个结点被访问了， 我们有理由相信它在接下来的一段时间被访问的概率要大于其它结点。于是， 我们把它放到双向链表的头部。当我们往双向链表里插入一个结点， 我们也有可能很快就会使用到它，同样把它插入到头部。 我们使用这种方式不断地调整着双向链表，链表尾部的结点自然也就是最近一段时间， 最久没有使用到的结点。那么，当我们的Cache满了， 需要替换掉的就是双向链表中最后的那个结点(不是尾结点，头尾结点不存储实际内容)。</p>
+<h2 id="对外暴露的接口"><a href="#对外暴露的接口" class="headerlink" title="对外暴露的接口"></a>对外暴露的接口</h2><p>LRUCache对外暴露三个接口</p>
+<pre><code class="golang">Get(K key)
+Put(K key, V value)
+</code></pre>
+<p>当我们初始化的时候只需要调用NewLRUCache(capacity)即可初始化我们的Cache的容量，需要塞数据的时候调用Put方法，需要获取数据的时候调用Get方法。</p>
+<p>当我们通过键值来访问类型为T的数据时，调用Get函数。如果键值为key的数据不存在在Cache中就返回-1；如果已经在 Cache中，那就返回该数据，同时将存储该数据的结点移到双向链表头部。 如果我们查询的数据不在Cache中，我们就可以通过Put接口将数据插入双向链表中。 如果此时的Cache还没满，那么我们将新结点插入到链表头部， 同时用哈希表保存结点的键值及结点地址对。如果Cache已经满了， 我们就将链表中的最后一个结点(注意不是尾结点)的内容替换为新内容， 然后移动到头部，更新哈希表。</p>
+<h2 id="GO-代码"><a href="#GO-代码" class="headerlink" title="GO 代码"></a>GO 代码</h2><pre><code class="golang">➜  lru cat lru.<span class="keyword">go</span> 
+<span class="keyword">package</span> lru
+
+<span class="keyword">import</span> <span class="string">"fmt"</span>
+
+<span class="keyword">type</span> Node <span class="keyword">struct</span> {
+        Key   <span class="keyword">interface</span>{}
+        Value <span class="keyword">interface</span>{}
+        Prev  *Node
+        Next  *Node
+}
+
+<span class="keyword">type</span> LRUCache <span class="keyword">struct</span> {
+        Head, Tail *Node
+        Capacity   <span class="keyword">int</span>
+        Map        <span class="keyword">map</span>[<span class="keyword">interface</span>{}]*Node
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">NewLRUCache</span><span class="params">(capacity <span class="keyword">int</span>)</span> *<span class="title">LRUCache</span></span> {
+        l := &amp;LRUCache{}
+        l.Capacity = capacity
+        l.Head = &amp;Node{}
+        l.Tail = &amp;Node{}
+        l.Head.Next = l.Tail
+        l.Tail.Prev = l.Head
+        l.Head.Prev = <span class="literal">nil</span>
+        l.Tail.Next = <span class="literal">nil</span>
+        l.Map = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">interface</span>{}]*Node)
+        <span class="keyword">return</span> l
+}
+
+<span class="comment">//分离节点</span>
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">detach</span><span class="params">(n *Node)</span></span> {
+        n.Prev.Next = n.Next
+        n.Next.Prev = n.Prev
+}
+
+<span class="comment">//节点插入头部</span>
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">attach</span><span class="params">(n *Node)</span></span> {
+        n.Prev = l.Head
+        n.Next = l.Head.Next
+        l.Head.Next = n
+        n.Next.Prev = n
+}
+
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">Put</span><span class="params">(k <span class="keyword">interface</span>{}, v <span class="keyword">interface</span>{})</span></span> {
+        oldV, ok := l.Map[k]
+        <span class="keyword">if</span> ok {
+                l.detach(oldV)
+                oldV.Value = v
+        } <span class="keyword">else</span> {
+                <span class="keyword">var</span> n *Node
+                <span class="keyword">if</span> <span class="built_in">len</span>(l.Map) &gt;= l.Capacity {
+                        n = l.Tail.Prev
+                        l.detach(n)
+                        <span class="built_in">delete</span>(l.Map, n.Key)
+                } <span class="keyword">else</span> {
+                        n = <span class="built_in">new</span>(Node)
+                }
+                n.Key = k
+                n.Value = v
+                l.Map[k] = n
+                l.attach(n)
+        }
+}
+
+<span class="function"><span class="keyword">func</span> <span class="params">(l *LRUCache)</span> <span class="title">Get</span><span class="params">(k <span class="keyword">interface</span>{})</span> <span class="title">interface</span></span>{} {
+        v, ok := l.Map[k]
+        <span class="keyword">if</span> ok {
+                l.detach(v)
+                l.attach(v)
+                <span class="keyword">return</span> v.Value
+        }
+        <span class="keyword">return</span> <span class="number">-1</span>
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {
+    l := NewLRUCache(<span class="number">10</span>)
+        l.Put(<span class="string">"str"</span>, <span class="number">1</span>)
+        fmt.Println(l.Get(<span class="string">"str"</span>))
+        l.Put(<span class="number">1</span>, <span class="number">2</span>)
+        fmt.Println(l.Get(<span class="number">1</span>))
+        fmt.Println(l.Get(<span class="string">"str"</span>).(<span class="keyword">int</span>))
+}
+
+
+➜  lru cat lru_test.<span class="keyword">go</span> 
+<span class="keyword">package</span> lru
+
+<span class="keyword">import</span> (
+        <span class="string">"testing"</span>
+)
+
+<span class="function"><span class="keyword">func</span> <span class="title">testEq</span><span class="params">(a, b []<span class="keyword">int</span>)</span> <span class="title">bool</span></span> {
+        <span class="keyword">if</span> a == <span class="literal">nil</span> &amp;&amp; b == <span class="literal">nil</span> {
+                <span class="keyword">return</span> <span class="literal">true</span>
+        }
+        <span class="keyword">if</span> a == <span class="literal">nil</span> || b == <span class="literal">nil</span> {
+                <span class="keyword">return</span> <span class="literal">false</span>
+        }
+        <span class="keyword">if</span> <span class="built_in">len</span>(a) != <span class="built_in">len</span>(b) {
+                <span class="keyword">return</span> <span class="literal">false</span>
+        }
+        <span class="keyword">for</span> i := <span class="keyword">range</span> a {
+                <span class="keyword">if</span> a[i] != b[i] {
+                        <span class="keyword">return</span> <span class="literal">false</span>
+                }
+        }
+        <span class="keyword">return</span> <span class="literal">true</span>
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">Test_Get</span><span class="params">(t *testing.T)</span></span> {
+        l := NewLRUCache(<span class="number">2</span>)
+        l.Put(<span class="string">"sky"</span>, <span class="string">"SKY"</span>)
+        <span class="keyword">if</span> l.Get(<span class="string">"sky"</span>) != <span class="string">"SKY"</span> {
+                t.Error(<span class="string">"test get sky failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky success"</span>)
+        }
+        l.Put(<span class="string">"sky1"</span>, <span class="number">2</span>)
+        <span class="keyword">if</span> l.Get(<span class="string">"sky1"</span>) != <span class="number">2</span> {
+                t.Error(<span class="string">"test get sky1 failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky1 success"</span>)
+        }
+        l.Put(<span class="string">"sky2"</span>, []<span class="keyword">int</span>{<span class="number">1</span>, <span class="number">2</span>})
+        <span class="keyword">if</span> testEq(l.Get(<span class="string">"sky2"</span>).([]<span class="keyword">int</span>), []<span class="keyword">int</span>{<span class="number">1</span>, <span class="number">2</span>}) {
+                t.Log(<span class="string">"test get sky2 success"</span>)
+        } <span class="keyword">else</span> {
+                t.Error(<span class="string">"test get sky2 failed!!!"</span>)
+        }
+        <span class="keyword">if</span> l.Get(<span class="string">"sky"</span>) != <span class="number">-1</span> {
+                t.Error(<span class="string">"test get sky failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky success"</span>)
+        }
+
+        <span class="keyword">if</span> l.Get(<span class="string">"sky1"</span>) != <span class="number">2</span> {
+                t.Error(<span class="string">"test get sky1 failed!!!"</span>)
+        } <span class="keyword">else</span> {
+                t.Log(<span class="string">"test get sky1 success"</span>)
+        }
+}
+
+<span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAdd</span><span class="params">(b *testing.B)</span></span> {
+        l := NewLRUCache(<span class="number">100</span>)
+
+        <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ {
+                l.Put(i, i*i)
+        }
+}
+
+➜  lru <span class="keyword">go</span> version
+<span class="keyword">go</span> version go1<span class="number">.5</span> linux/amd64
+
+➜  lru <span class="keyword">go</span> test -v lru.<span class="keyword">go</span> lru_test.<span class="keyword">go</span>
+=== RUN   Test_Get
+--- PASS: Test_Get (<span class="number">0.00s</span>)
+        lru_test.<span class="keyword">go</span>:<span class="number">31</span>: test get sky success
+        lru_test.<span class="keyword">go</span>:<span class="number">37</span>: test get sky1 success
+        lru_test.<span class="keyword">go</span>:<span class="number">41</span>: test get sky2 success
+        lru_test.<span class="keyword">go</span>:<span class="number">48</span>: test get sky success
+        lru_test.<span class="keyword">go</span>:<span class="number">54</span>: test get sky1 success
+PASS
+ok      command-line-arguments  <span class="number">0.003s</span>
+
+➜  lru <span class="keyword">go</span> test -test.bench=<span class="string">".*"</span> lru_test.<span class="keyword">go</span> lru.<span class="keyword">go</span> 
+PASS
+BenchmarkAdd<span class="number">-2</span>   <span class="number">3000000</span>               <span class="number">421</span> ns/op
+ok      command-line-arguments  <span class="number">1.695s</span>
+</code></pre>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.cs.uml.edu/~jlu1/doc/codes/lruCache.html" target="_blank" rel="external">http://www.cs.uml.edu/~jlu1/doc/codes/lruCache.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/" rel="next" title="10 tips for 10x application performance">
+                <i class="fa fa-chevron-left"></i> 10 tips for 10x application performance
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/05/2015-10-22-lua-oop/" rel="prev" title="lua 面向对象实现">
+                lua 面向对象实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/05/2016-06-29-lru-go/"
+           data-title="go语言实现LRU Cache" data-url="http://yoursite.com/2016/07/05/2016-06-29-lru-go/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="sky" />
+          <p class="site-author-name" itemprop="name">sky</p>
+          <p class="site-description motion-element" itemprop="description">前进，前进，不择手段的野蛮前进。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是LRU-Cache"><span class="nav-number">1.</span> <span class="nav-text">什么是LRU Cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构"><span class="nav-number">2.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对外暴露的接口"><span class="nav-number">3.</span> <span class="nav-text">对外暴露的接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GO-代码"><span class="nav-number">4.</span> <span class="nav-text">GO 代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sky</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"skey4"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("6rkRhIq2paqBgBWz66DWw8VE-gzGzoHsz", "jMVAmVvhICNd0U3TTkmDXIzs");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+  
+    <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("6rkRhIq2paqBgBWz66DWw8VE-gzGzoHsz", "jMVAmVvhICNd0U3TTkmDXIzs");</script>
+<script>
+function showTime(Counter) {
+    var query = new AV.Query(Counter);
+    $(".leancloud_visitors").each(function() {
+        var url = $(this).attr("id").trim();
+        query.equalTo("url", url);
+        query.find({
+            success: function(results) {
+                if (results.length == 0) {
+                    var content = $(document.getElementById(url)).text() + ': 0';
+                    $(document.getElementById(url)).text(content);
+                    return;
+                }
+                for (var i = 0; i < results.length; i++) {
+                    var object = results[i];
+                    var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+                    $(document.getElementById(url)).text(content);
+                }
+            },
+            error: function(object, error) {
+                console.log("Error: " + error.code + " " + error.message);
+            }
+        });
+
+    });
+}
+
+function addCount(Counter) {
+    var Counter = AV.Object.extend("Counter");
+    url = $(".leancloud_visitors").attr('id').trim();
+    title = $(".leancloud_visitors").attr('data-flag-title').trim();
+    var query = new AV.Query(Counter);
+    query.equalTo("url", url);
+    query.find({
+        success: function(results) {
+            if (results.length > 0) {
+                var counter = results[0];
+                counter.fetchWhenSave(true);
+                counter.increment("time");
+                counter.save(null, {
+                    success: function(counter) {
+                        var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+                        $(document.getElementById(url)).text(content);
+                    },
+                    error: function(counter, error) {
+                        console.log('Failed to save Visitor num, with error message: ' + error.message);
+                    }
+                });
+            } else {
+                var newcounter = new Counter();
+                newcounter.set("title", title);
+                newcounter.set("url", url);
+                newcounter.set("time", 1);
+                newcounter.save(null, {
+                    success: function(newcounter) {
+                        console.log("newcounter.get('time')="+newcounter.get('time'));
+                        var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+                        $(document.getElementById(url)).text(content);
+                    },
+                    error: function(newcounter, error) {
+                        console.log('Failed to create');
+                    }
+                });
+            }
+        },
+        error: function(error) {
+            console.log('Error:' + error.code + " " + error.message);
+        }
+    });
+}
+$(function() {
+    var Counter = AV.Object.extend("Counter");
+    if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+    } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+    }
+}); 
+</script>
+
+  
+</body>
+</html>
