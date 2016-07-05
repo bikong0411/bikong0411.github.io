@@ -308,8 +308,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-10-22-lua-oop/" itemprop="url">
-                  lua 面向对象实现
+                <a class="post-title-link" href="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/" itemprop="url">
+                  5个提高性能的Node.JS应用Tips
                 </a>
               
             
@@ -333,21 +333,22 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-22-lua-oop/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-22-lua-oop/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-11-18-5-performance-tips-for-node-application/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-10-22-lua-oop/"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/"class="leancloud_visitors" data-flag-title="5个提高性能的Node.JS应用Tips">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -362,129 +363,75 @@
       
         
           
-            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
+            <blockquote>
+<p> <a href="https://twitter.com/nebrius/status/505543249969176576?ref_src=twsrc%5Etfw" target="_blank" rel="external">Bryan Huges</a>在twitter中写道：如果你没有在你的node服务前加一层nginx，那么你这么做可能是不正确的。</p>
+</blockquote>
+<p>Node.js在用世界最著名的语言javascript去创建服务端应用的工具中处于领先地位。它同时提供了一个web服务器又和一个应用服务器的的功能。现在Node.js被当做开发和交付各类微服务的一个关键工具。</p>
+<p>Node.js可以替代或增强Java或.NET用作后端应用程序的开发。</p>
+<p>Node.js使用了单线程非阻塞IO，使其能够扩展并支持数万并发操作。Nginx也是使用这种架构去解决C10K(支持多于10000个并发连接)问题。Node.js以其高性能和开发人员的生产力而著称。</p>
+<p>那哪里错了呢？</p>
+<p>Node.js也有一些薄弱的环节和缺点，导致基于Node的系统容易表现的性能不好甚至崩溃。当问题频繁出现时，会引起基于Node的web应用程序流量大增。</p>
+<p>此外，Node.js是一个强大的工具能用来创建和运行应用逻辑，为你的网页产生核心的变量。但是它不那么擅长服务静态内容（比如图片，javascript文件）、在多个服务器之间进行负载均衡。</p>
+<p>为了最大化发挥Node.js的作用，你需要缓存静态内容，在多个应用服务器之间进行代理，进行负载均衡。还需要管理客户端、Node.js以及其他服务（比如一个运行Socket.IO的服务）之间的端口争用。Nginx可以被用来做这些，使之成为Node.js性能优化的一个很棒的工具。</p>
+<p>使用这些tips提高Node.js应用的性能</p>
+<ol>
+<li>部署一个反向代理服务器</li>
+<li>缓存静态文件</li>
+<li>在多个服务器之间进行负载均衡</li>
+<li>代理WebSocket连接</li>
+<li>实现SSL/TLS和HTTP/2</li>
+</ol>
+<p><em>注</em>： 一种快速解决Node.js应用程序的性能的办法是修改你的Node.js的配置，以充分利用现代多核服务器的优势。看看<a href="http://cjihrig.com/blog/scaling-node-js-applications/" target="_blank" rel="external">这篇文章</a>，以了解如何将Node.js的派生单独的子进程(在你的web服务器上子进程等于CPU的数量)，每个进程都能充分利用一个CPU，给你的应用一个很大的性能提升</p>
+<p>##1. 部署一个反向代理服务器</p>
+<p>当我们看到应用服务器直接暴露在互联网上被当作高性能网站的核心传入流量，我们（Nginx Inc.）总是有点恐惧。比如包括许多基于WordPress的，还有Node.js的网站。</p>
+<p>Node.js的扩展性在更大程度上比大多数应用服务器设计的更好，它的web服务器可以很好的处理大量的互联网流量。但是web服务不是Node.js构建的适合做的。</p>
+<p>如果你有一个高流量的站点，提高应用性能的第一步是在你的Node.js服务前放一台代理服务器，这样可以防止你的Node.js服务直接暴露在互联网的流量中，并且在你使用多台应用服务器进行负载均衡时有很高的灵活性在，并且可以用内部链接去缓存内容。</p>
+<p><img src="https://www.nginx.com/wp-content/uploads/2015/11/control2-1024x341.png" alt="Proxy Reverse"></p>
+<p>在现有的服务器前方搭建一台Nginx作为反向代理服务器，是nginx的一个核心用例，世界上已经有数以千万计的站点都这么用了。</p>
+<p>这有一篇特别的高级的文章<a href="http://www.nikola-breznjak.com/blog/nodejs/using-nginx-as-a-reverse-proxy-in-front-of-your-node-js-application/" target="_blank" rel="external">使用Nginx作为一个Node.js的反向代理服务器</a> 包括：</p>
 <ul>
-<li><p>类</p>
-<pre><code>Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:setName(name)
-    self.name = name
- end
-
- function Name:getName()
-    return self.Name
-end
-
--- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
-</code></pre></li>
-<li><p>单继承</p>
-<pre><code>--定义继承
-SpecName = Name:New({age=25})
-function SpecName:setNewName(name)
-      if self.getAge() &gt; 9 then
-          self:setName(name)
-      else
-          error(&quot;You must give an age!&quot;)
-      end
-end
-
-function SpecName:getAge()
-       return self.age
-end
-</code></pre></li>
+<li>简化操作权限和端口分配</li>
+<li>更有效地服务于静态图像（见下一个tips）</li>
+<li>成功管理Node.js崩溃</li>
+<li>缓解Dos攻击</li>
 </ul>
-<ul>
-<li><p>多继承</p>
-<pre><code>function search(k, plist)
-    for i=1,#plist do
-         if plist[i][k] ~= nil then return plist[i][k] end
-     end
-end
+<p><em>注</em> ： 这些教程讲解如何使用NGINX作为在Ubuntu14.04或CentOS的环境反向代理服务器，而且对那些想把NGINX放到node.js前的人来说是很有用的概述。</p>
+<p>##2. 缓存静态文件<br>随着一个基于Node.js的站点的成长，服务器开始显示的疲惫。这有亮点你希望做的:</p>
+<ol>
+<li>最大化的使用Node.js服务器 </li>
+<li>尽可能简单的添加应用服务器，并且它们之间可以进行负载均衡</li>
+</ol>
+<p>这实际上做起来很简单，就像上面第一个tips里面说的那样，部署一个Nginx作为反向代理，很简单就实现了缓存，负载均衡(当你有多台Node.js服务器的时候)等功能。</p>
+<p>一个应用容器平台Modulus（用作系数压测）的网站有一篇文章<a href="http://blog.modulus.io/supercharge-your-nodejs-applications-with-nginx" target="_blank" rel="external">压力测试nginx和Node.js应用的性能</a>，作者的网站能够为平均每秒服务近900请求。使用NGINX作为反向代理服务器，提供静态内容，同一站点提供超过每秒1600请求 - 近2倍的性能提升。</p>
+<p>如果再性能加倍你就要花费时间去采取额外的措施，以适应近一步的增长，比如审查（或者改进）一下你站点的设计，优化一下你的应用代码或者部署更多的应用服务器。</p>
+<p>以下是配置代码，适用于<a href="http://blog.modulus.io/supercharge-your-nodejs-applications-with-nginx" target="_blank" rel="external">Modulus上运行的网站</a>：</p>
+<pre><code>server {
+      listen 80;
+      server_name static-test-47242.onmodulus.net;
 
-function createClass(...)
-    local args = {...}
-    local c = {}
-    setmetatable(c, {__index = function(self, k) 
-        return search(k, args) 
-    end})
+      root /mnt/app;
+      index index.html index.htm;
 
-    c.__index = c
-    function c:new(o) 
-        o = o or {}
-        setmetatable(o, c)
-        return o
-    end
-    return c 
-end
+      location /static/ {
+           try_files $uri $uri/ =404;
+      }
 
-Balance = {balance= 10}
-function Balance:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
-end
-
-function Balance:despoit(v)
-    self.balance = self.balance + v
-end
-
-function Balance:withDraw(v)
-    if self.balance &lt; v then
-         error(&quot;Bad case&quot;)
-    else
-        self.balance = self.balance - v
-    end
-end
-
-Name={}
-function Name:new(o) 
-     o = o or {}
-     setmetatable(o, {__index = self})
-     return o
-end
-
-function Name:setName(name)
-    self.name = name
-end
-
-function Name:getName()
-    return self.name
-end
-
-c = createClass(Balance, Name)
-c:despoit(100)
-c:withDraw(10)
-print(c.balance)  --&gt; 100
-c:setName(&quot;wbz&quot;)
-print(c:getName()) --&gt; wbz
-</code></pre></li>
-<li><p>隐藏私有变量</p>
-<pre><code> function newAccount(initBalance)
-    local self = {balance=initBalance}
-    local withdraw = function(v)
-        self.balance = self.balance - v 
-    end                    
-
-    local deposit = function (v) 
-           self.balance = self.balance + v 
-    end                    
-
-    local getBalance = function()
-           return self.balance
-    end                    
-    return {               
-        withdraw=withdraw, 
-        deposit = deposit, 
-        getBalance = getBalance,    
-     }
-end 
-</code></pre></li>
-</ul>
+      location /api/ {
+           proxy_pass http://node-test-45750.onmodulus.net;
+      }
+}
+</code></pre><p>这篇详细的<a href="http://pnommensen.com/tag/ghost/" target="_blank" rel="external">文章</a>来自于NGINX公司的Patrick Nommensen，解释了他如何缓存他运行的Ghost开源博客平台Node.js应用程序的静态内容。虽然有些细节是Ghost特有的，你可以复用一些代码到很多其他的Node.js应用程序。</p>
+<p>例如，在Nginx的location块中，你可能会想不缓存某些内容。你通常不会想要缓存博客平台的管理界面，例如。下面是禁用[或不缓存]Ghost管理界面的缓存配置代码：</p>
+<pre><code>location ~ ^/(?:ghost|signout) { 
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_pass http://ghost_upstream;
+    add_header Cache-Control &quot;no-cache, private, no-store,
+    must-revalidate, max-stale=0, post-check=0, pre-check=0&quot;;
+}
+</code></pre><p>有关提供静态内容的一般信息，请参阅NGINX Plus管理指南。管理员指南包括实现更快的性能配置说明，尝试查找文件时相应成功或失败的多种选项，达到更快的性能的优化方法。</p>
+<p>缓存静态文件的NGINX服务器显著从Node.js的应用程序服务器卸载一部分工作，使其达到更高的性能。</p>
+<p><a href="https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/" target="_blank" rel="external">https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/</a></p>
 
           
         
@@ -567,13 +514,14 @@ end
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/"class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/"class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -591,6 +539,213 @@ end
             <p>10条建议让你的应用性能提升10倍</p>
 <p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
 
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
+                  Go Set实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-10-21-go-set/"class="leancloud_visitors" data-flag-title="Go Set实现">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>利用go的interface实现的有锁Set</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre>
           
         
       
@@ -672,13 +827,14 @@ end
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-09-15-router-improve-speed/"class="leancloud_visitors" data-flag-title="为你的路由器提速">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-09-15-router-improve-speed/"class="leancloud_visitors" data-flag-title="为你的路由器提速">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -785,13 +941,14 @@ end
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-10-07-tuning-nginx/"class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-10-07-tuning-nginx/"class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -889,13 +1046,14 @@ end
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-10-20-go-basic-data-structure/"class="leancloud_visitors" data-flag-title="Go 中常用的数据结构介绍">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-10-20-go-basic-data-structure/"class="leancloud_visitors" data-flag-title="Go 中常用的数据结构介绍">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -1488,212 +1646,6 @@ func main() {
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
-                  Go Set实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-10-21-go-set/"class="leancloud_visitors" data-flag-title="Go Set实现">
-         &nbsp;阅读次数
-        </span>
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>利用go的interface实现的有锁Set</p>
-<pre><code>package main
-import (
-    &quot;fmt&quot;
-    &quot;sync&quot;
-)
-
-type Set struct {
-    m map[interface{}]bool
-    sync.RWMutex
-}
-
-func New() *Set {
-    return &amp;Set{
-        m: map[interface{}]bool{},
-    }
-}
-
-func (s *Set) Add(item interface{}) {
-    s.Lock()
-    defer s.Unlock()
-    s.m[item] = true
-}
-
-func (s *Set) Remove(item interface{}) {
-    s.Lock()
-    defer s.Unlock()
-    delete(s.m, item)
-}
-
-func (s *Set) Contains(item interface{}) bool{
-    s.RLock()
-    defer s.RUnlock()
-    _,ok := s.m[item]
-    return ok
-}
-
-func (s *Set) Len() int {
-    return len(s.List())
-}
-
-func (s *Set) Clear() {
-    s.Lock()
-    defer s.Unlock()
-    s.m = map[interface{}]bool{}
-}
-
-func (s *Set) IsEmpty() bool {
-    s.RLock()
-    defer s.RUnlock()
-    if s.Len() == 0 {
-        return true
-    }
-    return false
-}
-
-func (s *Set) List() []interface{} {
-    s.RLock()
-    defer s.RUnlock()
-    list := []interface{}{}
-    for  k,_ := range s.m {
-        list = append(list, k)
-    }
-    return list
-}
-
-func (s *Set) Diff(t *Set) []interface{} {
-    sDiff := []interface{}{}
-    for sk := range s.m {
-        if _, ok := t.m[sk]; !ok {
-            sDiff = append(sDiff, sk)
-        }
-    }
-    return sDiff
-}
-
-
-func main() {
-    s := New()
-    s.Add(1)
-    s.Add(2)
-    s.Add(1)
-    if s.IsEmpty() {
-        fmt.Println(&quot;0 item&quot;)
-    }
-    s.Add(1)
-    s.Add(2)
-    s.Add(3)
-    s.Add(&quot;hello&quot;)
-    if s.Contains(2) {
-        fmt.Println(&quot;2 does exist&quot;)
-    }
-    s.Remove(2)
-    s.Remove(3)
-    s.Add(4)
-    s.Add(&quot;sky&quot;)
-    fmt.Println(&quot;list of all items&quot;, s.List())
-     t := New()
-    t.Add(1)
-    t.Add(3)
-    t.Add(&quot;world&quot;)
-    fmt.Println(s.Diff(t))
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/07/05/2016-06-19-openresty-note/" itemprop="url">
                   openresty学习笔记
                 </a>
@@ -1727,13 +1679,14 @@ func main() {
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2016-06-19-openresty-note/"class="leancloud_visitors" data-flag-title="openresty学习笔记">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2016-06-19-openresty-note/"class="leancloud_visitors" data-flag-title="openresty学习笔记">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -2063,13 +2016,14 @@ Here the args table will always look like
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/"class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/"class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -2240,178 +2194,6 @@ Location: http://127.1/lua
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/" itemprop="url">
-                  5个提高性能的Node.JS应用Tips
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-11-18-5-performance-tips-for-node-application/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2015-11-18-5-performance-tips-for-node-application/"class="leancloud_visitors" data-flag-title="5个提高性能的Node.JS应用Tips">
-         &nbsp;阅读次数
-        </span>
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p> <a href="https://twitter.com/nebrius/status/505543249969176576?ref_src=twsrc%5Etfw" target="_blank" rel="external">Bryan Huges</a>在twitter中写道：如果你没有在你的node服务前加一层nginx，那么你这么做可能是不正确的。</p>
-</blockquote>
-<p>Node.js在用世界最著名的语言javascript去创建服务端应用的工具中处于领先地位。它同时提供了一个web服务器又和一个应用服务器的的功能。现在Node.js被当做开发和交付各类微服务的一个关键工具。</p>
-<p>Node.js可以替代或增强Java或.NET用作后端应用程序的开发。</p>
-<p>Node.js使用了单线程非阻塞IO，使其能够扩展并支持数万并发操作。Nginx也是使用这种架构去解决C10K(支持多于10000个并发连接)问题。Node.js以其高性能和开发人员的生产力而著称。</p>
-<p>那哪里错了呢？</p>
-<p>Node.js也有一些薄弱的环节和缺点，导致基于Node的系统容易表现的性能不好甚至崩溃。当问题频繁出现时，会引起基于Node的web应用程序流量大增。</p>
-<p>此外，Node.js是一个强大的工具能用来创建和运行应用逻辑，为你的网页产生核心的变量。但是它不那么擅长服务静态内容（比如图片，javascript文件）、在多个服务器之间进行负载均衡。</p>
-<p>为了最大化发挥Node.js的作用，你需要缓存静态内容，在多个应用服务器之间进行代理，进行负载均衡。还需要管理客户端、Node.js以及其他服务（比如一个运行Socket.IO的服务）之间的端口争用。Nginx可以被用来做这些，使之成为Node.js性能优化的一个很棒的工具。</p>
-<p>使用这些tips提高Node.js应用的性能</p>
-<ol>
-<li>部署一个反向代理服务器</li>
-<li>缓存静态文件</li>
-<li>在多个服务器之间进行负载均衡</li>
-<li>代理WebSocket连接</li>
-<li>实现SSL/TLS和HTTP/2</li>
-</ol>
-<p><em>注</em>： 一种快速解决Node.js应用程序的性能的办法是修改你的Node.js的配置，以充分利用现代多核服务器的优势。看看<a href="http://cjihrig.com/blog/scaling-node-js-applications/" target="_blank" rel="external">这篇文章</a>，以了解如何将Node.js的派生单独的子进程(在你的web服务器上子进程等于CPU的数量)，每个进程都能充分利用一个CPU，给你的应用一个很大的性能提升</p>
-<p>##1. 部署一个反向代理服务器</p>
-<p>当我们看到应用服务器直接暴露在互联网上被当作高性能网站的核心传入流量，我们（Nginx Inc.）总是有点恐惧。比如包括许多基于WordPress的，还有Node.js的网站。</p>
-<p>Node.js的扩展性在更大程度上比大多数应用服务器设计的更好，它的web服务器可以很好的处理大量的互联网流量。但是web服务不是Node.js构建的适合做的。</p>
-<p>如果你有一个高流量的站点，提高应用性能的第一步是在你的Node.js服务前放一台代理服务器，这样可以防止你的Node.js服务直接暴露在互联网的流量中，并且在你使用多台应用服务器进行负载均衡时有很高的灵活性在，并且可以用内部链接去缓存内容。</p>
-<p><img src="https://www.nginx.com/wp-content/uploads/2015/11/control2-1024x341.png" alt="Proxy Reverse"></p>
-<p>在现有的服务器前方搭建一台Nginx作为反向代理服务器，是nginx的一个核心用例，世界上已经有数以千万计的站点都这么用了。</p>
-<p>这有一篇特别的高级的文章<a href="http://www.nikola-breznjak.com/blog/nodejs/using-nginx-as-a-reverse-proxy-in-front-of-your-node-js-application/" target="_blank" rel="external">使用Nginx作为一个Node.js的反向代理服务器</a> 包括：</p>
-<ul>
-<li>简化操作权限和端口分配</li>
-<li>更有效地服务于静态图像（见下一个tips）</li>
-<li>成功管理Node.js崩溃</li>
-<li>缓解Dos攻击</li>
-</ul>
-<p><em>注</em> ： 这些教程讲解如何使用NGINX作为在Ubuntu14.04或CentOS的环境反向代理服务器，而且对那些想把NGINX放到node.js前的人来说是很有用的概述。</p>
-<p>##2. 缓存静态文件<br>随着一个基于Node.js的站点的成长，服务器开始显示的疲惫。这有亮点你希望做的:</p>
-<ol>
-<li>最大化的使用Node.js服务器 </li>
-<li>尽可能简单的添加应用服务器，并且它们之间可以进行负载均衡</li>
-</ol>
-<p>这实际上做起来很简单，就像上面第一个tips里面说的那样，部署一个Nginx作为反向代理，很简单就实现了缓存，负载均衡(当你有多台Node.js服务器的时候)等功能。</p>
-<p>一个应用容器平台Modulus（用作系数压测）的网站有一篇文章<a href="http://blog.modulus.io/supercharge-your-nodejs-applications-with-nginx" target="_blank" rel="external">压力测试nginx和Node.js应用的性能</a>，作者的网站能够为平均每秒服务近900请求。使用NGINX作为反向代理服务器，提供静态内容，同一站点提供超过每秒1600请求 - 近2倍的性能提升。</p>
-<p>如果再性能加倍你就要花费时间去采取额外的措施，以适应近一步的增长，比如审查（或者改进）一下你站点的设计，优化一下你的应用代码或者部署更多的应用服务器。</p>
-<p>以下是配置代码，适用于<a href="http://blog.modulus.io/supercharge-your-nodejs-applications-with-nginx" target="_blank" rel="external">Modulus上运行的网站</a>：</p>
-<pre><code>server {
-      listen 80;
-      server_name static-test-47242.onmodulus.net;
-
-      root /mnt/app;
-      index index.html index.htm;
-
-      location /static/ {
-           try_files $uri $uri/ =404;
-      }
-
-      location /api/ {
-           proxy_pass http://node-test-45750.onmodulus.net;
-      }
-}
-</code></pre><p>这篇详细的<a href="http://pnommensen.com/tag/ghost/" target="_blank" rel="external">文章</a>来自于NGINX公司的Patrick Nommensen，解释了他如何缓存他运行的Ghost开源博客平台Node.js应用程序的静态内容。虽然有些细节是Ghost特有的，你可以复用一些代码到很多其他的Node.js应用程序。</p>
-<p>例如，在Nginx的location块中，你可能会想不缓存某些内容。你通常不会想要缓存博客平台的管理界面，例如。下面是禁用[或不缓存]Ghost管理界面的缓存配置代码：</p>
-<pre><code>location ~ ^/(?:ghost|signout) { 
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header Host $http_host;
-    proxy_pass http://ghost_upstream;
-    add_header Cache-Control &quot;no-cache, private, no-store,
-    must-revalidate, max-stale=0, post-check=0, pre-check=0&quot;;
-}
-</code></pre><p>有关提供静态内容的一般信息，请参阅NGINX Plus管理指南。管理员指南包括实现更快的性能配置说明，尝试查找文件时相应成功或失败的多种选项，达到更快的性能的优化方法。</p>
-<p>缓存静态文件的NGINX服务器显著从Node.js的应用程序服务器卸载一部分工作，使其达到更高的性能。</p>
-<p><a href="https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/" target="_blank" rel="external">https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/07/05/2016-05-31-lua-ffi-summary/" itemprop="url">
                   luajit ffi 总结 <转载>
                 </a>
@@ -2445,13 +2227,14 @@ Location: http://127.1/lua
           
 
           
-          
-          
-&nbsp; | &nbsp;
-<span id="/2016/07/05/2016-05-31-lua-ffi-summary/"class="leancloud_visitors" data-flag-title="luajit ffi 总结 <转载>">
-         &nbsp;阅读次数
-        </span>
 
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2016-05-31-lua-ffi-summary/"class="leancloud_visitors" data-flag-title="luajit ffi 总结 <转载>">
+                     &nbsp;阅读次数
+                    </span>
+          
           
         </div>
       </header>
@@ -2963,6 +2746,233 @@ Hello Lua
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-22-lua-oop/" itemprop="url">
+                  lua 面向对象实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-22-lua-oop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-22-lua-oop/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-10-22-lua-oop/"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
+<ul>
+<li><p>类</p>
+<pre><code>Name = {}
+   function Name:new(o) 
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+ end
+
+ function Name:setName(name)
+    self.name = name
+ end
+
+ function Name:getName()
+    return self.Name
+end
+
+-- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
+</code></pre></li>
+<li><p>单继承</p>
+<pre><code>--定义继承
+SpecName = Name:New({age=25})
+function SpecName:setNewName(name)
+      if self.getAge() &gt; 9 then
+          self:setName(name)
+      else
+          error(&quot;You must give an age!&quot;)
+      end
+end
+
+function SpecName:getAge()
+       return self.age
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>多继承</p>
+<pre><code>function search(k, plist)
+    for i=1,#plist do
+         if plist[i][k] ~= nil then return plist[i][k] end
+     end
+end
+
+function createClass(...)
+    local args = {...}
+    local c = {}
+    setmetatable(c, {__index = function(self, k) 
+        return search(k, args) 
+    end})
+
+    c.__index = c
+    function c:new(o) 
+        o = o or {}
+        setmetatable(o, c)
+        return o
+    end
+    return c 
+end
+
+Balance = {balance= 10}
+function Balance:new(o) 
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+end
+
+function Balance:despoit(v)
+    self.balance = self.balance + v
+end
+
+function Balance:withDraw(v)
+    if self.balance &lt; v then
+         error(&quot;Bad case&quot;)
+    else
+        self.balance = self.balance - v
+    end
+end
+
+Name={}
+function Name:new(o) 
+     o = o or {}
+     setmetatable(o, {__index = self})
+     return o
+end
+
+function Name:setName(name)
+    self.name = name
+end
+
+function Name:getName()
+    return self.name
+end
+
+c = createClass(Balance, Name)
+c:despoit(100)
+c:withDraw(10)
+print(c.balance)  --&gt; 100
+c:setName(&quot;wbz&quot;)
+print(c:getName()) --&gt; wbz
+</code></pre></li>
+<li><p>隐藏私有变量</p>
+<pre><code> function newAccount(initBalance)
+    local self = {balance=initBalance}
+    local withdraw = function(v)
+        self.balance = self.balance - v 
+    end                    
+
+    local deposit = function (v) 
+           self.balance = self.balance + v 
+    end                    
+
+    local getBalance = function()
+           return self.balance
+    end                    
+    return {               
+        withdraw=withdraw, 
+        deposit = deposit, 
+        getBalance = getBalance,    
+     }
+end 
+</code></pre></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -3056,7 +3066,7 @@ Hello Lua
 </div>
 
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+  Powered By <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
@@ -3279,91 +3289,6 @@ Hello Lua
   </script>
 
 
-
-  
-  
-    <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("CrujEsuoGcEj8uRxgKyJYcfX-gzGzoHsz", "eWKCvj9p1JLbhdc5Y8xXK27K");</script>
-<script>
-function showTime(Counter) {
-    var query = new AV.Query(Counter);
-    $(".leancloud_visitors").each(function() {
-        var url = $(this).attr("id").trim();
-        query.equalTo("url", url);
-        query.find({
-            success: function(results) {
-                if (results.length == 0) {
-                    var content = $(document.getElementById(url)).text() + ': 0';
-                    $(document.getElementById(url)).text(content);
-                    return;
-                }
-                for (var i = 0; i < results.length; i++) {
-                    var object = results[i];
-                    var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-                    $(document.getElementById(url)).text(content);
-                }
-            },
-            error: function(object, error) {
-                console.log("Error: " + error.code + " " + error.message);
-            }
-        });
-
-    });
-}
-
-function addCount(Counter) {
-    var Counter = AV.Object.extend("Counter");
-    url = $(".leancloud_visitors").attr('id').trim();
-    title = $(".leancloud_visitors").attr('data-flag-title').trim();
-    var query = new AV.Query(Counter);
-    query.equalTo("url", url);
-    query.find({
-        success: function(results) {
-            if (results.length > 0) {
-                var counter = results[0];
-                counter.fetchWhenSave(true);
-                counter.increment("time");
-                counter.save(null, {
-                    success: function(counter) {
-                        var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-                        $(document.getElementById(url)).text(content);
-                    },
-                    error: function(counter, error) {
-                        console.log('Failed to save Visitor num, with error message: ' + error.message);
-                    }
-                });
-            } else {
-                var newcounter = new Counter();
-                newcounter.set("title", title);
-                newcounter.set("url", url);
-                newcounter.set("time", 1);
-                newcounter.save(null, {
-                    success: function(newcounter) {
-                        console.log("newcounter.get('time')="+newcounter.get('time'));
-                        var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-                        $(document.getElementById(url)).text(content);
-                    },
-                    error: function(newcounter, error) {
-                        console.log('Failed to create');
-                    }
-                });
-            }
-        },
-        error: function(error) {
-            console.log('Error:' + error.code + " " + error.message);
-        }
-    });
-}
-$(function() {
-    var Counter = AV.Object.extend("Counter");
-    if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-    } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-    }
-}); 
-</script>
 
   
 </body>
