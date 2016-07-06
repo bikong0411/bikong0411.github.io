@@ -268,7 +268,7 @@
     e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
   })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
-  _st('install', 'k9zMTjMng4-ypts263ZR','2.0.0');
+  _st('install', 'ZRCiygcbA1PQanhkr_pi','2.0.0');
 </script>
 
 
@@ -308,8 +308,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
-                  Go Set实现
+                <a class="post-title-link" href="/2016/07/05/2015-10-22-lua-oop/" itemprop="url">
+                  lua 面向对象实现
                 </a>
               
             
@@ -333,8 +333,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-10-22-lua-oop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-22-lua-oop/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -345,7 +345,7 @@
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-21-go-set/"class="leancloud_visitors" data-flag-title="Go Set实现">
+            <span id="/2016/07/05/2015-10-22-lua-oop/"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
                      &nbsp;阅读次数
                     </span>
           
@@ -363,110 +363,130 @@
       
         
           
-            <p>利用go的interface实现的有锁Set</p>
-<pre><code>package main
-import (
-    &quot;fmt&quot;
-    &quot;sync&quot;
-)
+            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
+<ul>
+<li><p>类</p>
+<pre><code>Name = {}
+   function Name:new(o) 
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+ end
 
-type Set struct {
-    m map[interface{}]bool
-    sync.RWMutex
-}
+ function Name:setName(name)
+    self.name = name
+ end
 
-func New() *Set {
-    return &amp;Set{
-        m: map[interface{}]bool{},
-    }
-}
+ function Name:getName()
+    return self.Name
+end
 
-func (s *Set) Add(item interface{}) {
-    s.Lock()
-    defer s.Unlock()
-    s.m[item] = true
-}
+-- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
+</code></pre></li>
+<li><p>单继承</p>
+<pre><code>--定义继承
+SpecName = Name:New({age=25})
+function SpecName:setNewName(name)
+      if self.getAge() &gt; 9 then
+          self:setName(name)
+      else
+          error(&quot;You must give an age!&quot;)
+      end
+end
 
-func (s *Set) Remove(item interface{}) {
-    s.Lock()
-    defer s.Unlock()
-    delete(s.m, item)
-}
+function SpecName:getAge()
+       return self.age
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>多继承</p>
+<pre><code>function search(k, plist)
+    for i=1,#plist do
+         if plist[i][k] ~= nil then return plist[i][k] end
+     end
+end
 
-func (s *Set) Contains(item interface{}) bool{
-    s.RLock()
-    defer s.RUnlock()
-    _,ok := s.m[item]
-    return ok
-}
+function createClass(...)
+    local args = {...}
+    local c = {}
+    setmetatable(c, {__index = function(self, k) 
+        return search(k, args) 
+    end})
 
-func (s *Set) Len() int {
-    return len(s.List())
-}
+    c.__index = c
+    function c:new(o) 
+        o = o or {}
+        setmetatable(o, c)
+        return o
+    end
+    return c 
+end
 
-func (s *Set) Clear() {
-    s.Lock()
-    defer s.Unlock()
-    s.m = map[interface{}]bool{}
-}
+Balance = {balance= 10}
+function Balance:new(o) 
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+end
 
-func (s *Set) IsEmpty() bool {
-    s.RLock()
-    defer s.RUnlock()
-    if s.Len() == 0 {
-        return true
-    }
-    return false
-}
+function Balance:despoit(v)
+    self.balance = self.balance + v
+end
 
-func (s *Set) List() []interface{} {
-    s.RLock()
-    defer s.RUnlock()
-    list := []interface{}{}
-    for  k,_ := range s.m {
-        list = append(list, k)
-    }
-    return list
-}
+function Balance:withDraw(v)
+    if self.balance &lt; v then
+         error(&quot;Bad case&quot;)
+    else
+        self.balance = self.balance - v
+    end
+end
 
-func (s *Set) Diff(t *Set) []interface{} {
-    sDiff := []interface{}{}
-    for sk := range s.m {
-        if _, ok := t.m[sk]; !ok {
-            sDiff = append(sDiff, sk)
-        }
-    }
-    return sDiff
-}
+Name={}
+function Name:new(o) 
+     o = o or {}
+     setmetatable(o, {__index = self})
+     return o
+end
 
+function Name:setName(name)
+    self.name = name
+end
 
-func main() {
-    s := New()
-    s.Add(1)
-    s.Add(2)
-    s.Add(1)
-    if s.IsEmpty() {
-        fmt.Println(&quot;0 item&quot;)
-    }
-    s.Add(1)
-    s.Add(2)
-    s.Add(3)
-    s.Add(&quot;hello&quot;)
-    if s.Contains(2) {
-        fmt.Println(&quot;2 does exist&quot;)
-    }
-    s.Remove(2)
-    s.Remove(3)
-    s.Add(4)
-    s.Add(&quot;sky&quot;)
-    fmt.Println(&quot;list of all items&quot;, s.List())
-     t := New()
-    t.Add(1)
-    t.Add(3)
-    t.Add(&quot;world&quot;)
-    fmt.Println(s.Diff(t))
-}
-</code></pre>
+function Name:getName()
+    return self.name
+end
+
+c = createClass(Balance, Name)
+c:despoit(100)
+c:withDraw(10)
+print(c.balance)  --&gt; 100
+c:setName(&quot;wbz&quot;)
+print(c:getName()) --&gt; wbz
+</code></pre></li>
+<li><p>隐藏私有变量</p>
+<pre><code> function newAccount(initBalance)
+    local self = {balance=initBalance}
+    local withdraw = function(v)
+        self.balance = self.balance - v 
+    end                    
+
+    local deposit = function (v) 
+           self.balance = self.balance + v 
+    end                    
+
+    local getBalance = function()
+           return self.balance
+    end                    
+    return {               
+        withdraw=withdraw, 
+        deposit = deposit, 
+        getBalance = getBalance,    
+     }
+end 
+</code></pre></li>
+</ul>
+
           
         
       
@@ -802,111 +822,6 @@ ok      command-line-arguments  <span class="number">1.695s</span>
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-10-07-tuning-nginx/" itemprop="url">
-                  nginx性能调优（部分参数调整）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-07-tuning-nginx/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-tuning-nginx/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-07-tuning-nginx/"class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="url">
                   10 tips for 10x application performance
                 </a>
@@ -1013,8 +928,8 @@ ok      command-line-arguments  <span class="number">1.695s</span>
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-10-22-lua-oop/" itemprop="url">
-                  lua 面向对象实现
+                <a class="post-title-link" href="/2016/07/05/2015-10-07-tuning-nginx/" itemprop="url">
+                  nginx性能调优（部分参数调整）
                 </a>
               
             
@@ -1038,8 +953,8 @@ ok      command-line-arguments  <span class="number">1.695s</span>
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-22-lua-oop/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-22-lua-oop/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-10-07-tuning-nginx/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-tuning-nginx/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1050,7 +965,7 @@ ok      command-line-arguments  <span class="number">1.695s</span>
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-22-lua-oop/"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
+            <span id="/2016/07/05/2015-10-07-tuning-nginx/"class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
                      &nbsp;阅读次数
                     </span>
           
@@ -1068,129 +983,7 @@ ok      command-line-arguments  <span class="number">1.695s</span>
       
         
           
-            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
-<ul>
-<li><p>类</p>
-<pre><code>Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:setName(name)
-    self.name = name
- end
-
- function Name:getName()
-    return self.Name
-end
-
--- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
-</code></pre></li>
-<li><p>单继承</p>
-<pre><code>--定义继承
-SpecName = Name:New({age=25})
-function SpecName:setNewName(name)
-      if self.getAge() &gt; 9 then
-          self:setName(name)
-      else
-          error(&quot;You must give an age!&quot;)
-      end
-end
-
-function SpecName:getAge()
-       return self.age
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>多继承</p>
-<pre><code>function search(k, plist)
-    for i=1,#plist do
-         if plist[i][k] ~= nil then return plist[i][k] end
-     end
-end
-
-function createClass(...)
-    local args = {...}
-    local c = {}
-    setmetatable(c, {__index = function(self, k) 
-        return search(k, args) 
-    end})
-
-    c.__index = c
-    function c:new(o) 
-        o = o or {}
-        setmetatable(o, c)
-        return o
-    end
-    return c 
-end
-
-Balance = {balance= 10}
-function Balance:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
-end
-
-function Balance:despoit(v)
-    self.balance = self.balance + v
-end
-
-function Balance:withDraw(v)
-    if self.balance &lt; v then
-         error(&quot;Bad case&quot;)
-    else
-        self.balance = self.balance - v
-    end
-end
-
-Name={}
-function Name:new(o) 
-     o = o or {}
-     setmetatable(o, {__index = self})
-     return o
-end
-
-function Name:setName(name)
-    self.name = name
-end
-
-function Name:getName()
-    return self.name
-end
-
-c = createClass(Balance, Name)
-c:despoit(100)
-c:withDraw(10)
-print(c.balance)  --&gt; 100
-c:setName(&quot;wbz&quot;)
-print(c:getName()) --&gt; wbz
-</code></pre></li>
-<li><p>隐藏私有变量</p>
-<pre><code> function newAccount(initBalance)
-    local self = {balance=initBalance}
-    local withdraw = function(v)
-        self.balance = self.balance - v 
-    end                    
-
-    local deposit = function (v) 
-           self.balance = self.balance + v 
-    end                    
-
-    local getBalance = function()
-           return self.balance
-    end                    
-    return {               
-        withdraw=withdraw, 
-        deposit = deposit, 
-        getBalance = getBalance,    
-     }
-end 
-</code></pre></li>
-</ul>
+            <p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
 
           
         
@@ -1825,6 +1618,213 @@ func main() {
 }
 </code></pre><p>参考：<a href="http://se77en.cc/2014/06/30/array-slice-map-and-set-in-golang/#Slice(切片" target="_blank" rel="external">http://se77en.cc/2014/06/30/array-slice-map-and-set-in-golang/#Slice(切片</a>)</p>
 
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
+                  Go Set实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-10-21-go-set/"class="leancloud_visitors" data-flag-title="Go Set实现">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>利用go的interface实现的有锁Set</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre>
           
         
       
