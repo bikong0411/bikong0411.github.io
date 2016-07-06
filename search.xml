@@ -1980,7 +1980,7 @@ func main() {
     </entry>
     
     <entry>
-      <title><![CDATA[All tags]]></title>
+      <title><![CDATA[tags]]></title>
       <url>http://bikong0411.github.io/tags/index.html</url>
       <content type="html"></content>
     </entry>
