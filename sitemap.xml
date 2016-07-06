@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://yoursite.com/tags/index.html</loc>
+    
+    <lastmod>2016-07-05T15:55:31.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/about/index.html</loc>
+    
+    <lastmod>2016-07-05T15:53:32.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-11-18-5-performance-tips-for-node-application/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-10-07-tuning-nginx/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-10-21-go-set/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-10-20-go-basic-data-structure/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-10-22-lua-oop/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-09-15-router-improve-speed/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2016-05-31-lua-ffi-summary/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2016-05-31-lua-ffi/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2016-06-19-openresty-note/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2016-06-29-lru-go/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-09-06-Hello-World/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2016/07/05/2015-10-07-10tips-for-10x-application-performance/</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/guestbook/index.html</loc>
+    
+    <lastmod>2016-07-05T12:11:40.000Z</lastmod>
+    
+  </url>
+  
+</urlset>
