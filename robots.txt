@@ -1,2 +1,0 @@
-User-agent: *
-Sitemap: http://bikong0411.github.io/sitemap.xml

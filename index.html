@@ -229,16 +229,6 @@
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-commonweal">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
-            
-            公益404
-          </a>
-        </li>
-      
 
       
         <li class="menu-item menu-item-search">
@@ -822,8 +812,8 @@ ok      command-line-arguments  <span class="number">1.695s</span>
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="url">
-                  10 tips for 10x application performance
+                <a class="post-title-link" href="/2016/07/05/2015-09-15-router-improve-speed/" itemprop="url">
+                  为你的路由器提速
                 </a>
               
             
@@ -847,8 +837,8 @@ ok      command-line-arguments  <span class="number">1.695s</span>
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-09-15-router-improve-speed/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-09-15-router-improve-speed/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -859,7 +849,7 @@ ok      command-line-arguments  <span class="number">1.695s</span>
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/"class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
+            <span id="/2016/07/05/2015-09-15-router-improve-speed/"class="leancloud_visitors" data-flag-title="为你的路由器提速">
                      &nbsp;阅读次数
                     </span>
           
@@ -877,8 +867,16 @@ ok      command-line-arguments  <span class="number">1.695s</span>
       
         
           
-            <p>10条建议让你的应用性能提升10倍</p>
-<p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
+            <p>这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。</p>
+<p>今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上吧。后来在一个Q群里问了下群油有没有啥好办法，@ZERO（娃吊）说让我改下信道改成1。以前听说过信道，于是上网搜了下，得到如下常识：</p>
+<blockquote>
+<p>总的来说就是路由器信号不好，所以导致速度慢。<br>那么我就来回答一下另外一种可能的情况——信道拥堵。如果你在有很多无线网络覆盖的地方（比如小区）那么，你就可能遇到信道拥堵这一状况。<br>无线路由可以广播1-13个信道，大部分的集中在1,6,11这三个信道。一般路由器自动也默认是这三个信号。虽然1，6,11 三个信道号称是不会互相干扰，但是还是存在因为同一信道的无线信号太多而导致无线速度缓慢的情况（有线速度很快）</p>
+<p>你在路由器设置里面直接设置第13个信道就可以提高无线路由速度了。</p>
+<p>如果上述方法无效，请将你的无线路由发射协议从b/g/n三网混合改为b/g混合，部分终端设备不支持三网混合，会导致网络速度很慢。</p>
+</blockquote>
+<p>  于是乎开始操作，操作很简单，信道改成了13，结果发现效果不是很理想，又试着改了一下模式，改成了b/g,改完之后效果就明显了（附图）。</p>
+<p>  <img src="http://bikong0411.github.io/public/images/me_route.png" alt="router"></p>
+<p>  当然，你如果是土豪，你可以选择换一台更好的路由器。</p>
 
           
         
@@ -985,213 +983,6 @@ ok      command-line-arguments  <span class="number">1.695s</span>
           
             <p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
 
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
-                  Go Set实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-21-go-set/"class="leancloud_visitors" data-flag-title="Go Set实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>利用go的interface实现的有锁Set</p>
-<pre><code>package main
-import (
-    &quot;fmt&quot;
-    &quot;sync&quot;
-)
-
-type Set struct {
-    m map[interface{}]bool
-    sync.RWMutex
-}
-
-func New() *Set {
-    return &amp;Set{
-        m: map[interface{}]bool{},
-    }
-}
-
-func (s *Set) Add(item interface{}) {
-    s.Lock()
-    defer s.Unlock()
-    s.m[item] = true
-}
-
-func (s *Set) Remove(item interface{}) {
-    s.Lock()
-    defer s.Unlock()
-    delete(s.m, item)
-}
-
-func (s *Set) Contains(item interface{}) bool{
-    s.RLock()
-    defer s.RUnlock()
-    _,ok := s.m[item]
-    return ok
-}
-
-func (s *Set) Len() int {
-    return len(s.List())
-}
-
-func (s *Set) Clear() {
-    s.Lock()
-    defer s.Unlock()
-    s.m = map[interface{}]bool{}
-}
-
-func (s *Set) IsEmpty() bool {
-    s.RLock()
-    defer s.RUnlock()
-    if s.Len() == 0 {
-        return true
-    }
-    return false
-}
-
-func (s *Set) List() []interface{} {
-    s.RLock()
-    defer s.RUnlock()
-    list := []interface{}{}
-    for  k,_ := range s.m {
-        list = append(list, k)
-    }
-    return list
-}
-
-func (s *Set) Diff(t *Set) []interface{} {
-    sDiff := []interface{}{}
-    for sk := range s.m {
-        if _, ok := t.m[sk]; !ok {
-            sDiff = append(sDiff, sk)
-        }
-    }
-    return sDiff
-}
-
-
-func main() {
-    s := New()
-    s.Add(1)
-    s.Add(2)
-    s.Add(1)
-    if s.IsEmpty() {
-        fmt.Println(&quot;0 item&quot;)
-    }
-    s.Add(1)
-    s.Add(2)
-    s.Add(3)
-    s.Add(&quot;hello&quot;)
-    if s.Contains(2) {
-        fmt.Println(&quot;2 does exist&quot;)
-    }
-    s.Remove(2)
-    s.Remove(3)
-    s.Add(4)
-    s.Add(&quot;sky&quot;)
-    fmt.Println(&quot;list of all items&quot;, s.List())
-     t := New()
-    t.Add(1)
-    t.Add(3)
-    t.Add(&quot;world&quot;)
-    fmt.Println(s.Diff(t))
-}
-</code></pre>
           
         
       
@@ -1873,8 +1664,8 @@ func main() {
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-09-15-router-improve-speed/" itemprop="url">
-                  为你的路由器提速
+                <a class="post-title-link" href="/2016/07/05/2015-10-21-go-set/" itemprop="url">
+                  Go Set实现
                 </a>
               
             
@@ -1898,8 +1689,8 @@ func main() {
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-09-15-router-improve-speed/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-09-15-router-improve-speed/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-10-21-go-set/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1910,7 +1701,7 @@ func main() {
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-09-15-router-improve-speed/"class="leancloud_visitors" data-flag-title="为你的路由器提速">
+            <span id="/2016/07/05/2015-10-21-go-set/"class="leancloud_visitors" data-flag-title="Go Set实现">
                      &nbsp;阅读次数
                     </span>
           
@@ -1928,17 +1719,110 @@ func main() {
       
         
           
-            <p>这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。</p>
-<p>今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上吧。后来在一个Q群里问了下群油有没有啥好办法，@ZERO（娃吊）说让我改下信道改成1。以前听说过信道，于是上网搜了下，得到如下常识：</p>
-<blockquote>
-<p>总的来说就是路由器信号不好，所以导致速度慢。<br>那么我就来回答一下另外一种可能的情况——信道拥堵。如果你在有很多无线网络覆盖的地方（比如小区）那么，你就可能遇到信道拥堵这一状况。<br>无线路由可以广播1-13个信道，大部分的集中在1,6,11这三个信道。一般路由器自动也默认是这三个信号。虽然1，6,11 三个信道号称是不会互相干扰，但是还是存在因为同一信道的无线信号太多而导致无线速度缓慢的情况（有线速度很快）</p>
-<p>你在路由器设置里面直接设置第13个信道就可以提高无线路由速度了。</p>
-<p>如果上述方法无效，请将你的无线路由发射协议从b/g/n三网混合改为b/g混合，部分终端设备不支持三网混合，会导致网络速度很慢。</p>
-</blockquote>
-<p>  于是乎开始操作，操作很简单，信道改成了13，结果发现效果不是很理想，又试着改了一下模式，改成了b/g,改完之后效果就明显了（附图）。</p>
-<p>  <img src="http://bikong0411.github.io/public/images/me_route.png" alt="router"></p>
-<p>  当然，你如果是土豪，你可以选择换一台更好的路由器。</p>
+            <p>利用go的interface实现的有锁Set</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
 
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre>
           
         
       
@@ -1987,8 +1871,8 @@ func main() {
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" itemprop="url">
-                  使用nginx + lua 自定义access.log
+                <a class="post-title-link" href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="url">
+                  10 tips for 10x application performance
                 </a>
               
             
@@ -2012,8 +1896,8 @@ func main() {
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-10tips-for-10x-application-performance/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -2024,7 +1908,7 @@ func main() {
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/"class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
+            <span id="/2016/07/05/2015-10-07-10tips-for-10x-application-performance/"class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
                      &nbsp;阅读次数
                     </span>
           
@@ -2042,113 +1926,8 @@ func main() {
       
         
           
-            <p>说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="external">更多nginx内置的变量</a>) , 这种咱们就不说了，这个简单，基本大家都会。</p>
-<p>那是自定义access.log的名字? 比如在一个多个虚拟主机的nginx中，我们想根据不同的server去生成不同的access.log。这样我们去查access.log的时候也方便，从名字一眼就能看出要去哪个文件去查。你也可以通过上面nginx内置的变量去给文件命名，比如我用server_name去命名，我就可以这样写:</p>
-<pre><code>log_format log/$http_host.access.log
-</code></pre><p>然后reload一下nginx就可以了。当然我要说的也不是这个。</p>
-<p>其实我想说的是这种：自定义log_format 在log_format里面添加一些自己自定义的变量（openresty群里一个朋友问到这个问题）。</p>
-<p>比如我想给每个HTTP请求的access.log中添加一个UUID字符串。你可能要问这东西有什么用呢？你想一下，对于一些POST请求（也可能是GET请求），你从URL上看不出差别，但是因为POST的body太大，你又不想记到nginx的access.log里面，还有一种可能是你POST的body里面是二进制，即便你记录到access.log里面了，等你遇到问题要去查的时候你就发现”然并卵啊”，记录这东西也没啥用（是不是想哭），不用哭，今天就是介绍这个的。</p>
-<p>我们可以通过一个唯一的字符串去标记一个请求，然后这个串可以通过HTTP的Header或者通过QueryString传给我们的A\B\C\D…服务器，直到一个请求周期结束。然后我们在需要记录log的地方可以将这个unique的串也记录下来，如果你把日志都集中存储到了一个地方（比如ELK），当你去查问题的时候，你可以通过这个字符串就搜索到了这个请求的整个生命周期，是不是有点爽呢。 不扯淡了，下面就说说怎么搞的，这里用了nginx和lua去做，至于为啥用lua，说因为任性可以不，其实就是为了玩。</p>
-<p>如果没听过lua或者nginx，再如果不敢兴趣，那只能说不好意思，这位客官，你可能只能观一下了。想了解的同学可以自行搜索一下这俩玩意。如果已经了解了这俩东西不了解ngx_lua（或者openresty）的也可以去搜索一下，这俩项目都是@agentzh (章亦春)春哥的大作。这里我为了简单，就选用了ngx_lua。</p>
-<ol>
-<li><p>先说下lua生产随机数字吧，我把代码放到util.lua里面了</p>
-<pre><code>local os = require(&apos;os&apos;)
-local math = require(&apos;math&apos;)
-local io = require(&quot;io&quot;)
-
-local _M = {} 
-_M.uuid = function()
-    local template = &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;
-    d = io.open(&quot;/dev/urandom&quot;, &quot;r&quot;):read(4)
-    math.randomseed(os.time() + d:byte(1) + (d:byte(2) * 256) + (d:byte(3) * 65536) + (d:byte(4) * 4294967296))
-    return string.gsub( template, &quot;x&quot;,function (c) 
-    local v = (c == &quot;x&quot;) and math.random(0, 0xf) or math.random(8, 0xb)
-    return string.format(&quot;%x&quot;, v)
-end)          
-end            
-return _M
-</code></pre><p>  这里采用了从/dev/urandom去读取随机数，读了前4位，然后根据时间、前四位字符的ascii分作为随机数的种子，然后去随机参数字符替换template里面的x，你也可以再加其他去作为随机数发射器的种子比如pid，不过在lua中，你可能还需要posix这个module，最终生成一个32位的字符串。</p>
-</li>
-<li><p>那就直接亮出nginx的配置吧</p>
-<pre><code>log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;
-              &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;
-              &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$uuid&quot;&apos;;
-access_log  logs/access.log  main buff=4k;
-
-sendfile        on;
-tcp_nopush     on;
-
-#keepalive_timeout  0;
-keepalive_timeout  65;
-lua_package_path &quot;$prefix/lua/?.lua;/test/lua/?.lua;&quot;;
-init_by_lua_file lua/util.lua;
-</code></pre><p>  注意看，其他字段都没改，懒得连main都没改，只是最后添加了一个自定义的字段叫’”$uuid”‘, 还有你的\lua_package_path以及init_by_lua_file位置一定要写正确，不然会因为找不到文件报错。然后看下相关server里面的配置。</p>
-<pre><code>server {
-       listen       80 backlog=512;
-    server_name  localhost;
-
-    charset utf-8;
-    underscores_in_headers on; 
-
-    set_by_lua_block $uuid {
-           local util = require(&apos;util&apos;)
-           local uniq_id, _ = util.uuid()
-           return uniq_id
-    }
-
-    location /redirect {
-           return 301 http://127.1/lua; 
-    }
-
-    location /lua {
-           default_type &quot;text/plain&quot;;
-           content_by_lua_block {
-          local args = ngx.req.get_uri_args()
-          for key, val in pairs(args) do
-             if type(val) == &quot;table&quot; then
-                     ngx.say(key, &quot;: &quot;, table.concat(val, &quot;, &quot;))
-              else
-                  ngx.say(key, &quot;: &quot;, val)
-              end
-          end
-          ngx.say(ngx.var.arg_b)
-       }
-}
-...
-</code></pre><p> 只贴这么多关键部分吧，然后去check一下配置是否有问题</p>
-<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; sudo /opt/soft/nginx/sbin/nginx -t 
-nginx: [alert] lua\_code\_cache is off; this will hurt performance in /opt/soft/    nginx1.9.3/conf/nginx.conf:35
-nginx: the configuration file /opt/soft/nginx1.9.3/conf/nginx.conf syntax is ok
-nginx: configuration file /opt/soft/nginx1.9.3/conf/nginx.conf test is successful
-</code></pre><p> 这个警告是因为开发阶段lua_code_cache没开，生产环境是一定要开的，为了我们修改lua代码能及时生效。那我们去试试看下效果先</p>
-<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; curl -iL &apos;http://127.1/redirect?a=1&amp;b=2&amp;c=3&apos;
-HTTP/1.1 301 Moved Permanently
-Server: nginx/1.9.3
-Date: Thu, 05 Nov 2015 16:34:03 GMT
-Content-Type: text/html
-Content-Length: 184
-Connection: keep-alive
-Location: http://127.1/lua
-</code></pre><p> 然后去看下access.log的内容</p>
-<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; tail -n 2 /opt/soft/nginx/logs/access.log  
-127.0.0.1 - - [05/Nov/2015:13:32:09 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;8272ba28283350d51056995be1f0c244&quot;
-127.0.0.1 - - [05/Nov/2015:23:56:55 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;118ab63e5bf8e8c0a2d04e7ab898120d&quot;
-</code></pre></li>
-<li><p>透传给应用层</p>
-<ul>
-<li>如果你使用的是proxy模式你可以使用proxy_set_headers</li>
-<li><p>如果你通过fastcgi协议传递给后端的PHP，你可以使用fastcgi_param  </p>
-<p>   proxy_set_header  HTTP_UUID  $uuid;<br>   …<br>   fastcgi_param HTTP_UUID  $uuid;</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>注意：nginx对对header name的字符做了限制，默认 underscores_in_headers 为off，表示如果header name中包含下划线，则忽略掉。</p>
-<p>解决办法：</p>
-<ul>
-<li>配置中http部分 增加underscores_in_headers on; 配置</li>
-<li>用减号-替代下划线符号_，避免这种变态问题。        </li>
-</ul>
+            <p>10条建议让你的应用性能提升10倍</p>
+<p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
 
           
         
@@ -2895,6 +2674,217 @@ Hello Lua
 <p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
 <p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
 <p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" itemprop="url">
+                  使用nginx + lua 自定义access.log
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
+              2016-07-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/07/05/2015-11-05-ngx-lua-custom-access-log-format/"class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="external">更多nginx内置的变量</a>) , 这种咱们就不说了，这个简单，基本大家都会。</p>
+<p>那是自定义access.log的名字? 比如在一个多个虚拟主机的nginx中，我们想根据不同的server去生成不同的access.log。这样我们去查access.log的时候也方便，从名字一眼就能看出要去哪个文件去查。你也可以通过上面nginx内置的变量去给文件命名，比如我用server_name去命名，我就可以这样写:</p>
+<pre><code>log_format log/$http_host.access.log
+</code></pre><p>然后reload一下nginx就可以了。当然我要说的也不是这个。</p>
+<p>其实我想说的是这种：自定义log_format 在log_format里面添加一些自己自定义的变量（openresty群里一个朋友问到这个问题）。</p>
+<p>比如我想给每个HTTP请求的access.log中添加一个UUID字符串。你可能要问这东西有什么用呢？你想一下，对于一些POST请求（也可能是GET请求），你从URL上看不出差别，但是因为POST的body太大，你又不想记到nginx的access.log里面，还有一种可能是你POST的body里面是二进制，即便你记录到access.log里面了，等你遇到问题要去查的时候你就发现”然并卵啊”，记录这东西也没啥用（是不是想哭），不用哭，今天就是介绍这个的。</p>
+<p>我们可以通过一个唯一的字符串去标记一个请求，然后这个串可以通过HTTP的Header或者通过QueryString传给我们的A\B\C\D…服务器，直到一个请求周期结束。然后我们在需要记录log的地方可以将这个unique的串也记录下来，如果你把日志都集中存储到了一个地方（比如ELK），当你去查问题的时候，你可以通过这个字符串就搜索到了这个请求的整个生命周期，是不是有点爽呢。 不扯淡了，下面就说说怎么搞的，这里用了nginx和lua去做，至于为啥用lua，说因为任性可以不，其实就是为了玩。</p>
+<p>如果没听过lua或者nginx，再如果不敢兴趣，那只能说不好意思，这位客官，你可能只能观一下了。想了解的同学可以自行搜索一下这俩玩意。如果已经了解了这俩东西不了解ngx_lua（或者openresty）的也可以去搜索一下，这俩项目都是@agentzh (章亦春)春哥的大作。这里我为了简单，就选用了ngx_lua。</p>
+<ol>
+<li><p>先说下lua生产随机数字吧，我把代码放到util.lua里面了</p>
+<pre><code>local os = require(&apos;os&apos;)
+local math = require(&apos;math&apos;)
+local io = require(&quot;io&quot;)
+
+local _M = {} 
+_M.uuid = function()
+    local template = &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;
+    d = io.open(&quot;/dev/urandom&quot;, &quot;r&quot;):read(4)
+    math.randomseed(os.time() + d:byte(1) + (d:byte(2) * 256) + (d:byte(3) * 65536) + (d:byte(4) * 4294967296))
+    return string.gsub( template, &quot;x&quot;,function (c) 
+    local v = (c == &quot;x&quot;) and math.random(0, 0xf) or math.random(8, 0xb)
+    return string.format(&quot;%x&quot;, v)
+end)          
+end            
+return _M
+</code></pre><p>  这里采用了从/dev/urandom去读取随机数，读了前4位，然后根据时间、前四位字符的ascii分作为随机数的种子，然后去随机参数字符替换template里面的x，你也可以再加其他去作为随机数发射器的种子比如pid，不过在lua中，你可能还需要posix这个module，最终生成一个32位的字符串。</p>
+</li>
+<li><p>那就直接亮出nginx的配置吧</p>
+<pre><code>log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;
+              &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;
+              &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$uuid&quot;&apos;;
+access_log  logs/access.log  main buff=4k;
+
+sendfile        on;
+tcp_nopush     on;
+
+#keepalive_timeout  0;
+keepalive_timeout  65;
+lua_package_path &quot;$prefix/lua/?.lua;/test/lua/?.lua;&quot;;
+init_by_lua_file lua/util.lua;
+</code></pre><p>  注意看，其他字段都没改，懒得连main都没改，只是最后添加了一个自定义的字段叫’”$uuid”‘, 还有你的\lua_package_path以及init_by_lua_file位置一定要写正确，不然会因为找不到文件报错。然后看下相关server里面的配置。</p>
+<pre><code>server {
+       listen       80 backlog=512;
+    server_name  localhost;
+
+    charset utf-8;
+    underscores_in_headers on; 
+
+    set_by_lua_block $uuid {
+           local util = require(&apos;util&apos;)
+           local uniq_id, _ = util.uuid()
+           return uniq_id
+    }
+
+    location /redirect {
+           return 301 http://127.1/lua; 
+    }
+
+    location /lua {
+           default_type &quot;text/plain&quot;;
+           content_by_lua_block {
+          local args = ngx.req.get_uri_args()
+          for key, val in pairs(args) do
+             if type(val) == &quot;table&quot; then
+                     ngx.say(key, &quot;: &quot;, table.concat(val, &quot;, &quot;))
+              else
+                  ngx.say(key, &quot;: &quot;, val)
+              end
+          end
+          ngx.say(ngx.var.arg_b)
+       }
+}
+...
+</code></pre><p> 只贴这么多关键部分吧，然后去check一下配置是否有问题</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; sudo /opt/soft/nginx/sbin/nginx -t 
+nginx: [alert] lua\_code\_cache is off; this will hurt performance in /opt/soft/    nginx1.9.3/conf/nginx.conf:35
+nginx: the configuration file /opt/soft/nginx1.9.3/conf/nginx.conf syntax is ok
+nginx: configuration file /opt/soft/nginx1.9.3/conf/nginx.conf test is successful
+</code></pre><p> 这个警告是因为开发阶段lua_code_cache没开，生产环境是一定要开的，为了我们修改lua代码能及时生效。那我们去试试看下效果先</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; curl -iL &apos;http://127.1/redirect?a=1&amp;b=2&amp;c=3&apos;
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.9.3
+Date: Thu, 05 Nov 2015 16:34:03 GMT
+Content-Type: text/html
+Content-Length: 184
+Connection: keep-alive
+Location: http://127.1/lua
+</code></pre><p> 然后去看下access.log的内容</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; tail -n 2 /opt/soft/nginx/logs/access.log  
+127.0.0.1 - - [05/Nov/2015:13:32:09 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;8272ba28283350d51056995be1f0c244&quot;
+127.0.0.1 - - [05/Nov/2015:23:56:55 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;118ab63e5bf8e8c0a2d04e7ab898120d&quot;
+</code></pre></li>
+<li><p>透传给应用层</p>
+<ul>
+<li>如果你使用的是proxy模式你可以使用proxy_set_headers</li>
+<li><p>如果你通过fastcgi协议传递给后端的PHP，你可以使用fastcgi_param  </p>
+<p>   proxy_set_header  HTTP_UUID  $uuid;<br>   …<br>   fastcgi_param HTTP_UUID  $uuid;</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>注意：nginx对对header name的字符做了限制，默认 underscores_in_headers 为off，表示如果header name中包含下划线，则忽略掉。</p>
+<p>解决办法：</p>
+<ul>
+<li>配置中http部分 增加underscores_in_headers on; 配置</li>
+<li>用减号-替代下划线符号_，避免这种变态问题。        </li>
+</ul>
 
           
         
