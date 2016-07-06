@@ -84,19 +84,19 @@
 
 
 
-<meta name="description" content="10条建议让你的应用性能提升10倍
-原文连接">
+<meta name="description" content="说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (更多nginx内置的变量) , 这种咱们就不说了，这个简单，基本大家都会。
+那是自定义access.log的名字? 比如在一个多个虚拟主机">
 <meta property="og:type" content="article">
-<meta property="og:title" content="10 tips for 10x application performance">
-<meta property="og:url" content="http://yoursite.com/2016/07/05/2015-10-07-10tips-for-10x-application-performance.html">
+<meta property="og:title" content="使用nginx + lua 自定义access.log">
+<meta property="og:url" content="http://yoursite.com/2015/11/05/ngx-lua-custom-access-log-format.html">
 <meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="10条建议让你的应用性能提升10倍
-原文连接">
+<meta property="og:description" content="说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (更多nginx内置的变量) , 这种咱们就不说了，这个简单，基本大家都会。
+那是自定义access.log的名字? 比如在一个多个虚拟主机">
 <meta property="og:updated_time" content="2016-07-05T13:29:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="10 tips for 10x application performance">
-<meta name="twitter:description" content="10条建议让你的应用性能提升10倍
-原文连接">
+<meta name="twitter:title" content="使用nginx + lua 自定义access.log">
+<meta name="twitter:description" content="说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (更多nginx内置的变量) , 这种咱们就不说了，这个简单，基本大家都会。
+那是自定义access.log的名字? 比如在一个多个虚拟主机">
 
 
 
@@ -117,9 +117,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/07/05/2015-10-07-10tips-for-10x-application-performance.html"/>
+  <link rel="canonical" href="http://yoursite.com/2015/11/05/ngx-lua-custom-access-log-format.html"/>
 
-  <title> 10 tips for 10x application performance | 碧云轩 </title>
+  <title> 使用nginx + lua 自定义access.log | 碧云轩 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -299,7 +299,7 @@
             
             
               
-                10 tips for 10x application performance
+                使用nginx + lua 自定义access.log
               
             
           </h1>
@@ -311,8 +311,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
-              2016-07-05
+            <time itemprop="dateCreated" datetime="2015-11-05T00:00:00+08:00" content="2015-11-05">
+              2015-11-05
             </time>
           </span>
 
@@ -322,8 +322,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-07-10tips-for-10x-application-performance.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-07-10tips-for-10x-application-performance.html" itemprop="commentsCount"></span>
+                <a href="/2015/11/05/ngx-lua-custom-access-log-format.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/05/ngx-lua-custom-access-log-format.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -334,7 +334,7 @@
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-07-10tips-for-10x-application-performance.html"class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
+            <span id="/2015/11/05/ngx-lua-custom-access-log-format.html"class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
                      &nbsp;阅读次数
                     </span>
           
@@ -350,8 +350,113 @@
       
 
       
-        <p>10条建议让你的应用性能提升10倍</p>
-<p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
+        <p>说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="external">更多nginx内置的变量</a>) , 这种咱们就不说了，这个简单，基本大家都会。</p>
+<p>那是自定义access.log的名字? 比如在一个多个虚拟主机的nginx中，我们想根据不同的server去生成不同的access.log。这样我们去查access.log的时候也方便，从名字一眼就能看出要去哪个文件去查。你也可以通过上面nginx内置的变量去给文件命名，比如我用server_name去命名，我就可以这样写:</p>
+<pre><code>log_format log/$http_host.access.log
+</code></pre><p>然后reload一下nginx就可以了。当然我要说的也不是这个。</p>
+<p>其实我想说的是这种：自定义log_format 在log_format里面添加一些自己自定义的变量（openresty群里一个朋友问到这个问题）。</p>
+<p>比如我想给每个HTTP请求的access.log中添加一个UUID字符串。你可能要问这东西有什么用呢？你想一下，对于一些POST请求（也可能是GET请求），你从URL上看不出差别，但是因为POST的body太大，你又不想记到nginx的access.log里面，还有一种可能是你POST的body里面是二进制，即便你记录到access.log里面了，等你遇到问题要去查的时候你就发现”然并卵啊”，记录这东西也没啥用（是不是想哭），不用哭，今天就是介绍这个的。</p>
+<p>我们可以通过一个唯一的字符串去标记一个请求，然后这个串可以通过HTTP的Header或者通过QueryString传给我们的A\B\C\D…服务器，直到一个请求周期结束。然后我们在需要记录log的地方可以将这个unique的串也记录下来，如果你把日志都集中存储到了一个地方（比如ELK），当你去查问题的时候，你可以通过这个字符串就搜索到了这个请求的整个生命周期，是不是有点爽呢。 不扯淡了，下面就说说怎么搞的，这里用了nginx和lua去做，至于为啥用lua，说因为任性可以不，其实就是为了玩。</p>
+<p>如果没听过lua或者nginx，再如果不敢兴趣，那只能说不好意思，这位客官，你可能只能观一下了。想了解的同学可以自行搜索一下这俩玩意。如果已经了解了这俩东西不了解ngx_lua（或者openresty）的也可以去搜索一下，这俩项目都是@agentzh (章亦春)春哥的大作。这里我为了简单，就选用了ngx_lua。</p>
+<ol>
+<li><p>先说下lua生产随机数字吧，我把代码放到util.lua里面了</p>
+<pre><code>local os = require(&apos;os&apos;)
+local math = require(&apos;math&apos;)
+local io = require(&quot;io&quot;)
+
+local _M = {} 
+_M.uuid = function()
+    local template = &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;
+    d = io.open(&quot;/dev/urandom&quot;, &quot;r&quot;):read(4)
+    math.randomseed(os.time() + d:byte(1) + (d:byte(2) * 256) + (d:byte(3) * 65536) + (d:byte(4) * 4294967296))
+    return string.gsub( template, &quot;x&quot;,function (c) 
+    local v = (c == &quot;x&quot;) and math.random(0, 0xf) or math.random(8, 0xb)
+    return string.format(&quot;%x&quot;, v)
+end)          
+end            
+return _M
+</code></pre><p>  这里采用了从/dev/urandom去读取随机数，读了前4位，然后根据时间、前四位字符的ascii分作为随机数的种子，然后去随机参数字符替换template里面的x，你也可以再加其他去作为随机数发射器的种子比如pid，不过在lua中，你可能还需要posix这个module，最终生成一个32位的字符串。</p>
+</li>
+<li><p>那就直接亮出nginx的配置吧</p>
+<pre><code>log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;
+              &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;
+              &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$uuid&quot;&apos;;
+access_log  logs/access.log  main buff=4k;
+
+sendfile        on;
+tcp_nopush     on;
+
+#keepalive_timeout  0;
+keepalive_timeout  65;
+lua_package_path &quot;$prefix/lua/?.lua;/test/lua/?.lua;&quot;;
+init_by_lua_file lua/util.lua;
+</code></pre><p>  注意看，其他字段都没改，懒得连main都没改，只是最后添加了一个自定义的字段叫’”$uuid”‘, 还有你的\lua_package_path以及init_by_lua_file位置一定要写正确，不然会因为找不到文件报错。然后看下相关server里面的配置。</p>
+<pre><code>server {
+       listen       80 backlog=512;
+    server_name  localhost;
+
+    charset utf-8;
+    underscores_in_headers on; 
+
+    set_by_lua_block $uuid {
+           local util = require(&apos;util&apos;)
+           local uniq_id, _ = util.uuid()
+           return uniq_id
+    }
+
+    location /redirect {
+           return 301 http://127.1/lua; 
+    }
+
+    location /lua {
+           default_type &quot;text/plain&quot;;
+           content_by_lua_block {
+          local args = ngx.req.get_uri_args()
+          for key, val in pairs(args) do
+             if type(val) == &quot;table&quot; then
+                     ngx.say(key, &quot;: &quot;, table.concat(val, &quot;, &quot;))
+              else
+                  ngx.say(key, &quot;: &quot;, val)
+              end
+          end
+          ngx.say(ngx.var.arg_b)
+       }
+}
+...
+</code></pre><p> 只贴这么多关键部分吧，然后去check一下配置是否有问题</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; sudo /opt/soft/nginx/sbin/nginx -t 
+nginx: [alert] lua\_code\_cache is off; this will hurt performance in /opt/soft/    nginx1.9.3/conf/nginx.conf:35
+nginx: the configuration file /opt/soft/nginx1.9.3/conf/nginx.conf syntax is ok
+nginx: configuration file /opt/soft/nginx1.9.3/conf/nginx.conf test is successful
+</code></pre><p> 这个警告是因为开发阶段lua_code_cache没开，生产环境是一定要开的，为了我们修改lua代码能及时生效。那我们去试试看下效果先</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; curl -iL &apos;http://127.1/redirect?a=1&amp;b=2&amp;c=3&apos;
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.9.3
+Date: Thu, 05 Nov 2015 16:34:03 GMT
+Content-Type: text/html
+Content-Length: 184
+Connection: keep-alive
+Location: http://127.1/lua
+</code></pre><p> 然后去看下access.log的内容</p>
+<pre><code>[sky@10_211_55_6_VM_CENTOS go]&gt; tail -n 2 /opt/soft/nginx/logs/access.log  
+127.0.0.1 - - [05/Nov/2015:13:32:09 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;8272ba28283350d51056995be1f0c244&quot;
+127.0.0.1 - - [05/Nov/2015:23:56:55 +0800] &quot;GET /lua HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot; &quot;-&quot; &quot;118ab63e5bf8e8c0a2d04e7ab898120d&quot;
+</code></pre></li>
+<li><p>透传给应用层</p>
+<ul>
+<li>如果你使用的是proxy模式你可以使用proxy_set_headers</li>
+<li><p>如果你通过fastcgi协议传递给后端的PHP，你可以使用fastcgi_param  </p>
+<p>   proxy_set_header  HTTP_UUID  $uuid;<br>   …<br>   fastcgi_param HTTP_UUID  $uuid;</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>注意：nginx对对header name的字符做了限制，默认 underscores_in_headers 为off，表示如果header name中包含下划线，则忽略掉。</p>
+<p>解决办法：</p>
+<ul>
+<li>配置中http部分 增加underscores_in_headers on; 配置</li>
+<li>用减号-替代下划线符号_，避免这种变态问题。        </li>
+</ul>
 
       
     </div>
@@ -376,16 +481,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/05/2015-10-07-tuning-nginx.html" rel="next" title="nginx性能调优（部分参数调整）">
-                <i class="fa fa-chevron-left"></i> nginx性能调优（部分参数调整）
+              <a href="/2015/10/22/lua-oop.html" rel="next" title="lua 面向对象实现">
+                <i class="fa fa-chevron-left"></i> lua 面向对象实现
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/05/2015-09-15-router-improve-speed.html" rel="prev" title="为你的路由器提速">
-                为你的路由器提速 <i class="fa fa-chevron-right"></i>
+              <a href="/2015/11/18/5-performance-tips-for-node-application.html" rel="prev" title="5个提高性能的Node.JS应用Tips">
+                5个提高性能的Node.JS应用Tips <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -412,8 +517,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/05/2015-10-07-10tips-for-10x-application-performance.html"
-           data-title="10 tips for 10x application performance" data-url="http://yoursite.com/2016/07/05/2015-10-07-10tips-for-10x-application-performance.html">
+      <div class="ds-thread" data-thread-key="2015/11/05/ngx-lua-custom-access-log-format.html"
+           data-title="使用nginx + lua 自定义access.log" data-url="http://yoursite.com/2015/11/05/ngx-lua-custom-access-log-format.html">
       </div>
     
   </div>

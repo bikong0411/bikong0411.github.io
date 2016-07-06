@@ -84,46 +84,15 @@
 
 
 
-<meta name="description" content="虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。
-
-类
-Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:">
-<meta property="og:type" content="article">
-<meta property="og:title" content="lua 面向对象实现">
-<meta property="og:url" content="http://yoursite.com/2016/07/05/2015-10-22-lua-oop.html">
+<meta name="description" content="前进，前进，不择手段的野蛮前进。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="碧云轩">
+<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
 <meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。
-
-类
-Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:">
-<meta property="og:updated_time" content="2016-07-05T13:29:45.000Z">
+<meta property="og:description" content="前进，前进，不择手段的野蛮前进。">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lua 面向对象实现">
-<meta name="twitter:description" content="虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。
-
-类
-Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:">
+<meta name="twitter:title" content="碧云轩">
+<meta name="twitter:description" content="前进，前进，不择手段的野蛮前进。">
 
 
 
@@ -144,9 +113,9 @@ Name = {}
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/07/05/2015-10-22-lua-oop.html"/>
+  <link rel="canonical" href="http://yoursite.com/archives/2015/"/>
 
-  <title> lua 面向对象实现 | 碧云轩 </title>
+  <title> 归档 | 碧云轩 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -177,7 +146,7 @@ Name = {}
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left  page-archive  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -305,248 +274,362 @@ Name = {}
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-collapse">
+    <span class="archive-move-on"></span>
+
+    <span class="archive-page-counter">
+      
+      
+      
+        
+      
+      嗯..! 目前共计 13 篇日志。 继续努力。
+    </span>
+
     
 
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                lua 面向对象实现
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-05T21:29:45+08:00" content="2016-07-05">
-              2016-07-05
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-10-22-lua-oop.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-22-lua-oop.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-10-22-lua-oop.html"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
-      
-        <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
-<ul>
-<li><p>类</p>
-<pre><code>Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:setName(name)
-    self.name = name
- end
-
- function Name:getName()
-    return self.Name
-end
-
--- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
-</code></pre></li>
-<li><p>单继承</p>
-<pre><code>--定义继承
-SpecName = Name:New({age=25})
-function SpecName:setNewName(name)
-      if self.getAge() &gt; 9 then
-          self:setName(name)
-      else
-          error(&quot;You must give an age!&quot;)
-      end
-end
-
-function SpecName:getAge()
-       return self.age
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>多继承</p>
-<pre><code>function search(k, plist)
-    for i=1,#plist do
-         if plist[i][k] ~= nil then return plist[i][k] end
-     end
-end
-
-function createClass(...)
-    local args = {...}
-    local c = {}
-    setmetatable(c, {__index = function(self, k) 
-        return search(k, args) 
-    end})
-
-    c.__index = c
-    function c:new(o) 
-        o = o or {}
-        setmetatable(o, c)
-        return o
-    end
-    return c 
-end
-
-Balance = {balance= 10}
-function Balance:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
-end
-
-function Balance:despoit(v)
-    self.balance = self.balance + v
-end
-
-function Balance:withDraw(v)
-    if self.balance &lt; v then
-         error(&quot;Bad case&quot;)
-    else
-        self.balance = self.balance - v
-    end
-end
-
-Name={}
-function Name:new(o) 
-     o = o or {}
-     setmetatable(o, {__index = self})
-     return o
-end
-
-function Name:setName(name)
-    self.name = name
-end
-
-function Name:getName()
-    return self.name
-end
-
-c = createClass(Balance, Name)
-c:despoit(100)
-c:withDraw(10)
-print(c.balance)  --&gt; 100
-c:setName(&quot;wbz&quot;)
-print(c:getName()) --&gt; wbz
-</code></pre></li>
-<li><p>隐藏私有变量</p>
-<pre><code> function newAccount(initBalance)
-    local self = {balance=initBalance}
-    local withdraw = function(v)
-        self.balance = self.balance - v 
-    end                    
-
-    local deposit = function (v) 
-           self.balance = self.balance + v 
-    end                    
-
-    local getBalance = function()
-           return self.balance
-    end                    
-    return {               
-        withdraw=withdraw, 
-        deposit = deposit, 
-        getBalance = getBalance,    
-     }
-end 
-</code></pre></li>
-</ul>
-
-      
-    </div>
-
-    <div>
       
         
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/07/05/2015-09-15-router-improve-speed.html" rel="next" title="为你的路由器提速">
-                <i class="fa fa-chevron-left"></i> 为你的路由器提速
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
         </div>
       
+      
 
       
-      
-    </footer>
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/11/18/5-performance-tips-for-node-application.html" itemprop="url">
+              
+                <span itemprop="name">5个提高性能的Node.JS应用Tips</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-11-18T00:00:00+08:00"
+              content="2015-11-18" >
+          11-18
+        </time>
+      </div>
+
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
+    
+
       
-    </div>
-  </div>
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/11/05/ngx-lua-custom-access-log-format.html" itemprop="url">
+              
+                <span itemprop="name">使用nginx + lua 自定义access.log</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-11-05T00:00:00+08:00"
+              content="2015-11-05" >
+          11-05
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/10/22/lua-oop.html" itemprop="url">
+              
+                <span itemprop="name">lua 面向对象实现</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-10-22T00:00:00+08:00"
+              content="2015-10-22" >
+          10-22
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/10/21/go-set.html" itemprop="url">
+              
+                <span itemprop="name">Go Set实现</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-10-21T00:00:00+08:00"
+              content="2015-10-21" >
+          10-21
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/10/20/go-basic-data-structure.html" itemprop="url">
+              
+                <span itemprop="name">Go 中常用的数据结构介绍</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-10-20T00:00:00+08:00"
+              content="2015-10-20" >
+          10-20
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/10/07/tuning-nginx.html" itemprop="url">
+              
+                <span itemprop="name">nginx性能调优（部分参数调整）</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-10-07T00:00:00+08:00"
+              content="2015-10-07" >
+          10-07
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/10/07/10tips-for-10x-application-performance.html" itemprop="url">
+              
+                <span itemprop="name">10 tips for 10x application performance</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-10-07T00:00:00+08:00"
+              content="2015-10-07" >
+          10-07
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/09/15/router-improve-speed.html" itemprop="url">
+              
+                <span itemprop="name">为你的路由器提速</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-09-15T00:00:00+08:00"
+              content="2015-09-15" >
+          09-15
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2015/09/06/Hello-World.html" itemprop="url">
+              
+                <span itemprop="name">博客搬到新家啦</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2015-09-06T00:00:00+08:00"
+              content="2015-09-06" >
+          09-06
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+
+    
+
+  </section>
+
+  
+
 
 
           </div>
@@ -554,14 +637,6 @@ end
 
 
           
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/07/05/2015-10-22-lua-oop.html"
-           data-title="lua 面向对象实现" data-url="http://yoursite.com/2016/07/05/2015-10-22-lua-oop.html">
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -581,17 +656,8 @@ end
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -627,17 +693,6 @@ end
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -734,9 +789,11 @@ end
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
+  
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
 
 
   
