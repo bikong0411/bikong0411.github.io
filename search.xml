@@ -1,359 +1,12 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="前进，前进，不择手段的野蛮前进。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="碧云轩">
-<meta property="og:url" content="http://bikong0411.github.io/index.html">
-<meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="前进，前进，不择手段的野蛮前进。">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="碧云轩">
-<meta name="twitter:description" content="前进，前进，不择手段的野蛮前进。">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: 'sky'
-    }
-  };
-</script>
-
-
-
-
-  <link rel="canonical" href="http://bikong0411.github.io/"/>
-
-  <title> 碧云轩 - 前进，前进，不择手段的野蛮前进。 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?76b3ed277c6e2e5651636f036f6c1428";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
-
-
-
-
-
-
+<?xml version="1.0" encoding="utf-8"?>
+<search>
   
   
     
-  
-
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">碧云轩</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle"></p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-
-      
-        <li class="menu-item menu-item-search">
-          
-            <a href="#" class="st-search-show-outputs">
-          
-            
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
-            
-            搜索
-          </a>
-        </li>
-      
-    </ul>
-  
-
-  
-    <div class="site-search">
-      
-  <form class="site-search-form">
-  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
-</form>
-
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install', 'ZRCiygcbA1PQanhkr_pi','2.0.0');
-</script>
-
-
-
-    </div>
-  
-</nav>
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-  <section id="posts" class="posts-expand">
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/29/lru-go.html" itemprop="url">
-                  go语言实现LRU Cache
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-29T00:00:00+08:00" content="2016-06-29">
-              2016-06-29
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/29/lru-go.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/29/lru-go.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/06/29/lru-go.html"class="leancloud_visitors" data-flag-title="go语言实现LRU Cache">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是LRU-Cache"><a href="#什么是LRU-Cache" class="headerlink" title="什么是LRU Cache"></a>什么是LRU Cache</h2><blockquote>
+    <entry>
+      <title><![CDATA[go语言实现LRU Cache]]></title>
+      <url>http://bikong0411.github.io/2016/06/29/lru-go.html</url>
+      <content type="html"><![CDATA[<h2 id="什么是LRU-Cache"><a href="#什么是LRU-Cache" class="headerlink" title="什么是LRU Cache"></a>什么是LRU Cache</h2><blockquote>
 <p>LRU是Least Recently Used的缩写，意思是最近最少使用，它是一种Cache替换算法。 什么是Cache？狭义的Cache指的是位于CPU和主存间的快速RAM， 通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。 广义上的Cache指的是位于速度相差较大的两种硬件之间， 用于协调两者数据传输速度差异的结构。除了CPU与主存之间有Cache， 内存与硬盘之间也有Cache，乃至在硬盘与网络之间也有某种意义上的Cache── 称为Internet临时文件夹或网络内容缓存等。</p>
 </blockquote>
 <p>Cache的容量有限，因此当Cache的容量用完后，而又有新的内容需要添加进来时， 就需要挑选并舍弃原有的部分内容，从而腾出空间来放新内容。LRU Cache 的替换原则就是将最近最少使用的内容替换掉(还有一种是FIFO方式进行缓存替换)。其实，LRU译成最久未使用会更形象， 因为该算法每次替换掉的就是一段时间内最久没有使用过的内容。</p>
@@ -536,111 +189,13 @@ BenchmarkAdd<span class="number">-2</span>   <span class="number">3000000</span>
 ok      command-line-arguments  <span class="number">1.695s</span>
 </code></pre>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.cs.uml.edu/~jlu1/doc/codes/lruCache.html" target="_blank" rel="external">http://www.cs.uml.edu/~jlu1/doc/codes/lruCache.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/19/openresty-note.html" itemprop="url">
-                  openresty学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-19T00:00:00+08:00" content="2016-06-19">
-              2016-06-19
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/19/openresty-note.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/19/openresty-note.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/06/19/openresty-note.html"class="leancloud_visitors" data-flag-title="openresty学习笔记">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
+    <entry>
+      <title><![CDATA[openresty学习笔记]]></title>
+      <url>http://bikong0411.github.io/2016/06/19/openresty-note.html</url>
+      <content type="html"><![CDATA[<ol>
 <li><p>lua_package_path “conf/lua/?.lua”; 表示多个字符串的通配符为？，不是 *</p>
 </li>
 <li><p>lua中涉及到路径，如果没有指定绝对路径，那前缀为 安装 openresty 的 路径前缀。比如</p>
@@ -873,111 +428,13 @@ Here the args table will always look like
 <p>参考: <a href="http://chattool.sinaapp.com/?p=493" target="_blank" rel="external">phper</a></p>
 </li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
-                  luajit ffi 应用之sleep实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
-              2016-05-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
+    <entry>
+      <title><![CDATA[luajit ffi 应用之sleep实现]]></title>
+      <url>http://bikong0411.github.io/2016/05/31/lua-ffi.html</url>
+      <content type="html"><![CDATA[<p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
 <ul>
 <li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
 <pre><code> local ffi=require(&apos;ffi&apos;)
@@ -1020,111 +477,13 @@ ngx.say(&quot;sleep finish&quot;)
 <p>参考: </p>
 <p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
 <p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/31/lua-ffi-summary.html" itemprop="url">
-                  luajit ffi 总结 <转载>
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
-              2016-05-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/31/lua-ffi-summary.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi-summary.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/05/31/lua-ffi-summary.html"class="leancloud_visitors" data-flag-title="luajit ffi 总结 <转载>">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。</p>
+    <entry>
+      <title><![CDATA[luajit ffi 总结 <转载>]]></title>
+      <url>http://bikong0411.github.io/2016/05/31/lua-ffi-summary.html</url>
+      <content type="html"><![CDATA[<p>Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。</p>
 <p>使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是使用 lua C API，另一种方法就是使用 luajit 提供的 ffi 库来调用 C 程序。本文主要是对 luajit ffi 的研究总结。</p>
 <p>#luajit ffi</p>
 <p>luajit 和 lua 一样，是可以直接安装在操作系统中的，相关介绍直接参考官网 luajit。个人测试效果来看，luajit 的执行效率远高于 lua，大概是 8 倍左右。openresty 的 lua-nginx-module 模块就是将 luajit 集成到了 Nginx 中，实现在 Nginx 中执行 Lua 脚本</p>
@@ -1593,111 +952,13 @@ Hello Lua
 <p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
 <p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
 <p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/18/5-performance-tips-for-node-application.html" itemprop="url">
-                  5个提高性能的Node.JS应用Tips
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-18T00:00:00+08:00" content="2015-11-18">
-              2015-11-18
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/18/5-performance-tips-for-node-application.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/18/5-performance-tips-for-node-application.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/11/18/5-performance-tips-for-node-application.html"class="leancloud_visitors" data-flag-title="5个提高性能的Node.JS应用Tips">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
+    <entry>
+      <title><![CDATA[5个提高性能的Node.JS应用Tips]]></title>
+      <url>http://bikong0411.github.io/2015/11/18/5-performance-tips-for-node-application.html</url>
+      <content type="html"><![CDATA[<blockquote>
 <p> <a href="https://twitter.com/nebrius/status/505543249969176576?ref_src=twsrc%5Etfw" target="_blank" rel="external">Bryan Huges</a>在twitter中写道：如果你没有在你的node服务前加一层nginx，那么你这么做可能是不正确的。</p>
 </blockquote>
 <p>Node.js在用世界最著名的语言javascript去创建服务端应用的工具中处于领先地位。它同时提供了一个web服务器又和一个应用服务器的的功能。现在Node.js被当做开发和交付各类微服务的一个关键工具。</p>
@@ -1766,111 +1027,13 @@ Hello Lua
 </code></pre><p>有关提供静态内容的一般信息，请参阅NGINX Plus管理指南。管理员指南包括实现更快的性能配置说明，尝试查找文件时相应成功或失败的多种选项，达到更快的性能的优化方法。</p>
 <p>缓存静态文件的NGINX服务器显著从Node.js的应用程序服务器卸载一部分工作，使其达到更高的性能。</p>
 <p><a href="https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/" target="_blank" rel="external">https://www.nginx.com/blog/5-performance-tips-for-node-js-applications/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/05/ngx-lua-custom-access-log-format.html" itemprop="url">
-                  使用nginx + lua 自定义access.log
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-05T00:00:00+08:00" content="2015-11-05">
-              2015-11-05
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/05/ngx-lua-custom-access-log-format.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/05/ngx-lua-custom-access-log-format.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/11/05/ngx-lua-custom-access-log-format.html"class="leancloud_visitors" data-flag-title="使用nginx + lua 自定义access.log">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="external">更多nginx内置的变量</a>) , 这种咱们就不说了，这个简单，基本大家都会。</p>
+    <entry>
+      <title><![CDATA[使用nginx + lua 自定义access.log]]></title>
+      <url>http://bikong0411.github.io/2015/11/05/ngx-lua-custom-access-log-format.html</url>
+      <content type="html"><![CDATA[<p>说起nginx自定义access.log，可能大家都不陌生，有的同学会说，那不就是定义一下format, format里面可以使用nginx内置的变量$remote_addr、$status、$http_user_agent、$time_local etc… (<a href="http://nginx.org/en/docs/varindex.html" target="_blank" rel="external">更多nginx内置的变量</a>) , 这种咱们就不说了，这个简单，基本大家都会。</p>
 <p>那是自定义access.log的名字? 比如在一个多个虚拟主机的nginx中，我们想根据不同的server去生成不同的access.log。这样我们去查access.log的时候也方便，从名字一眼就能看出要去哪个文件去查。你也可以通过上面nginx内置的变量去给文件命名，比如我用server_name去命名，我就可以这样写:</p>
 <pre><code>log_format log/$http_host.access.log
 </code></pre><p>然后reload一下nginx就可以了。当然我要说的也不是这个。</p>
@@ -1977,111 +1140,13 @@ Location: http://127.1/lua
 <li>配置中http部分 增加underscores_in_headers on; 配置</li>
 <li>用减号-替代下划线符号_，避免这种变态问题。        </li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/22/lua-oop.html" itemprop="url">
-                  lua 面向对象实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-22T00:00:00+08:00" content="2015-10-22">
-              2015-10-22
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/22/lua-oop.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/22/lua-oop.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/10/22/lua-oop.html"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
+    <entry>
+      <title><![CDATA[lua 面向对象实现]]></title>
+      <url>http://bikong0411.github.io/2015/10/22/lua-oop.html</url>
+      <content type="html"><![CDATA[<p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
 <ul>
 <li><p>类</p>
 <pre><code>Name = {}
@@ -2204,111 +1269,13 @@ print(c:getName()) --&gt; wbz
 end 
 </code></pre></li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/21/go-set.html" itemprop="url">
-                  Go Set实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-21T00:00:00+08:00" content="2015-10-21">
-              2015-10-21
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/21/go-set.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/21/go-set.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/10/21/go-set.html"class="leancloud_visitors" data-flag-title="Go Set实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>利用go的interface实现的有锁Set</p>
+    <entry>
+      <title><![CDATA[Go Set实现]]></title>
+      <url>http://bikong0411.github.io/2015/10/21/go-set.html</url>
+      <content type="html"><![CDATA[<p>利用go的interface实现的有锁Set</p>
 <pre><code>package main
 import (
     &quot;fmt&quot;
@@ -2411,111 +1378,13 @@ func main() {
     t.Add(&quot;world&quot;)
     fmt.Println(s.Diff(t))
 }
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+</code></pre>]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/20/go-basic-data-structure.html" itemprop="url">
-                  Go 中常用的数据结构介绍
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-20T00:00:00+08:00" content="2015-10-20">
-              2015-10-20
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/20/go-basic-data-structure.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/go-basic-data-structure.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/10/20/go-basic-data-structure.html"class="leancloud_visitors" data-flag-title="Go 中常用的数据结构介绍">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#Array(数组)<br>内部机制</p>
+    <entry>
+      <title><![CDATA[Go 中常用的数据结构介绍]]></title>
+      <url>http://bikong0411.github.io/2015/10/20/go-basic-data-structure.html</url>
+      <content type="html"><![CDATA[<p>#Array(数组)<br>内部机制</p>
 <p>在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。</p>
 <p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。</p>
 <p>数组声明和初始化</p>
@@ -3044,562 +1913,77 @@ func main() {
     fmt.Println(s.Diff(t))
 }
 </code></pre><p>参考：<a href="http://se77en.cc/2014/06/30/array-slice-map-and-set-in-golang/#Slice(切片" target="_blank" rel="external">http://se77en.cc/2014/06/30/array-slice-map-and-set-in-golang/#Slice(切片</a>)</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    </entry>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+    <entry>
+      <title><![CDATA[nginx性能调优（部分参数调整）]]></title>
+      <url>http://bikong0411.github.io/2015/10/07/tuning-nginx.html</url>
+      <content type="html"><![CDATA[<p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
+]]></content>
+    </entry>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/07/tuning-nginx.html" itemprop="url">
-                  nginx性能调优（部分参数调整）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-07T00:00:00+08:00" content="2015-10-07">
-              2015-10-07
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/07/tuning-nginx.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/07/tuning-nginx.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/10/07/tuning-nginx.html"class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
+    <entry>
+      <title><![CDATA[10 tips for 10x application performance]]></title>
+      <url>http://bikong0411.github.io/2015/10/07/10tips-for-10x-application-performance.html</url>
+      <content type="html"><![CDATA[<p>10条建议让你的应用性能提升10倍</p>
+<p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
+]]></content>
+    </entry>
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+    <entry>
+      <title><![CDATA[为你的路由器提速]]></title>
+      <url>http://bikong0411.github.io/2015/09/15/router-improve-speed.html</url>
+      <content type="html"><![CDATA[<p>这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。</p>
+<p>今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上吧。后来在一个Q群里问了下群油有没有啥好办法，@ZERO（娃吊）说让我改下信道改成1。以前听说过信道，于是上网搜了下，得到如下常识：</p>
+<blockquote>
+<p>总的来说就是路由器信号不好，所以导致速度慢。<br>那么我就来回答一下另外一种可能的情况——信道拥堵。如果你在有很多无线网络覆盖的地方（比如小区）那么，你就可能遇到信道拥堵这一状况。<br>无线路由可以广播1-13个信道，大部分的集中在1,6,11这三个信道。一般路由器自动也默认是这三个信号。虽然1，6,11 三个信道号称是不会互相干扰，但是还是存在因为同一信道的无线信号太多而导致无线速度缓慢的情况（有线速度很快）</p>
+<p>你在路由器设置里面直接设置第13个信道就可以提高无线路由速度了。</p>
+<p>如果上述方法无效，请将你的无线路由发射协议从b/g/n三网混合改为b/g混合，部分终端设备不支持三网混合，会导致网络速度很慢。</p>
+</blockquote>
+<p>  于是乎开始操作，操作很简单，信道改成了13，结果发现效果不是很理想，又试着改了一下模式，改成了b/g,改完之后效果就明显了（附图）。</p>
+<p>  <img src="http://bikong0411.github.io/public/images/me_route.png" alt="router"></p>
+<p>  当然，你如果是土豪，你可以选择换一台更好的路由器。</p>
+]]></content>
+    </entry>
     
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
-
-
-          </div>
-          
-
-
-          
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.jpg"
-               alt="sky" />
-          <p class="site-author-name" itemprop="name">sky</p>
-          <p class="site-description motion-element" itemprop="description">前进，前进，不择手段的野蛮前进。</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">13</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          
-
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-      </section>
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">sky</span>
-</div>
-
-<div class="powered-by">
-  Powered By <a class="theme-link" href="http://hexo.io">Hexo</a>
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
-
-
-
-  
-  
-
-  
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
+    <entry>
+      <title><![CDATA[博客搬到新家啦]]></title>
+      <url>http://bikong0411.github.io/2015/09/06/Hello-World.html</url>
+      <content type="html"><![CDATA[<p>这是我的第一篇blog，Hello World</p>
+<blockquote>
+<p>Hello World</p>
+</blockquote>
+<p><a href="http://skey4.tumblr.com/" target="_blank" rel="external">旧版blog地址</a></p>
+]]></content>
+    </entry>
     
   
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"skey4"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
   
     
-    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
+    <entry>
+      <title><![CDATA[about]]></title>
+      <url>http://bikong0411.github.io/about/index.html</url>
+      <content type="html"></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[categories]]></title>
+      <url>http://bikong0411.github.io/categories/index.html</url>
+      <content type="html"></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[guestbook]]></title>
+      <url>http://bikong0411.github.io/guestbook/index.html</url>
+      <content type="html"></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[All tags]]></title>
+      <url>http://bikong0411.github.io/tags/index.html</url>
+      <content type="html"></content>
+    </entry>
+    
   
-
-
-
-
-
-
-  
-  
-  <script type="text/javascript">
-    // Popup Window;
-    var isfetched = false;
-    // Search DB path;
-    var search_path = "search.xml";
-    if (search_path.length == 0) {
-       search_path = "search.xml";
-    }
-    var path = "/" + search_path;
-    // monitor main search box;
-
-    function proceedsearch() {
-      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
-      $('.popup').toggle();
-
-    }
-    // search function;
-    var searchFunc = function(path, search_id, content_id) {
-    'use strict';
-    $.ajax({
-        url: path,
-        dataType: "xml",
-        async: true,
-        success: function( xmlResponse ) {
-            // get the contents from search data
-            isfetched = true;
-            $('.popup').detach().appendTo('.header-inner');
-            var datas = $( "entry", xmlResponse ).map(function() {
-                return {
-                    title: $( "title", this ).text(),
-                    content: $("content",this).text(),
-                    url: $( "url" , this).text()
-                };
-            }).get();
-            var $input = document.getElementById(search_id);
-            var $resultContent = document.getElementById(content_id);
-            $input.addEventListener('input', function(){
-                var matchcounts = 0;
-                var str='<ul class=\"search-result-list\">';                
-                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-                $resultContent.innerHTML = "";
-                if (this.value.trim().length > 1) {
-                // perform local searching
-                datas.forEach(function(data) {
-                    var isMatch = true;
-                    var content_index = [];
-                    var data_title = data.title.trim().toLowerCase();
-                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
-                    var data_url = data.url;
-                    var index_title = -1;
-                    var index_content = -1;
-                    var first_occur = -1;
-                    // only match artiles with not empty titles and contents
-                    if(data_title != '' && data_content != '') {
-                        keywords.forEach(function(keyword, i) {
-                            index_title = data_title.indexOf(keyword);
-                            index_content = data_content.indexOf(keyword);
-                            if( index_title < 0 && index_content < 0 ){
-                                isMatch = false;
-                            } else {
-                                if (index_content < 0) {
-                                    index_content = 0;
-                                }
-                                if (i == 0) {
-                                    first_occur = index_content;
-                                }
-                            }
-                        });
-                    }
-                    // show search results
-                    if (isMatch) {
-                        matchcounts += 1;
-                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
-                        var content = data.content.trim().replace(/<[^>]+>/g,"");
-                        if (first_occur >= 0) {
-                            // cut out 100 characters
-                            var start = first_occur - 20;
-                            var end = first_occur + 80;
-                            if(start < 0){
-                                start = 0;
-                            }
-                            if(start == 0){
-                                end = 50;
-                            }
-                            if(end > content.length){
-                                end = content.length;
-                            }
-                            var match_content = content.substring(start, end);
-                            // highlight all keywords
-                            keywords.forEach(function(keyword){
-                                var regS = new RegExp(keyword, "gi");
-                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
-                            });
-                            
-                            str += "<p class=\"search-result\">" + match_content +"...</p>"
-                        }
-                        str += "</li>";
-                    }
-                })};
-                str += "</ul>";
-                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
-                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
-                $resultContent.innerHTML = str;
-            });
-            proceedsearch();
-        }
-    });}
-
-    // handle and trigger popup window;
-    $('.popup-trigger').mousedown(function(e) {
-      e.stopPropagation();
-      if (isfetched == false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-
-    });
-
-    $('.popup-btn-close').click(function(e){
-      $('.popup').hide();
-      $(".popoverlay").remove();
-      $('body').css('overflow', '');
-    });
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-  </script>
-
-  
-
-  
-  
-    <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("CrujEsuoGcEj8uRxgKyJYcfX-gzGzoHsz", "eWKCvj9p1JLbhdc5Y8xXK27K");</script>
-<script>
-function showTime(Counter) {
-    var query = new AV.Query(Counter);
-    $(".leancloud_visitors").each(function() {
-        var url = $(this).attr("id").trim();
-        query.equalTo("url", url);
-        query.find({
-            success: function(results) {
-                if (results.length == 0) {
-                    var content = $(document.getElementById(url)).text() + ': 0';
-                    $(document.getElementById(url)).text(content);
-                    return;
-                }
-                for (var i = 0; i < results.length; i++) {
-                    var object = results[i];
-                    var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-                    $(document.getElementById(url)).text(content);
-                }
-            },
-            error: function(object, error) {
-                console.log("Error: " + error.code + " " + error.message);
-            }
-        });
-
-    });
-}
-
-function addCount(Counter) {
-    var Counter = AV.Object.extend("Counter");
-    url = $(".leancloud_visitors").attr('id').trim();
-    title = $(".leancloud_visitors").attr('data-flag-title').trim();
-    var query = new AV.Query(Counter);
-    query.equalTo("url", url);
-    query.find({
-        success: function(results) {
-            if (results.length > 0) {
-                var counter = results[0];
-                counter.fetchWhenSave(true);
-                counter.increment("time");
-                counter.save(null, {
-                    success: function(counter) {
-                        var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-                        $(document.getElementById(url)).text(content);
-                    },
-                    error: function(counter, error) {
-                        console.log('Failed to save Visitor num, with error message: ' + error.message);
-                    }
-                });
-            } else {
-                var newcounter = new Counter();
-                newcounter.set("title", title);
-                newcounter.set("url", url);
-                newcounter.set("time", 1);
-                newcounter.save(null, {
-                    success: function(newcounter) {
-                        console.log("newcounter.get('time')="+newcounter.get('time'));
-                        var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-                        $(document.getElementById(url)).text(content);
-                    },
-                    error: function(newcounter, error) {
-                        console.log('Failed to create');
-                    }
-                });
-            }
-        },
-        error: function(error) {
-            console.log('Error:' + error.code + " " + error.message);
-        }
-    });
-}
-$(function() {
-    var Counter = AV.Object.extend("Counter");
-    if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-    } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-    }
-}); 
-</script>
-
-
-  
-</body>
-</html>
+</search>
