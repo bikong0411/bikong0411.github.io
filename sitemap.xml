@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://bikong0411.github.io/about/index.html</loc>
+    
+    <lastmod>2016-07-06T05:56:57.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://bikong0411.github.io/categories/index.html</loc>
     
     <lastmod>2016-07-06T05:54:44.000Z</lastmod>
@@ -23,21 +30,14 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/about/index.html</loc>
-    
-    <lastmod>2016-07-05T15:53:32.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bikong0411.github.io/2015/10/20/go-basic-data-structure.html</loc>
+    <loc>http://bikong0411.github.io/2015/11/18/5-performance-tips-for-node-application.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/10/21/go-set.html</loc>
+    <loc>http://bikong0411.github.io/2015/10/20/go-basic-data-structure.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
@@ -58,7 +58,7 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/09/15/router-improve-speed.html</loc>
+    <loc>http://bikong0411.github.io/2015/10/07/tuning-nginx.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
@@ -79,14 +79,14 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/09/06/Hello-World.html</loc>
+    <loc>http://bikong0411.github.io/2016/06/29/lru-go.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2016/06/29/lru-go.html</loc>
+    <loc>http://bikong0411.github.io/2015/09/15/router-improve-speed.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
@@ -100,14 +100,14 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/10/07/tuning-nginx.html</loc>
+    <loc>http://bikong0411.github.io/2015/09/06/Hello-World.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/11/18/5-performance-tips-for-node-application.html</loc>
+    <loc>http://bikong0411.github.io/2015/10/21/go-set.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     

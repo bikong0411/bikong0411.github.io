@@ -1974,14 +1974,14 @@ func main() {
     </entry>
     
     <entry>
-      <title><![CDATA[guestbook]]></title>
-      <url>http://bikong0411.github.io/guestbook/index.html</url>
+      <title><![CDATA[tags]]></title>
+      <url>http://bikong0411.github.io/tags/index.html</url>
       <content type="html"></content>
     </entry>
     
     <entry>
-      <title><![CDATA[tags]]></title>
-      <url>http://bikong0411.github.io/tags/index.html</url>
+      <title><![CDATA[guestbook]]></title>
+      <url>http://bikong0411.github.io/guestbook/index.html</url>
       <content type="html"></content>
     </entry>
     
