@@ -84,21 +84,55 @@
 
 
 
-<meta name="description" content="这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。
-今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上">
+<meta name="description" content="利用go的interface实现的有锁Set
+package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;amp;Set{">
 <meta property="og:type" content="article">
-<meta property="og:title" content="为你的路由器提速">
-<meta property="og:url" content="http://yoursite.com/2016/07/05/2015-09-15-router-improve-speed/index.html">
+<meta property="og:title" content="Go Set实现">
+<meta property="og:url" content="http://yoursite.com/2016/07/05/2015-10-21-go-set.html">
 <meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。
-今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上">
-<meta property="og:image" content="http://bikong0411.github.io/public/images/me_route.png">
+<meta property="og:description" content="利用go的interface实现的有锁Set
+package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;amp;Set{">
 <meta property="og:updated_time" content="2016-07-05T13:29:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="为你的路由器提速">
-<meta name="twitter:description" content="这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。
-今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上">
-<meta name="twitter:image" content="http://bikong0411.github.io/public/images/me_route.png">
+<meta name="twitter:title" content="Go Set实现">
+<meta name="twitter:description" content="利用go的interface实现的有锁Set
+package main
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;amp;Set{">
 
 
 
@@ -119,9 +153,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/07/05/2015-09-15-router-improve-speed/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/05/2015-10-21-go-set.html"/>
 
-  <title> 为你的路由器提速 | 碧云轩 </title>
+  <title> Go Set实现 | 碧云轩 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -301,7 +335,7 @@
             
             
               
-                为你的路由器提速
+                Go Set实现
               
             
           </h1>
@@ -324,8 +358,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-09-15-router-improve-speed/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-09-15-router-improve-speed/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-10-21-go-set.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-10-21-go-set.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -336,7 +370,7 @@
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-09-15-router-improve-speed/"class="leancloud_visitors" data-flag-title="为你的路由器提速">
+            <span id="/2016/07/05/2015-10-21-go-set.html"class="leancloud_visitors" data-flag-title="Go Set实现">
                      &nbsp;阅读次数
                     </span>
           
@@ -352,17 +386,110 @@
       
 
       
-        <p>这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。</p>
-<p>今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上吧。后来在一个Q群里问了下群油有没有啥好办法，@ZERO（娃吊）说让我改下信道改成1。以前听说过信道，于是上网搜了下，得到如下常识：</p>
-<blockquote>
-<p>总的来说就是路由器信号不好，所以导致速度慢。<br>那么我就来回答一下另外一种可能的情况——信道拥堵。如果你在有很多无线网络覆盖的地方（比如小区）那么，你就可能遇到信道拥堵这一状况。<br>无线路由可以广播1-13个信道，大部分的集中在1,6,11这三个信道。一般路由器自动也默认是这三个信号。虽然1，6,11 三个信道号称是不会互相干扰，但是还是存在因为同一信道的无线信号太多而导致无线速度缓慢的情况（有线速度很快）</p>
-<p>你在路由器设置里面直接设置第13个信道就可以提高无线路由速度了。</p>
-<p>如果上述方法无效，请将你的无线路由发射协议从b/g/n三网混合改为b/g混合，部分终端设备不支持三网混合，会导致网络速度很慢。</p>
-</blockquote>
-<p>  于是乎开始操作，操作很简单，信道改成了13，结果发现效果不是很理想，又试着改了一下模式，改成了b/g,改完之后效果就明显了（附图）。</p>
-<p>  <img src="http://bikong0411.github.io/public/images/me_route.png" alt="router"></p>
-<p>  当然，你如果是土豪，你可以选择换一台更好的路由器。</p>
+        <p>利用go的interface实现的有锁Set</p>
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;sync&quot;
+)
 
+type Set struct {
+    m map[interface{}]bool
+    sync.RWMutex
+}
+
+func New() *Set {
+    return &amp;Set{
+        m: map[interface{}]bool{},
+    }
+}
+
+func (s *Set) Add(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    s.m[item] = true
+}
+
+func (s *Set) Remove(item interface{}) {
+    s.Lock()
+    defer s.Unlock()
+    delete(s.m, item)
+}
+
+func (s *Set) Contains(item interface{}) bool{
+    s.RLock()
+    defer s.RUnlock()
+    _,ok := s.m[item]
+    return ok
+}
+
+func (s *Set) Len() int {
+    return len(s.List())
+}
+
+func (s *Set) Clear() {
+    s.Lock()
+    defer s.Unlock()
+    s.m = map[interface{}]bool{}
+}
+
+func (s *Set) IsEmpty() bool {
+    s.RLock()
+    defer s.RUnlock()
+    if s.Len() == 0 {
+        return true
+    }
+    return false
+}
+
+func (s *Set) List() []interface{} {
+    s.RLock()
+    defer s.RUnlock()
+    list := []interface{}{}
+    for  k,_ := range s.m {
+        list = append(list, k)
+    }
+    return list
+}
+
+func (s *Set) Diff(t *Set) []interface{} {
+    sDiff := []interface{}{}
+    for sk := range s.m {
+        if _, ok := t.m[sk]; !ok {
+            sDiff = append(sDiff, sk)
+        }
+    }
+    return sDiff
+}
+
+
+func main() {
+    s := New()
+    s.Add(1)
+    s.Add(2)
+    s.Add(1)
+    if s.IsEmpty() {
+        fmt.Println(&quot;0 item&quot;)
+    }
+    s.Add(1)
+    s.Add(2)
+    s.Add(3)
+    s.Add(&quot;hello&quot;)
+    if s.Contains(2) {
+        fmt.Println(&quot;2 does exist&quot;)
+    }
+    s.Remove(2)
+    s.Remove(3)
+    s.Add(4)
+    s.Add(&quot;sky&quot;)
+    fmt.Println(&quot;list of all items&quot;, s.List())
+     t := New()
+    t.Add(1)
+    t.Add(3)
+    t.Add(&quot;world&quot;)
+    fmt.Println(s.Diff(t))
+}
+</code></pre>
       
     </div>
 
@@ -386,16 +513,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/05/2015-10-07-tuning-nginx/" rel="next" title="nginx性能调优（部分参数调整）">
-                <i class="fa fa-chevron-left"></i> nginx性能调优（部分参数调整）
+              <a href="/2016/07/05/2016-06-29-lru-go.html" rel="next" title="go语言实现LRU Cache">
+                <i class="fa fa-chevron-left"></i> go语言实现LRU Cache
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/05/2016-06-29-lru-go/" rel="prev" title="go语言实现LRU Cache">
-                go语言实现LRU Cache <i class="fa fa-chevron-right"></i>
+              <a href="/2016/07/05/2015-10-20-go-basic-data-structure.html" rel="prev" title="Go 中常用的数据结构介绍">
+                Go 中常用的数据结构介绍 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -422,8 +549,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/05/2015-09-15-router-improve-speed/"
-           data-title="为你的路由器提速" data-url="http://yoursite.com/2016/07/05/2015-09-15-router-improve-speed/">
+      <div class="ds-thread" data-thread-key="2016/07/05/2015-10-21-go-set.html"
+           data-title="Go Set实现" data-url="http://yoursite.com/2016/07/05/2015-10-21-go-set.html">
       </div>
     
   </div>

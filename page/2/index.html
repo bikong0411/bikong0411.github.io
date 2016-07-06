@@ -298,8 +298,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2016-05-31-lua-ffi/" itemprop="url">
-                  luajit ffi 应用之sleep实现
+                <a class="post-title-link" href="/2016/07/05/2016-05-31-lua-ffi-summary.html" itemprop="url">
+                  luajit ffi 总结 <转载>
                 </a>
               
             
@@ -323,8 +323,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2016-05-31-lua-ffi/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-05-31-lua-ffi/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2016-05-31-lua-ffi-summary.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-05-31-lua-ffi-summary.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -335,7 +335,7 @@
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2016-05-31-lua-ffi/"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
+            <span id="/2016/07/05/2016-05-31-lua-ffi-summary.html"class="leancloud_visitors" data-flag-title="luajit ffi 总结 <转载>">
                      &nbsp;阅读次数
                     </span>
           
@@ -353,49 +353,475 @@
       
         
           
-            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
-<ul>
-<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
-<pre><code> local ffi=require(&apos;ffi&apos;)
- ffi.cdef[[
-      void Sleep(int ms);
-      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
- ]]
+            <p>Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。</p>
+<p>使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是使用 lua C API，另一种方法就是使用 luajit 提供的 ffi 库来调用 C 程序。本文主要是对 luajit ffi 的研究总结。</p>
+<p>#luajit ffi</p>
+<p>luajit 和 lua 一样，是可以直接安装在操作系统中的，相关介绍直接参考官网 luajit。个人测试效果来看，luajit 的执行效率远高于 lua，大概是 8 倍左右。openresty 的 lua-nginx-module 模块就是将 luajit 集成到了 Nginx 中，实现在 Nginx 中执行 Lua 脚本</p>
+<p>luajit ffi 是 luajit 提供给 Luaer 使用 Lua 调用 C 函数的 Lua 库，使用该库，Luaer 不用再去操作复杂的 Lua 栈来粘合两种程序代码，luajit ffi 官方资料。</p>
+<p>##引入 luajit ffi 库</p>
+<pre><code>local ffi = require(&quot;ffi&quot;)
+</code></pre><p>#在 Lua 中调用 C 函数</p>
+<p>和 lua 的 C API 一样，Lua 调用 C 函数，需要将 C 函数编译成链接库。区别在于 C API 查找 C 的 Lua 库是在 package.cpath 路径下进行查找，而这些库函数使用 Lua 栈接口进行编写。而 luajit 对于 C 链接库的引用遵从于普通 C 库的引用方式，先在 /usr/lib(/usr/lib64)，/lib(/lib64) 目录下查找，再到用户自定义的 LD_LIBRARY_PATH 下查找。</p>
+<p>本节涉及接口：</p>
+<pre><code> ffi.cdef[[c_function define]]
+ffi.C
+ffi.load(name [,global])
+</code></pre><ul>
+<li><p>调用 C 标准库函数</p>
+<p> 对于 C 标准库函数引用，需要引入函数，函数声明</p>
+<pre><code>ffi.cdef[[c_function define]]
+</code></pre><p>  调用 C 函数</p>
+<pre><code>ffi.C.c_function
+</code></pre><p>  如：</p>
+<pre><code>local ffi = require(&quot;ffi&quot;)
 
- local sleep
- if ffi.os == &quot;Windows&quot; then
-     function sleep(s)
-         ffi.C.Sleep(s*1000)
-     end
- else
-     function sleep(s)
-          ffi.C.poll(nil, 0, s*1000)
-     end
- end
-
-for i=1, 2 do
-     ngx.say(&quot;.&quot;)
-     ngx.flush()
-     sleep(1)
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
-<pre><code>local ffi=require(&apos;ffi&apos;)
 ffi.cdef[[
-    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
-    struct timespec { long    tv_sec;  long tv_nsec;  };
+    int printf(const char *fmt, ...);
+    int strcasecmp(const char *s1, const char *s2);
 ]]
-local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
-ffi.C.select(1,nil,nil,nil,time)
-ngx.say(&quot;sleep finish&quot;)
+
+ffi.C.printf(&quot;Hello %s!\n&quot;, &quot;world&quot;)
+ret = ffi.C.strcasecmp(&quot;Hello&quot;, &quot;hello&quot;)
+print(ret)
+ret = ffi.C.strcasecmp(&quot;Hello&quot;, &quot;hello1&quot;)
+print(ret)
+</code></pre><p>  输出结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffic.lua 
+Hello world!
+0
+-49
 </code></pre></li>
+<li><p>调用自定义的 C 函数</p>
+<p>  调用自定义的 C 函数，首先要将自定义的 C 函数编译成链接库</p>
+<pre><code>[root@AlexWoo-CentOS lua]# cat ffimyc.c 
+int add(int x, int y)
+{
+    return x + y;
+}
+[root@AlexWoo-CentOS lua]# gcc -g -o libffimyc.so -fpic -shared ffimyc.c
+</code></pre></li>
+<li><p>调用 C 标准库函数</p>
+<p>   调用 C 标准库函数，需要在 Lua 中引入相应的库</p>
+<pre><code>ffi.load(name [,global])
+</code></pre><p>  这里第二个参数如果为 true，则该库被引入全局命名空间，这里使用 ffi.load 需要注意两点：</p>
+<ol>
+<li><p>链接库文件必须在 C 的动态链接库查找路径中，否则会报类似错误：</p>
+<pre><code>luajit: ffimyc.lua:3: libffimyc.so: cannot open shared object file: No such file or directory
+</code></pre><p> 引入方法：</p>
+<pre><code> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:your_lib_path
+
+在 Linux 下，库函数名的查找与 C 程序查找动态链接库相同，如上面我生成的动态链接库文件为 libffimyc.so，我在 ffi.load 中的 name 为 ffimyc
+</code></pre><p> 调用自己的函数，可以直接使用 ffi.load 返回的变量调用，下面我们看一个简单的例子：</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+myc = ffi.load(&apos;ffimyc&apos;)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ret = myc.add(1, 20)
+print(ret)
+</code></pre><p>输出结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffimyc.lua
+21
+</code></pre></li>
+<li><p>使用 ffi.C 调用自定义的 C 函数</p>
+<p> 上面的例子中，是不能直接使用 ffi.C 来调用 add 函数的，那么怎么用 ffi.C 来调用 add 函数，对，就是 ffi.load 时，第二个参数置为 true，将库加载为全局命名空间。示例：</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+
+ffi.load(&apos;ffimyc&apos;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ret = ffi.C.add(1, 10)
+print(ret)
+</code></pre><p> 输出结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffimyc.lua
+11
+</code></pre><p>本节小结</p>
+<p>在 lua 中调用 C 函数，需要使用 ffi.cdef 对 C 函数进行声明</p>
+<p>对于 C 标准库函数，已在全局命名空间，直接可以使用 ffi.C.函数名(函数参数…) 来调用函数</p>
+<p>对于自定义的 C 函数，需要将其先编译成链接库，并将链接库所在路径加入到 LD_LIBRARY_PATH 中，需要使用 ffi.load 载入链接库</p>
+<p>如果 ffi.load 第二个参数不填写，链接库以私有空间方式链入 Lua 脚本，使用时需要用 ffi.load 的返回值对函数进行调用</p>
+<p>如果 ffi.load 第二个参数设置为 true，可以使用 ffi.C 直接调用，调用方法同 C 标准库函数的调用</p>
+</li>
+</ol>
+</li>
 </ul>
-<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
-<p>参考: </p>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
-<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
+<p>Lua 处理 cdata 对象</p>
+<p>上面对 Lua 如何调用 C 函数进行了小结，但是光能调用 C 函数是远远不够的，我们还需要对 C 的变量，变量类型进行处理。本节将对这部分进行探讨。</p>
+<p>C 类型转化为 Lua 中的 ctype</p>
+<p>C 类型转化为 Lua ctype，使用 ffi.typeof，该函数返回一个 ctype 变量类型</p>
+<pre><code>ctype = ffi.typeof(ct)
+</code></pre><p>示例：</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+
+ffi.cdef[[
+    struct s1 {
+        int a;
+         int b;
+    };
+    typedef struct {
+        int c;
+            int d;
+    } s2;
+    union u {
+           int a;
+        long b;
+        float c;
+    };
+    enum e {
+            Male,
+        Female
+    };
+]]
+
+print(ffi.typeof(&quot;int8_t&quot;))
+print(ffi.typeof(&quot;uint8_t&quot;))
+print(ffi.typeof(&quot;int16_t&quot;))
+print(ffi.typeof(&quot;uint16_t&quot;))
+print(ffi.typeof(&quot;int32_t&quot;))
+print(ffi.typeof(&quot;uint32_t&quot;))
+print(ffi.typeof(&quot;int64_t&quot;))
+print(ffi.typeof(&quot;uint64_t&quot;))
+print(ffi.typeof(&quot;double&quot;))
+print(ffi.typeof(&quot;float&quot;))
+print(ffi.typeof(&quot;bool&quot;))
+print(ffi.typeof(&quot;struct s1&quot;))
+print(ffi.typeof(&quot;s2&quot;))
+print(ffi.typeof(&quot;union u&quot;))
+print(ffi.typeof(&quot;enum e&quot;))
+print(ffi.typeof(&quot;struct s1*&quot;))
+print(ffi.typeof(&quot;struct s1[]&quot;))
+</code></pre><p>  输出：</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+ctype&lt;char&gt;
+ctype&lt;unsigned char&gt;
+ctype&lt;short&gt;
+ctype&lt;unsigned short&gt;
+ctype&lt;int&gt;
+ctype&lt;unsigned int&gt;
+ctype&lt;int64_t&gt;
+ctype&lt;uint64_t&gt;
+ctype&lt;double&gt;
+ctype&lt;float&gt;
+ctype&lt;bool&gt;
+ctype&lt;struct s1&gt;
+ctype&lt;struct 98&gt;
+ctype&lt;union u&gt;
+ctype&lt;enum e&gt;
+ctype&lt;struct s1 *&gt;
+ctype&lt;struct s1 []&gt;
+</code></pre><p>  创建并初始化 cdata 对象</p>
+<p>  使用 ctype 有以下两种构造 Lua C 对象的方法</p>
+<pre><code>cdata = ffi.new(ct [,nelem] [,init...])
+cdata = ctype([nelem,] [init...])
+</code></pre><p>  基本类型 cdata 对象</p>
+<p>  首先是一个 C 的函数，我们使用构造的 cadata 对象来调用该函数：</p>
+<pre><code>int add(int x, int y)
+{
+    return x+y;
+}
+</code></pre><p>  直接调用</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+print(t.add(10, 11))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+21
+</code></pre><p>  这种方法仅限于基本类型，lua 会将其基本类型转换为 cdata 的基本类型</p>
+<p>  使用 ffi.new 构造</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ti = ffi.typeof(&quot;int&quot;)
+a = ffi.new(ti, 10)
+b = ffi.new(&quot;int&quot;, 11)
+print(type(a), type(b))
+print(t.add(a, b))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+cdata   cdata
+21
+</code></pre><p>  这里如果执行 print(ffi.typeof(“int”))，结果就是 ctype，因此这里 ffi.new 的第一个参数直接填为 “int” 与传入一个 ctype 的类型对象是等价的</p>
+<p>  使用类型对象构造</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+]]
+
+ti = ffi.typeof(&quot;int&quot;)
+a = ti(10)
+b = ti(11)
+print(t.add(a, b))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+21
+</code></pre><p>  基本类型指针 cdata 对象</p>
+<p>  首先是一个 C 的函数，我们使用构造的 cadata 对象来调用该函数：</p>
+<pre><code>int addp(int *x, int *y)
+{
+    return *x+*y;
+}
+</code></pre><p>  这里构造指针对象可以使用 ffi.new 和 类型构造两种方法，下面只以一种进行举例，其它举一反三</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    int add(int x, int y);
+    int addp(int *x, int *y);
+]]
+
+a = ffi.new(&quot;int[1]&quot;, {10})
+b = ffi.new(&quot;int[1]&quot;, {10})
+print(t.addp(a, b))
+</code></pre><p>  执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+21
+</code></pre><p>  没有将 Lua 原生类型直接转换为指针类型的方法(至少我没找到)，这里使用的是将 Lua 的 table 转为只有一个元素的数组，并将数组当作指针类型参数传入addp中。</p>
+<p>结构类型 cdata 对象</p>
+<p>首先是一个 C 程序，我们使用构造的 cadata 对象来调用该函数：</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct constr_t {
+    int a;
+    int b;
+    struct innerstr {
+        int x;
+        int y;
+    } c;
+};
+
+void print_constr_t(struct constr_t t)
+{
+    printf(&quot;a:%d\n&quot;, t.a);
+    printf(&quot;b:%d\n&quot;, t.b);
+    printf(&quot;c.x:%d\n&quot;, t.c.x);
+    printf(&quot;c.y:%d\n&quot;, t.c.y);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    struct constr_t {
+        int a;
+        int b;
+        struct innerstr {
+            int x;
+            int y;
+        } c;
+    };
+    void print_constr_t(struct constr_t t);
+]]
+
+a = ffi.new(&quot;struct constr_t&quot;, {1, 2, {10, 11}})
+t.print_constr_t(a)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+a:1
+b:2
+c.x:10
+c.y:11
+</code></pre><p>这里我们看到构造一个 C 的结构类型与基本类型的方法基本类似，唯一区别就是需要使用 table 来进行构造，table 的层次结构与 C 的结构的层次必须符合</p>
+<p>结构类型指针 cdata 对象</p>
+<p>在日常使用中，对于结构体，我们更常使用的是指针。和基本类型指针 cdata 对象不同，可以直接使用与结构类型 cdata 对象相同的方式来构造结构类型指针的 cdata 对象</p>
+<p>C 程序</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct constr_t {
+    int a;
+    int b;
+    struct innerstr {
+        int x;
+        int y;
+    } c;
+};
+
+void print_pconstr_t(struct constr_t *t)
+{
+    printf(&quot;a:%d\n&quot;, t-&gt;a);
+    printf(&quot;b:%d\n&quot;, t-&gt;b);
+    printf(&quot;c.x:%d\n&quot;, t-&gt;c.x);
+    printf(&quot;c.y:%d\n&quot;, t-&gt;c.y);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    struct constr_t {
+        int a;
+        int b;
+        struct innerstr {
+            int x;
+            int y;
+        } c;
+    };
+    void print_pconstr_t(struct constr_t *t);
+]]
+
+a = ffi.new(&quot;struct constr_t&quot;, {1, 2, {10, 11}})
+t.print_pconstr_t(a)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+a:1
+b:2
+c.x:10
+c.y:11
+</code></pre><p>字符串 cdata 对象</p>
+<p>可以使用 Lua string 对象来初始化字符串 cdata 对象</p>
+<p>C 程序</p>
+<pre><code>void print(const char *s)
+{
+    printf(&quot;%s\n&quot;, s);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    void print(const char *s);
+]]
+
+a = ffi.new(&quot;const char*&quot;, &quot;Hello World&quot;)
+t.print(a)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+Hello World
+</code></pre><p>注意对字符串，ffi.new 第一个参数只能是 const char <em>、const char[size] 或 char[size]，不能是 char </em>，const char[?] 等类型</p>
+<p>使用 cdata 对象</p>
+<p>本节将探讨在 Lua 中怎么使用 cdata 对象</p>
+<p>C 程序</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+struct constr_t {
+    int a;
+    int b;
+    struct innerstr {
+        int x;
+        int y;
+    } c;
+};
+
+void print_pconstr_t(struct constr_t *t)
+{
+    printf(&quot;a:%d\n&quot;, t-&gt;a);
+    printf(&quot;b:%d\n&quot;, t-&gt;b);
+    printf(&quot;c.x:%d\n&quot;, t-&gt;c.x);
+    printf(&quot;c.y:%d\n&quot;, t-&gt;c.y);
+}
+
+int print_i(int x)
+{
+    printf(&quot;x: %d\n&quot;, x);
+}
+
+int print_pi(int *px)
+{
+    printf(&quot;px: %d\n&quot;, *px);
+}
+
+void print(const char *s)
+{
+    printf(&quot;%s\n&quot;, s);
+}
+</code></pre><p>Lua 程序</p>
+<pre><code>local ffi = require(&apos;ffi&apos;)
+local t = ffi.load(&quot;t&quot;, true)
+
+ffi.cdef[[
+    struct constr_t {
+        int a;
+        int b;
+        struct innerstr {
+            int x;
+            int y;
+        } c;
+    };
+    void print_pconstr_t(struct constr_t *t);
+    int print_i(int x);
+    int print_pi(int *px);
+    void print(const char *s);
+]]
+
+ti = ffi.new(&quot;int&quot;, 10)
+tpi = ffi.new(&quot;int[1]&quot;, {20})
+
+ts = ffi.new(&quot;struct constr_t&quot;, {1, 2, {3, 4}})
+
+tcstr = ffi.new(&quot;const char*&quot;, &quot;Hello World&quot;)
+tstr = ffi.new(&quot;char[11]&quot;, &quot;Hello World&quot;)
+
+t.print_i(ti)
+--t.print_pi(ti) --luajit: ffit.lua:29: bad argument #1 to &apos;print_pi&apos; (cannot convert &apos;int&apos; to &apos;int *&apos;)
+
+--t.print_i(tpi) --luajit: ffit.lua:31: bad argument #1 to &apos;print_i&apos; (cannot convert &apos;int [1]&apos; to &apos;int&apos;)
+t.print_pi(tpi)
+
+t.print_pconstr_t(ts)
+
+t.print(tcstr)
+t.print(tstr)
+</code></pre><p>–对基本类型操作</p>
+<pre><code>ti = 100 --change tpi to number
+tpi[0] = 21
+--tpi=22 --change tpi to number
+--tpi[1] = 2000 --luajit: ffit.lua:44: attempt to index global &apos;tpi&apos; (a number value)
+print(type(ti), type(tpi))
+t.print_i(ti)
+t.print_pi(tpi)
+</code></pre><p>–对 struct 类型操作</p>
+<pre><code>ts.b = 100
+ts.c.y = 1000
+print(type(ts))
+t.print_pconstr_t(ts)
+</code></pre><p>–对字符串类型操作</p>
+<pre><code>--tcstr[2] = 32 --luajit: ffit.lua:54: attempt to write to constant location
+tstr[2] = 32
+t.print(tstr)
+
+t.print(&quot;Hello Lua&quot;)
+</code></pre><p>执行结果</p>
+<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
+x: 10
+px: 20
+a:1
+b:2
+c.x:3
+c.y:4
+Hello World
+Hello World
+number  cdata
+x: 100
+px: 21
+cdata    
+a:1
+b:100
+c.x:3
+c.y:1000
+Hello World
+Hello Lua
+</code></pre><p>从上面的例子可以看出，对基本类型，实际上不需要将其转为 cdata 类型；对于基本类型指针，操作方式与数组类似，在 Lua 中可当作 table 数组进行处理；对结构类型，在 Lua 中可当作 table 字典进行处理；对字符串，在 Lua 中可当作 table 数组进行处理</p>
+<p>本节小结</p>
+<p>Lua 可以使用 ffi.new 初始化一个 cdata 对象，也可以使用 ffi.typeof 生成的类型来初始化一个 cdata 对象</p>
+<p>对于基本类型和字符串类型，没有必要将其转为 cdata 对象，其可以作为参数传入 C 函数中。也可以接收 C 函数的返回值</p>
+<p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
+<p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
+<p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
 
           
         
@@ -445,7 +871,7 @@ ngx.say(&quot;sleep finish&quot;)
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2016-06-19-openresty-note/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/05/2016-06-19-openresty-note.html" itemprop="url">
                   openresty学习笔记
                 </a>
               
@@ -470,8 +896,8 @@ ngx.say(&quot;sleep finish&quot;)
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2016-06-19-openresty-note/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-06-19-openresty-note/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2016-06-19-openresty-note.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2016-06-19-openresty-note.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -482,7 +908,7 @@ ngx.say(&quot;sleep finish&quot;)
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2016-06-19-openresty-note/"class="leancloud_visitors" data-flag-title="openresty学习笔记">
+            <span id="/2016/07/05/2016-06-19-openresty-note.html"class="leancloud_visitors" data-flag-title="openresty学习笔记">
                      &nbsp;阅读次数
                     </span>
           
@@ -782,7 +1208,7 @@ Here the args table will always look like
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/2015-09-06-Hello-World/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/05/2015-09-06-Hello-World.html" itemprop="url">
                   博客搬到新家啦
                 </a>
               
@@ -807,8 +1233,8 @@ Here the args table will always look like
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/05/2015-09-06-Hello-World/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-09-06-Hello-World/" itemprop="commentsCount"></span>
+                <a href="/2016/07/05/2015-09-06-Hello-World.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/2015-09-06-Hello-World.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -819,7 +1245,7 @@ Here the args table will always look like
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/07/05/2015-09-06-Hello-World/"class="leancloud_visitors" data-flag-title="博客搬到新家啦">
+            <span id="/2016/07/05/2015-09-06-Hello-World.html"class="leancloud_visitors" data-flag-title="博客搬到新家啦">
                      &nbsp;阅读次数
                     </span>
           
