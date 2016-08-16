@@ -4,7 +4,7 @@
   <url>
     <loc>http://bikong0411.github.io/2016/08/16/convert-type-by-union.html</loc>
     
-    <lastmod>2016-08-16T14:49:28.000Z</lastmod>
+    <lastmod>2016-08-16T14:57:27.000Z</lastmod>
     
   </url>
   
@@ -37,14 +37,7 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/10/21/go-set.html</loc>
-    
-    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bikong0411.github.io/2015/10/22/lua-oop.html</loc>
+    <loc>http://bikong0411.github.io/2015/10/20/go-basic-data-structure.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
@@ -52,6 +45,13 @@
   
   <url>
     <loc>http://bikong0411.github.io/2015/11/05/ngx-lua-custom-access-log-format.html</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bikong0411.github.io/2015/10/22/lua-oop.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
@@ -72,13 +72,6 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2016/05/31/lua-ffi.html</loc>
-    
-    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bikong0411.github.io/2016/06/29/lru-go.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
@@ -86,7 +79,7 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/09/15/router-improve-speed.html</loc>
+    <loc>http://bikong0411.github.io/2016/05/31/lua-ffi-summary.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
@@ -107,14 +100,21 @@
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2015/10/20/go-basic-data-structure.html</loc>
+    <loc>http://bikong0411.github.io/2015/10/21/go-set.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bikong0411.github.io/2016/05/31/lua-ffi-summary.html</loc>
+    <loc>http://bikong0411.github.io/2015/09/15/router-improve-speed.html</loc>
+    
+    <lastmod>2016-07-05T13:29:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bikong0411.github.io/2016/05/31/lua-ffi.html</loc>
     
     <lastmod>2016-07-05T13:29:45.000Z</lastmod>
     

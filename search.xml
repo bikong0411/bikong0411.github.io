@@ -13,7 +13,9 @@
 <p>这玩意看着挺简单，想着通过ffi,搞个atof不就可以了吗？自己试了下发现，结果不对，一直是0。过了一会一位同学直接抛出了代码，最后说了句 “union做类型转换，最好用了。。”, 由于咱C语言学的不太好，根本没听过这方法啊，于是Google了一番，也算是记个笔记。</p>
 <h1 id="0x02-C语言实例"><a href="#0x02-C语言实例" class="headerlink" title="0x02. C语言实例"></a>0x02. C语言实例</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> <span class="number">_U</span>nFloat &#123;</div><div class="line">    <span class="keyword">float</span> value;</div><div class="line">    <span class="keyword">char</span> buff[<span class="number">4</span>];</div><div class="line">&#125;UnFloat;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    UnFloat uf;</div><div class="line">    uf.value = <span class="number">0</span>;</div><div class="line">    <span class="keyword">float</span> f = <span class="number">3.1415926</span>;</div><div class="line">    <span class="keyword">char</span> cf[<span class="number">4</span>];</div><div class="line">    <span class="built_in">memset</span>(cf,<span class="string">'\0'</span>,<span class="keyword">sizeof</span>(cf));</div><div class="line">    <span class="built_in">memcpy</span>(cf,&amp;f,<span class="keyword">sizeof</span>(cf));</div><div class="line">    <span class="built_in">memcpy</span>(uf.buff,cf,<span class="keyword">sizeof</span>(uf.buff));</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"The union converted float value is %f"</span>, uf.value);</div><div class="line">    getchar();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h1 id="0x03-luajit代码"><a href="#0x03-luajit代码" class="headerlink" title="0x03. luajit代码"></a>0x03. luajit代码</h1><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">local</span> ffi = <span class="built_in">require</span> <span class="string">'ffi'</span></div><div class="line">ffi.cdef <span class="string">[[</span></div><div class="line">typedef union &#123;</div><div class="line">    char buf[4];</div><div class="line">    float f;</div><div class="line">&#125; point_t;</div><div class="line">]]</div><div class="line"><span class="keyword">local</span> arr = &#123;<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0xFB</span>, <span class="number">0x42</span>&#125;</div><div class="line"><span class="keyword">local</span> str = <span class="string">''</span></div><div class="line"><span class="keyword">for</span> _,v <span class="keyword">in</span> <span class="built_in">ipairs</span>(arr) <span class="keyword">do</span></div><div class="line">     str = str .. <span class="built_in">string</span>.char(v)</div><div class="line"><span class="keyword">end</span></div><div class="line"><span class="keyword">local</span> v = ffi.new(<span class="string">"point_t"</span>, str)</div><div class="line"><span class="built_in">print</span>(v.f)</div></pre></td></tr></table></figure>
-<h1 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04. 总结"></a>0x04. 总结</h1><p>该方法确实挺好用，atof不能处理这种数据</p>
+<h1 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04. 总结"></a>0x04. 总结</h1><p>该方法确实挺好用，atof不能处理这种数据，另外补充一下lua的string如何转换成c_str</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">方法<span class="number">1</span></div><div class="line"><span class="keyword">local</span> str = <span class="string">"test"</span></div><div class="line"><span class="keyword">local</span> c_str = ffi.new(<span class="string">"char [?]"</span>, #str)</div><div class="line">ffi.copy(c_str, str)</div><div class="line"></div><div class="line">方法<span class="number">2</span></div><div class="line"><span class="keyword">local</span> c_str = ffi.new(<span class="string">"const char *"</span>, test)</div></pre></td></tr></table></figure>
+<p>反之通过ffi.string即可</p>
 ]]></content>
     </entry>
     
@@ -442,55 +444,6 @@ Here the args table will always look like
 <p>参考: <a href="http://chattool.sinaapp.com/?p=493" target="_blank" rel="external">phper</a></p>
 </li>
 </ul>
-]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[luajit ffi 应用之sleep实现]]></title>
-      <url>http://bikong0411.github.io/2016/05/31/lua-ffi.html</url>
-      <content type="html"><![CDATA[<p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
-<ul>
-<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
-<pre><code> local ffi=require(&apos;ffi&apos;)
- ffi.cdef[[
-      void Sleep(int ms);
-      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
- ]]
-
- local sleep
- if ffi.os == &quot;Windows&quot; then
-     function sleep(s)
-         ffi.C.Sleep(s*1000)
-     end
- else
-     function sleep(s)
-          ffi.C.poll(nil, 0, s*1000)
-     end
- end
-
-for i=1, 2 do
-     ngx.say(&quot;.&quot;)
-     ngx.flush()
-     sleep(1)
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
-<pre><code>local ffi=require(&apos;ffi&apos;)
-ffi.cdef[[
-    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
-    struct timespec { long    tv_sec;  long tv_nsec;  };
-]]
-local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
-ffi.C.select(1,nil,nil,nil,time)
-ngx.say(&quot;sleep finish&quot;)
-</code></pre></li>
-</ul>
-<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
-<p>参考: </p>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
-<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
 ]]></content>
     </entry>
     
@@ -966,6 +919,55 @@ Hello Lua
 <p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
 <p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
 <p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[luajit ffi 应用之sleep实现]]></title>
+      <url>http://bikong0411.github.io/2016/05/31/lua-ffi.html</url>
+      <content type="html"><![CDATA[<p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
+<ul>
+<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
+<pre><code> local ffi=require(&apos;ffi&apos;)
+ ffi.cdef[[
+      void Sleep(int ms);
+      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
+ ]]
+
+ local sleep
+ if ffi.os == &quot;Windows&quot; then
+     function sleep(s)
+         ffi.C.Sleep(s*1000)
+     end
+ else
+     function sleep(s)
+          ffi.C.poll(nil, 0, s*1000)
+     end
+ end
+
+for i=1, 2 do
+     ngx.say(&quot;.&quot;)
+     ngx.flush()
+     sleep(1)
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
+<pre><code>local ffi=require(&apos;ffi&apos;)
+ffi.cdef[[
+    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
+    struct timespec { long    tv_sec;  long tv_nsec;  };
+]]
+local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
+ffi.C.select(1,nil,nil,nil,time)
+ngx.say(&quot;sleep finish&quot;)
+</code></pre></li>
+</ul>
+<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
+<p>参考: </p>
+<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
+<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
 ]]></content>
     </entry>
     
@@ -1976,8 +1978,14 @@ func main() {
   
     
     <entry>
-      <title><![CDATA[about]]></title>
-      <url>http://bikong0411.github.io/about/index.html</url>
+      <title><![CDATA[guestbook]]></title>
+      <url>http://bikong0411.github.io/guestbook/index.html</url>
+      <content type="html"></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[categories]]></title>
+      <url>http://bikong0411.github.io/categories/index.html</url>
       <content type="html"></content>
     </entry>
     
@@ -1988,14 +1996,8 @@ func main() {
     </entry>
     
     <entry>
-      <title><![CDATA[guestbook]]></title>
-      <url>http://bikong0411.github.io/guestbook/index.html</url>
-      <content type="html"></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[categories]]></title>
-      <url>http://bikong0411.github.io/categories/index.html</url>
+      <title><![CDATA[about]]></title>
+      <url>http://bikong0411.github.io/about/index.html</url>
       <content type="html"></content>
     </entry>
     
