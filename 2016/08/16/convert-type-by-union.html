@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="luajit c/c++," />
 
 
 
@@ -84,15 +84,22 @@
 
 
 
-<meta name="description" content="前进，前进，不择手段的野蛮前进。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="碧云轩">
-<meta property="og:url" content="http://bikong0411.github.io/page/2/index.html">
+<meta name="description" content="#0x01.起因OpenResty群里抛出一个如下的问题
+
+===========技术点，征解决代码如何把网络传输的 float 数字转换成 lua 可以识别的 number ？float 类型，在网络字节流中是 0x00 0x00 0xFB 0x42 ,它所对应的实际值是 125.5 。请问如果在 lua 中获取到字节流后，如何把他转成我们需要的 125.5 ？同样的，double 类型也需要类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过union进行类型转换">
+<meta property="og:url" content="http://bikong0411.github.io/2016/08/16/convert-type-by-union.html">
 <meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="前进，前进，不择手段的野蛮前进。">
+<meta property="og:description" content="#0x01.起因OpenResty群里抛出一个如下的问题
+
+===========技术点，征解决代码如何把网络传输的 float 数字转换成 lua 可以识别的 number ？float 类型，在网络字节流中是 0x00 0x00 0xFB 0x42 ,它所对应的实际值是 125.5 。请问如果在 lua 中获取到字节流后，如何把他转成我们需要的 125.5 ？同样的，double 类型也需要类">
+<meta property="og:updated_time" content="2016-08-16T14:44:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="碧云轩">
-<meta name="twitter:description" content="前进，前进，不择手段的野蛮前进。">
+<meta name="twitter:title" content="通过union进行类型转换">
+<meta name="twitter:description" content="#0x01.起因OpenResty群里抛出一个如下的问题
+
+===========技术点，征解决代码如何把网络传输的 float 数字转换成 lua 可以识别的 number ？float 类型，在网络字节流中是 0x00 0x00 0xFB 0x42 ,它所对应的实际值是 125.5 。请问如果在 lua 中获取到字节流后，如何把他转成我们需要的 125.5 ？同样的，double 类型也需要类">
 
 
 
@@ -113,9 +120,9 @@
 
 
 
-  <link rel="canonical" href="http://bikong0411.github.io/page/2/"/>
+  <link rel="canonical" href="http://bikong0411.github.io/2016/08/16/convert-type-by-union.html"/>
 
-  <title> 碧云轩 - 前进，前进，不择手段的野蛮前进。 </title>
+  <title> 通过union进行类型转换 | 碧云轩 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -146,9 +153,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -275,9 +280,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -297,10 +302,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2015/10/07/tuning-nginx.html" itemprop="url">
-                  nginx性能调优（部分参数调整）
-                </a>
+                通过union进行类型转换
               
             
           </h1>
@@ -312,19 +314,38 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-07T00:00:00+08:00" content="2015-10-07">
-              2015-10-07
+            <time itemprop="dateCreated" datetime="2016-08-16T00:00:00+08:00" content="2016-08-16">
+              2016-08-16
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/10/07/tuning-nginx.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/07/tuning-nginx.html" itemprop="commentsCount"></span>
+                <a href="/2016/08/16/convert-type-by-union.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/16/convert-type-by-union.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -335,7 +356,7 @@
           
           
             &nbsp; | &nbsp;
-            <span id="/2015/10/07/tuning-nginx.html"class="leancloud_visitors" data-flag-title="nginx性能调优（部分参数调整）">
+            <span id="/2016/08/16/convert-type-by-union.html"class="leancloud_visitors" data-flag-title="通过union进行类型转换">
                      &nbsp;阅读次数
                     </span>
           
@@ -351,373 +372,69 @@
       
 
       
-        
-          
-            <p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/07/10tips-for-10x-application-performance.html" itemprop="url">
-                  10 tips for 10x application performance
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-07T00:00:00+08:00" content="2015-10-07">
-              2015-10-07
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/07/10tips-for-10x-application-performance.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/07/10tips-for-10x-application-performance.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/10/07/10tips-for-10x-application-performance.html"class="leancloud_visitors" data-flag-title="10 tips for 10x application performance">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>10条建议让你的应用性能提升10倍</p>
-<p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/15/router-improve-speed.html" itemprop="url">
-                  为你的路由器提速
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-15T00:00:00+08:00" content="2015-09-15">
-              2015-09-15
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/15/router-improve-speed.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/15/router-improve-speed.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/09/15/router-improve-speed.html"class="leancloud_visitors" data-flag-title="为你的路由器提速">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这两天明显感觉到网络越来越差劲了，号称10M的带宽，下载速度不到100kb/s, 还以为是联通本的问题，于是联系联通报修，结果联通维修人员说是路由器的问题，并且表现的很生气（以后再也不保修了，真心不敢惹）。</p>
-<p>今天下班后，拿着本子坐路由器边上发现网络还可以，但是在卧室就是打不开百度，感觉是信号衰减的问题。早就听说可以用易拉罐做个信号放大器的装置，可是这会咱也没有啊，那怎么办呢，不能一直坐到路由器边上吧。后来在一个Q群里问了下群油有没有啥好办法，@ZERO（娃吊）说让我改下信道改成1。以前听说过信道，于是上网搜了下，得到如下常识：</p>
+        <p>#0x01.起因<br>OpenResty群里抛出一个如下的问题</p>
 <blockquote>
-<p>总的来说就是路由器信号不好，所以导致速度慢。<br>那么我就来回答一下另外一种可能的情况——信道拥堵。如果你在有很多无线网络覆盖的地方（比如小区）那么，你就可能遇到信道拥堵这一状况。<br>无线路由可以广播1-13个信道，大部分的集中在1,6,11这三个信道。一般路由器自动也默认是这三个信号。虽然1，6,11 三个信道号称是不会互相干扰，但是还是存在因为同一信道的无线信号太多而导致无线速度缓慢的情况（有线速度很快）</p>
-<p>你在路由器设置里面直接设置第13个信道就可以提高无线路由速度了。</p>
-<p>如果上述方法无效，请将你的无线路由发射协议从b/g/n三网混合改为b/g混合，部分终端设备不支持三网混合，会导致网络速度很慢。</p>
+<p>===========技术点，征解决代码<br>如何把网络传输的 float 数字转换成 lua 可以识别的 number ？<br>float 类型，在网络字节流中是 <code>0x00 0x00 0xFB 0x42</code> ,它所对应的实际值是 125.5 。请问如果在 lua 中获取到字节流后，如何把他转成我们需要的 125.5 ？<br>同样的，double 类型也需要类似代码。</p>
 </blockquote>
-<p>  于是乎开始操作，操作很简单，信道改成了13，结果发现效果不是很理想，又试着改了一下模式，改成了b/g,改完之后效果就明显了（附图）。</p>
-<p>  <img src="http://bikong0411.github.io/public/images/me_route.png" alt="router"></p>
-<p>  当然，你如果是土豪，你可以选择换一台更好的路由器。</p>
+<p>这玩意看着挺简单，想着通过ffi,搞个atof不就可以了吗？自己试了下发现，结果不对，一直是0。过了一会一位同学直接抛出了代码，最后说了句 “union做类型转换，最好用了。。”, 由于咱C语言学的不太好，根本没听过这方法啊，于是Google了一番，也算是记个笔记。</p>
+<p>#0x02. C语言实例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> <span class="number">_U</span>nFloat &#123;</div><div class="line">    <span class="keyword">float</span> value;</div><div class="line">    <span class="keyword">char</span> buff[<span class="number">4</span>];</div><div class="line">&#125;UnFloat;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    UnFloat uf;</div><div class="line">    uf.value = <span class="number">0</span>;</div><div class="line">    <span class="keyword">float</span> f = <span class="number">3.1415926</span>;</div><div class="line">    <span class="keyword">char</span> cf[<span class="number">4</span>];</div><div class="line">    <span class="built_in">memset</span>(cf,<span class="string">'\0'</span>,<span class="keyword">sizeof</span>(cf));</div><div class="line">    <span class="built_in">memcpy</span>(cf,&amp;f,<span class="keyword">sizeof</span>(cf));</div><div class="line">    <span class="built_in">memcpy</span>(uf.buff,cf,<span class="keyword">sizeof</span>(uf.buff));</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"The union converted float value is %f"</span>, uf.value);</div><div class="line">    getchar();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#0x03. luajit代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">local ffi = require &apos;ffi&apos;</div><div class="line">ffi.cdef [[</div><div class="line">typedef union &#123;</div><div class="line">    char buf[4];</div><div class="line">    float f;</div><div class="line">&#125; point_t;</div><div class="line">]]</div><div class="line">local arr = &#123;0x00, 0x00, 0xFB, 0x42&#125;</div><div class="line">local str = &apos;&apos;</div><div class="line">for _,v in ipairs(arr) do</div><div class="line">     str = str .. string.char(v)</div><div class="line">end</div><div class="line">local v = ffi.new(&quot;point_t&quot;, str)</div><div class="line">print(v.f)</div></pre></td></tr></table></figure>
+<p>#0x04. 总结<br>该方法确实挺好用，atof不能处理这种数据</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/06/Hello-World.html" itemprop="url">
-                  博客搬到新家啦
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-06T00:00:00+08:00" content="2015-09-06">
-              2015-09-06
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/06/Hello-World.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/06/Hello-World.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/09/06/Hello-World.html"class="leancloud_visitors" data-flag-title="博客搬到新家啦">
-                     &nbsp;阅读次数
-                    </span>
-          
+            <a href="/tags/luajit-c-c/" rel="tag">#luajit c/c++</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>这是我的第一篇blog，Hello World</p>
-<blockquote>
-<p>Hello World</p>
-</blockquote>
-<p><a href="http://skey4.tumblr.com/" target="_blank" rel="external">旧版blog地址</a></p>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/29/lru-go.html" rel="next" title="go语言实现LRU Cache">
+                <i class="fa fa-chevron-left"></i> go语言实现LRU Cache
+              </a>
+            
+          </div>
 
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -725,6 +442,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/16/convert-type-by-union.html"
+           data-title="通过union进行类型转换" data-url="http://bikong0411.github.io/2016/08/16/convert-type-by-union.html">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -744,8 +469,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -843,6 +577,17 @@
       </section>
 
       
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
 
     </div>
   </aside>
@@ -938,6 +683,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
