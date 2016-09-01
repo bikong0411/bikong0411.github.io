@@ -238,7 +238,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            Suche
+            搜索
           </a>
         </li>
       
@@ -1067,6 +1067,153 @@ Here the args table will always look like
             
               
                 
+                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
+                  luajit ffi 应用之sleep实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
+              2016-05-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
+<ul>
+<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
+<pre><code> local ffi=require(&apos;ffi&apos;)
+ ffi.cdef[[
+      void Sleep(int ms);
+      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
+ ]]
+
+ local sleep
+ if ffi.os == &quot;Windows&quot; then
+     function sleep(s)
+         ffi.C.Sleep(s*1000)
+     end
+ else
+     function sleep(s)
+          ffi.C.poll(nil, 0, s*1000)
+     end
+ end
+
+for i=1, 2 do
+     ngx.say(&quot;.&quot;)
+     ngx.flush()
+     sleep(1)
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
+<pre><code>local ffi=require(&apos;ffi&apos;)
+ffi.cdef[[
+    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
+    struct timespec { long    tv_sec;  long tv_nsec;  };
+]]
+local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
+ffi.C.select(1,nil,nil,nil,time)
+ngx.say(&quot;sleep finish&quot;)
+</code></pre></li>
+</ul>
+<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
+<p>参考: </p>
+<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
+<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/31/lua-ffi-summary.html" itemprop="url">
                   luajit ffi 总结 <转载>
                 </a>
@@ -1591,153 +1738,6 @@ Hello Lua
 <p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
 <p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
 <p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
-                  luajit ffi 应用之sleep实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
-              2016-05-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
-<ul>
-<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
-<pre><code> local ffi=require(&apos;ffi&apos;)
- ffi.cdef[[
-      void Sleep(int ms);
-      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
- ]]
-
- local sleep
- if ffi.os == &quot;Windows&quot; then
-     function sleep(s)
-         ffi.C.Sleep(s*1000)
-     end
- else
-     function sleep(s)
-          ffi.C.poll(nil, 0, s*1000)
-     end
- end
-
-for i=1, 2 do
-     ngx.say(&quot;.&quot;)
-     ngx.flush()
-     sleep(1)
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
-<pre><code>local ffi=require(&apos;ffi&apos;)
-ffi.cdef[[
-    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
-    struct timespec { long    tv_sec;  long tv_nsec;  };
-]]
-local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
-ffi.C.select(1,nil,nil,nil,time)
-ngx.say(&quot;sleep finish&quot;)
-</code></pre></li>
-</ul>
-<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
-<p>参考: </p>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
-<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
 
           
         
