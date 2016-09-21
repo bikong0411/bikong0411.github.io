@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title><![CDATA[最好的Zend Opcache配置]]></title>
+      <url>http://bikong0411.github.io/2016/09/21/zend-opcache-best-setting.html</url>
+      <content type="html"><![CDATA[<h1 id="最好的Zend-Opcache配置"><a href="#最好的Zend-Opcache配置" class="headerlink" title="最好的Zend Opcache配置"></a>最好的Zend Opcache配置</h1><p>很多人都在使用ZendOptimizer了，但是很多人都不知道怎么去设置。</p>
+<p>你是否注意到你是如何在没有范例或者一个真实线上存在的实例供学习花费的情况下花几个小时去读文档，但是还是不知道如何去设置这些选项？</p>
+<p>比如，你懂得<span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.memory_consumption</span>意味着什么，但是谁知道它应该设置多少？32是不是太大了或许太小了?Google半天什么都发现，只能根据自己的直觉去设置，谁设置过谁知道。</p>
+<p>但是，如果你的直接是错误的呢？你愿意通过你的猜测去赌一把吗？</p>
+<p>我不是这样的。</p>
+<p>在研究方面我有一个很可怕的像狂人一样的坏习惯，我会用Google搜索一些奇怪的设置并且我会花三个小时去从PHP的源码中进行挖掘。</p>
+<p>与其让这些知识浪费，我更想与你分享。我不得不花时间搞清楚了Zend Optimizer的真实生产环境的最佳设置。</p>
+<p>这些设置是从我众多APP中的一个每天访问量1.17亿HTTP请求的APP的php.ini中直接拿出来的。我将解释每一个选项是干嘛的还有为什么这么设置，你可以根据你自己的情况进行调整。</p>
+<p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.revalidate_freq</span> - 简单的说，多久（单位是秒）检查一次你的代码缓存(opcache)是否过期。0代表每一个请求都回去检查你的PHP代码（代价比较大，每次请求会添加很多stat的系统调用去检查文件的最后修改时间,而每次每次系统调用都涉及到内核的中断还有上下文的切换，代价比较大)。在开发环境可以直接设置为0，生产环境下设置跟下一个设置项有关。</p>
+<p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.validate_timestamps</span> - 当这个选项开启的时候，PHP将每隔（你设置的opcache.revalidate_freq 的值）秒去检查文件的最后修改时间。</p>
+<p>当你未开启该选项的时候，opcache.revaliate_freq的设置会被忽略，你的PHP文件将永远不会因为代码更新去检查文件修改时间。因此，如果你修改了你的代码，修改将不会生效直到你重启PHP（或者强制通过Kill -SIGUSR2)。</p>
+<p>是的，这感觉有点痛苦并且荒唐，但是你应该去使用它，为什么呢？当你更新或者部署代码的时候新代码可能会与旧代码掺杂在一起，那运行结果就不可知了，像地狱一样不安全。</p>
+<p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.max_accelerated_files</span> - 控制一次最多可以加载多少个PHP文件到内存。将这个值设置的比你工程的PHP文件多是非常重要的。我的代码库有不到6000个文件，所以我选择了一个比6000大的质数7963作为最大加速文件的个数。</p>
+<p>你可以通过<span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">find . -type f -print | grep php | wc -l</span>快速计算出你代码仓库里有多少个文件。</p>
+<p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.memory_consumption</span> - 默认值是64M，因为我有一吨代码，所以我把这个值设置为192M。你可以使用opcache_get_status()方法查看opcache目前消耗的内存(下周可能会更多)进而判断你是否需要增加这个设置的值。</p>
+<p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.interned_strings_buffer</span> - 关于这个选项的文档数基本是0，PHP使用了一个叫做内部字符串技术来提升性能，比如在你代码里面使用了1000次foobar字符串，PHP内部只存储foobar这个字符串一次不可变字符串，另外的999次使用指针去指向内部字符串，更深层次的说，这个设置并不是为每个php-fpm进程设置一个不可变的字符串的池，而是所有的php-fpm进程共享的，它节省内存，提高性能，在大的应用中效果更显著。</p>
+<p>它的值单位是M，所以”16”代表16MB，默认值比较小4MB。</p>
+<p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.fast_shutdown</span> - 另外一个有趣的但没有用文档的选项，”允许快速关闭”，哦，好的，就像解释的这样，它实际上做的是提供一个快速调用你代码中析构函数的机制加速一个单个请求的相应，加速php worker的回收进行更快的准备处理下一个请求。设置为1代表打开它。</p>
+<p>php.ini中设置如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">opcache.revalidate_freq=<span class="number">0</span></div><div class="line">opcache.validate_timestamps=<span class="number">0</span> (comment this out in your dev environment)</div><div class="line">opcache.max_accelerated_files=<span class="number">7963</span></div><div class="line">opcache.memory_consumption=<span class="number">192</span></div><div class="line">opcache.interned_strings_buffer=<span class="number">16</span></div><div class="line">opcache.fast_shutdown=<span class="number">1</span></div></pre></td></tr></table></figure>
+<p>原文: <a href="https://www.scalingphpbook.com/blog/2014/02/14/best-zend-opcache-settings.html" target="_blank" rel="external">https://www.scalingphpbook.com/blog/2014/02/14/best-zend-opcache-settings.html</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[通过union进行类型转换]]></title>
       <url>http://bikong0411.github.io/2016/08/16/convert-type-by-union.html</url>
       <content type="html"><![CDATA[<h1 id="0x01-起因"><a href="#0x01-起因" class="headerlink" title="0x01.起因"></a>0x01.起因</h1><p>OpenResty群里抛出一个如下的问题</p>
@@ -1933,17 +1960,17 @@ func main() {
     </entry>
     
     <entry>
-      <title><![CDATA[nginx性能调优（部分参数调整）]]></title>
-      <url>http://bikong0411.github.io/2015/10/07/tuning-nginx.html</url>
-      <content type="html"><![CDATA[<p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
-]]></content>
-    </entry>
-    
-    <entry>
       <title><![CDATA[10 tips for 10x application performance]]></title>
       <url>http://bikong0411.github.io/2015/10/07/10tips-for-10x-application-performance.html</url>
       <content type="html"><![CDATA[<p>10条建议让你的应用性能提升10倍</p>
 <p><a href="https://www.nginx.com/blog/10-tips-for-10x-application-performance/" target="_blank" rel="external">原文连接</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[nginx性能调优（部分参数调整）]]></title>
+      <url>http://bikong0411.github.io/2015/10/07/tuning-nginx.html</url>
+      <content type="html"><![CDATA[<p><a href="https://www.nginx.com/blog/tuning-nginx/" target="_blank" rel="external">原文连接</a></p>
 ]]></content>
     </entry>
     
