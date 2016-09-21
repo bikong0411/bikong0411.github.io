@@ -4,6 +4,49 @@
   
     
     <entry>
+      <title><![CDATA[关于上线系统的一些想法 (for php)]]></title>
+      <url>http://bikong0411.github.io/2016/09/21/%E5%85%B3%E4%BA%8E%E4%B8%8A%E7%BA%BF%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%83%B3%E6%B3%95.html</url>
+      <content type="html"><![CDATA[<h1 id="0X00-起因"><a href="#0X00-起因" class="headerlink" title="0X00. 起因"></a>0X00. 起因</h1><p>最近在升级php7, php7的opcache的一个选项opcache.revalidate_freq的默认值是60，之前线上php5.5.6中opcache的opcache.revalidate_freq设置的为2。然后在上线代码的时候总是会出现php的error, 这种情况被称为”瞬报”。 当上线的文件较多的时候，这种错误可能会持续很长时间，但是op也不太care, 总觉得无所谓，所以一直也没处理，只需要在上线的时候在群里通报一声：”我在上线，有php-error的话属于瞬报，无视即可”。好尴尬，哈哈。</p>
+<h1 id="0X01-现象"><a href="#0X01-现象" class="headerlink" title="0X01. 现象"></a>0X01. 现象</h1><p>上线的时候，收到php-error后，通常都很紧张，这尼玛难道有问题，要回滚啊！！！赶紧看看php-error是什么造成的。打开一看尼玛A文件的a方法调用B文件中的b方法是出错，说B文件中不存在b这个方法，怎么可能我tmd这次上线新加的b方法啊，连水都没顾得上喝，赶紧去打开B文件看，果然B文件里面有b方法。</p>
+<h1 id="0X02-思考原因"><a href="#0X02-思考原因" class="headerlink" title="0X02. 思考原因"></a>0X02. 思考原因</h1><p>出现这种问题的原因是什么呢？罪魁祸首是什么呢？当然最根本的原因就是上线是非原子的。所谓上线代码的原子性即你上线的文件要同时生效不能存在你上线的A文件调用的是上线之前版本的B文件，这样导致最终的结果是跟预期相悖的，也是不可预测的。</p>
+<p>那么导致这个问题出现的原因有几种呢？</p>
+<ul>
+<li>opcache缓存问题</li>
+<li>php文件cache问题</li>
+</ul>
+<h1 id="0X03-opcache缓存问题"><a href="#0X03-opcache缓存问题" class="headerlink" title="0X03. opcache缓存问题"></a>0X03. opcache缓存问题</h1><p>说到opcache，目前最常用的有后面几种apc、 eaccelerator、 <a href="http://bikong0411.github.io/2016/09/21/zend-opcache-best-setting.html">ZendOpcache</a>，apc 的 bug 很多，比如开启了<a href="http://php.net/manual/en/apc.configuration.php#ini.apc.enable-cli" target="_blank" rel="external">apc.enable_cli</a> 配置后就会有很多<a href="https://github.com/composer/composer/issues/264" target="_blank" rel="external">灵异问题</a>。随着ZendOpcache被内置到官方的PHP版本中，ZendOpcache使用也越来越广泛，当然效果也是非常好的。所以还是使用ZendOpcache吧。此外apc和ZendOpcache对文件的缓存键也不同，apc按照文件的inode，Zendopcache选择了文件的path。</p>
+<p>接上面，如果A的opcache先过期，B的后过期，就可能导致上面说的那种非”原子发布”导致不可预知的问题。</p>
+<h1 id="0X04-php文件cache问题"><a href="#0X04-php文件cache问题" class="headerlink" title="0X04. php文件cache问题"></a>0X04. php文件cache问题</h1><p>这里说的不是普通的文件缓存，说的是realpath缓存，php在include或者requrire文件的时候并不是每次都去通过stat系统调用判断文件是否存在，如果存在就加载进内存，加载过之后php对文件会进行一个优化，PHP会根据文件的path去缓存该文件的stats信息，通过如下代码可以验证</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$f = @file_get_contents(<span class="string">'/tmp/bar.php'</span>);</div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">"hello"</span>;</div><div class="line"></div><div class="line">var_dump(realpath_cache_get());</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">hello</div><div class="line"><span class="keyword">array</span>(<span class="number">5</span>) &#123;</div><div class="line">  [<span class="string">"/home/julien.pauli/www/realpath_example.php"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    float(<span class="number">1.7251638834424E+19</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">false</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">43</span>) <span class="string">"/home/julien.pauli/www/realpath_example.php"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/home"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    int(<span class="number">4353355791257440477</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">5</span>) <span class="string">"/home"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/home/julien.pauli"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    int(<span class="number">159282770203332178</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">18</span>) <span class="string">"/home/julien.pauli"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/tmp"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    float(<span class="number">1.6709564980243E+19</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">4</span>) <span class="string">"/tmp"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/home/julien.pauli/www"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    int(<span class="number">5178407966190555102</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">22</span>) <span class="string">"/home/julien.pauli/www"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div></pre></td></tr></table></figure>
+<p>你可以使用clearstatcache(true)清空这个array,强制PHP去通过stat()系统调用获取文件的信息，尽管之前已经被访问过。另外realpath是进程级别的，非共享内存级别。更多reaplpath cache相关的东西可以参考 <a href="http://jpauli.github.io/2014/06/30/realpath-cache.html" target="_blank" rel="external">http://jpauli.github.io/2014/06/30/realpath-cache.html</a>。</p>
+<p>这块主要是影响那些通过修改软链接形式的上线系统，因为realpath cache的存在可能导致代码不生效。</p>
+<h1 id="0X05-解决方案"><a href="#0X05-解决方案" class="headerlink" title="0X05. 解决方案"></a>0X05. 解决方案</h1><p>以上两种问题都需要考虑如何解决，如果是通过修改软链接的形式上线的，需要同时处理realpath cache、opcache的缓存，否则只需要处理opcache缓存即可。</p>
+<p>当然方案都是两种一种是自动过期、一种是手动过期。</p>
+<ul>
+<li>realpath cache</li>
+</ul>
+<p>自动过期</p>
+<p>可以通过修改php.ini里 realpath_cache_size、realpath_cache_ttl实现。</p>
+<p>当然如果你使用的nginx + php-fpm的形式，你可以通过修改nginx的fastcgi_params实现，配置如下:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">fastcgi_param</span> SCRIPT_FILENAME <span class="variable">$realpath_root</span> <span class="variable">$fastcgi_script_name</span>;</div><div class="line"><span class="attribute">fastcgi_param</span> DOCUMENT_ROOT <span class="variable">$realpath_root</span>;</div></pre></td></tr></table></figure>
+<p>这样当你修改网站目录的软链时，nginx会自己判断你网站根目录的真实路径，当然代价还是stat的系统调用，只不过把php的stat转移到了nginx。</p>
+<p>软链的方法推荐使用ln -sfn处理。</p>
+<p>手动过期<br>可以通过调用clearstatcache(true)去清除</p>
+<ul>
+<li>opcache</li>
+</ul>
+<p>自动过期</p>
+<p>如果你使用的是ZendOpcache 你可以设置opcache.validate_timestamps=1，opcache.revalidate_freq=0 当然代价是每次请求都回去检查文件的最后修改时间，无谓增加一堆stat系统调用，性能可想而知。</p>
+<p>手动过期</p>
+<p>可以通过设置opcache.validate_timestamps=0去关闭ZendOpcache的自动检测文件是否更新操作，上线完毕后手工调用opcache_reset()或者opcache_invalidate(string $script [, boolean $force = FALSE ] )，需要注意的是opcache_reset是重置所有的opcache,或者opcache_invalidate可以针对单个文件。当然最粗暴的方法就是重启fpm进行（Kill SIGUSR2强制也可以），性能会有些许损失，还是建议通过清楚opcache的方式去处理。</p>
+<p>BTW：如果需要手动重置 opcode cache，需要注意的是因为它是基于 SAPI 的概念，所以不能直接在命令行下调用 apc_clear_cache 或者 opcache_reset 方法来重置缓存，当然办法总是有的，那就是使用 <a href="http://gordalina.github.io/cachetool/" target="_blank" rel="external">CacheTool</a> 在命令行下模拟 fastcgi 请求。</p>
+<h1 id="0X06-总结"><a href="#0X06-总结" class="headerlink" title="0X06. 总结"></a>0X06. 总结</h1><p>把opcache、realpath尽可能的设置的时间长一些或者永不自动过期，通过手动清除的方式清楚去清除。</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[最好的Zend Opcache配置]]></title>
       <url>http://bikong0411.github.io/2016/09/21/zend-opcache-best-setting.html</url>
       <content type="html"><![CDATA[<p>很多人都在使用ZendOpcache了，但是很多人都不知道怎么去设置。</p>
@@ -472,55 +515,6 @@ Here the args table will always look like
 <p>参考: <a href="http://chattool.sinaapp.com/?p=493" target="_blank" rel="external">phper</a></p>
 </li>
 </ul>
-]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[luajit ffi 应用之sleep实现]]></title>
-      <url>http://bikong0411.github.io/2016/05/31/lua-ffi.html</url>
-      <content type="html"><![CDATA[<p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
-<ul>
-<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
-<pre><code> local ffi=require(&apos;ffi&apos;)
- ffi.cdef[[
-      void Sleep(int ms);
-      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
- ]]
-
- local sleep
- if ffi.os == &quot;Windows&quot; then
-     function sleep(s)
-         ffi.C.Sleep(s*1000)
-     end
- else
-     function sleep(s)
-          ffi.C.poll(nil, 0, s*1000)
-     end
- end
-
-for i=1, 2 do
-     ngx.say(&quot;.&quot;)
-     ngx.flush()
-     sleep(1)
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
-<pre><code>local ffi=require(&apos;ffi&apos;)
-ffi.cdef[[
-    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
-    struct timespec { long    tv_sec;  long tv_nsec;  };
-]]
-local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
-ffi.C.select(1,nil,nil,nil,time)
-ngx.say(&quot;sleep finish&quot;)
-</code></pre></li>
-</ul>
-<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
-<p>参考: </p>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
-<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
 ]]></content>
     </entry>
     
@@ -996,6 +990,55 @@ Hello Lua
 <p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
 <p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
 <p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[luajit ffi 应用之sleep实现]]></title>
+      <url>http://bikong0411.github.io/2016/05/31/lua-ffi.html</url>
+      <content type="html"><![CDATA[<p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
+<ul>
+<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
+<pre><code> local ffi=require(&apos;ffi&apos;)
+ ffi.cdef[[
+      void Sleep(int ms);
+      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
+ ]]
+
+ local sleep
+ if ffi.os == &quot;Windows&quot; then
+     function sleep(s)
+         ffi.C.Sleep(s*1000)
+     end
+ else
+     function sleep(s)
+          ffi.C.poll(nil, 0, s*1000)
+     end
+ end
+
+for i=1, 2 do
+     ngx.say(&quot;.&quot;)
+     ngx.flush()
+     sleep(1)
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
+<pre><code>local ffi=require(&apos;ffi&apos;)
+ffi.cdef[[
+    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
+    struct timespec { long    tv_sec;  long tv_nsec;  };
+]]
+local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
+ffi.C.select(1,nil,nil,nil,time)
+ngx.say(&quot;sleep finish&quot;)
+</code></pre></li>
+</ul>
+<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
+<p>参考: </p>
+<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
+<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
 ]]></content>
     </entry>
     

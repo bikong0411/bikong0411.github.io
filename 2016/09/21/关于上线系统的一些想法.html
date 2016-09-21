@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="php," />
 
 
 
@@ -84,19 +84,16 @@
 
 
 
-<meta name="description" content="Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。
-使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是">
+<meta name="description" content="0X00. 起因最近在升级php7, php7的opcache的一个选项opcache.revalidate_freq的默认值是60，之前线上php5.5.6中opcache的opcache.revalidate_freq设置的为2。然后在上线代码的时候总是会出现php的error, 这种情况被称为”瞬报”。 当上线的文件较多的时候，这种错误可能会持续很长时间，但是op也不太care, 总觉得无所">
 <meta property="og:type" content="article">
-<meta property="og:title" content="luajit ffi 总结 <转载>">
-<meta property="og:url" content="http://bikong0411.github.io/2016/05/31/lua-ffi-summary.html">
+<meta property="og:title" content="关于上线系统的一些想法 (for php)">
+<meta property="og:url" content="http://bikong0411.github.io/2016/09/21/关于上线系统的一些想法.html">
 <meta property="og:site_name" content="碧云轩">
-<meta property="og:description" content="Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。
-使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是">
-<meta property="og:updated_time" content="2016-07-05T13:29:45.000Z">
+<meta property="og:description" content="0X00. 起因最近在升级php7, php7的opcache的一个选项opcache.revalidate_freq的默认值是60，之前线上php5.5.6中opcache的opcache.revalidate_freq设置的为2。然后在上线代码的时候总是会出现php的error, 这种情况被称为”瞬报”。 当上线的文件较多的时候，这种错误可能会持续很长时间，但是op也不太care, 总觉得无所">
+<meta property="og:updated_time" content="2016-09-21T14:05:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="luajit ffi 总结 <转载>">
-<meta name="twitter:description" content="Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。
-使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是">
+<meta name="twitter:title" content="关于上线系统的一些想法 (for php)">
+<meta name="twitter:description" content="0X00. 起因最近在升级php7, php7的opcache的一个选项opcache.revalidate_freq的默认值是60，之前线上php5.5.6中opcache的opcache.revalidate_freq设置的为2。然后在上线代码的时候总是会出现php的error, 这种情况被称为”瞬报”。 当上线的文件较多的时候，这种错误可能会持续很长时间，但是op也不太care, 总觉得无所">
 
 
 
@@ -117,9 +114,9 @@
 
 
 
-  <link rel="canonical" href="http://bikong0411.github.io/2016/05/31/lua-ffi-summary.html"/>
+  <link rel="canonical" href="http://bikong0411.github.io/2016/09/21/关于上线系统的一些想法.html"/>
 
-  <title> luajit ffi 总结 <转载> | 碧云轩 </title>
+  <title> 关于上线系统的一些想法 (for php) | 碧云轩 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -292,7 +289,7 @@
             
             
               
-                luajit ffi 总结 <转载>
+                关于上线系统的一些想法 (for php)
               
             
           </h1>
@@ -304,19 +301,38 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
-              2016-05-31
+            <time itemprop="dateCreated" datetime="2016-09-21T00:00:00+08:00" content="2016-09-21">
+              2016-09-21
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/other/" itemprop="url" rel="index">
+                    <span itemprop="name">其他</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/31/lua-ffi-summary.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi-summary.html" itemprop="commentsCount"></span>
+                <a href="/2016/09/21/关于上线系统的一些想法.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/21/关于上线系统的一些想法.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -327,7 +343,7 @@
           
           
             &nbsp; | &nbsp;
-            <span id="/2016/05/31/lua-ffi-summary.html"class="leancloud_visitors" data-flag-title="luajit ffi 总结 <转载>">
+            <span id="/2016/09/21/关于上线系统的一些想法.html"class="leancloud_visitors" data-flag-title="关于上线系统的一些想法 (for php)">
                      &nbsp;阅读次数
                     </span>
           
@@ -343,475 +359,43 @@
       
 
       
-        <p>Lua 是一种语法简单，上手快的语言，虽然原生库比较少，但是可以方便的和 C 语言互相调用，常被用于脚本嵌入到 C 程序中。如 Redis 中可以加载 Lua 脚本，作用类似于存储过程，Nginx 中 lua-nginx-module 模块更是将 Lua 的这种特性发挥到极致。</p>
-<p>使用 Lua 如何调用 C 的函数，个人认为是每一个 Lua 开发者必学的内容。Lua 调用 C 程序有两种方法，一种是使用 lua C API，另一种方法就是使用 luajit 提供的 ffi 库来调用 C 程序。本文主要是对 luajit ffi 的研究总结。</p>
-<p>#luajit ffi</p>
-<p>luajit 和 lua 一样，是可以直接安装在操作系统中的，相关介绍直接参考官网 luajit。个人测试效果来看，luajit 的执行效率远高于 lua，大概是 8 倍左右。openresty 的 lua-nginx-module 模块就是将 luajit 集成到了 Nginx 中，实现在 Nginx 中执行 Lua 脚本</p>
-<p>luajit ffi 是 luajit 提供给 Luaer 使用 Lua 调用 C 函数的 Lua 库，使用该库，Luaer 不用再去操作复杂的 Lua 栈来粘合两种程序代码，luajit ffi 官方资料。</p>
-<p>##引入 luajit ffi 库</p>
-<pre><code>local ffi = require(&quot;ffi&quot;)
-</code></pre><p>#在 Lua 中调用 C 函数</p>
-<p>和 lua 的 C API 一样，Lua 调用 C 函数，需要将 C 函数编译成链接库。区别在于 C API 查找 C 的 Lua 库是在 package.cpath 路径下进行查找，而这些库函数使用 Lua 栈接口进行编写。而 luajit 对于 C 链接库的引用遵从于普通 C 库的引用方式，先在 /usr/lib(/usr/lib64)，/lib(/lib64) 目录下查找，再到用户自定义的 LD_LIBRARY_PATH 下查找。</p>
-<p>本节涉及接口：</p>
-<pre><code> ffi.cdef[[c_function define]]
-ffi.C
-ffi.load(name [,global])
-</code></pre><ul>
-<li><p>调用 C 标准库函数</p>
-<p> 对于 C 标准库函数引用，需要引入函数，函数声明</p>
-<pre><code>ffi.cdef[[c_function define]]
-</code></pre><p>  调用 C 函数</p>
-<pre><code>ffi.C.c_function
-</code></pre><p>  如：</p>
-<pre><code>local ffi = require(&quot;ffi&quot;)
-
-ffi.cdef[[
-    int printf(const char *fmt, ...);
-    int strcasecmp(const char *s1, const char *s2);
-]]
-
-ffi.C.printf(&quot;Hello %s!\n&quot;, &quot;world&quot;)
-ret = ffi.C.strcasecmp(&quot;Hello&quot;, &quot;hello&quot;)
-print(ret)
-ret = ffi.C.strcasecmp(&quot;Hello&quot;, &quot;hello1&quot;)
-print(ret)
-</code></pre><p>  输出结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffic.lua 
-Hello world!
-0
--49
-</code></pre></li>
-<li><p>调用自定义的 C 函数</p>
-<p>  调用自定义的 C 函数，首先要将自定义的 C 函数编译成链接库</p>
-<pre><code>[root@AlexWoo-CentOS lua]# cat ffimyc.c 
-int add(int x, int y)
-{
-    return x + y;
-}
-[root@AlexWoo-CentOS lua]# gcc -g -o libffimyc.so -fpic -shared ffimyc.c
-</code></pre></li>
-<li><p>调用 C 标准库函数</p>
-<p>   调用 C 标准库函数，需要在 Lua 中引入相应的库</p>
-<pre><code>ffi.load(name [,global])
-</code></pre><p>  这里第二个参数如果为 true，则该库被引入全局命名空间，这里使用 ffi.load 需要注意两点：</p>
-<ol>
-<li><p>链接库文件必须在 C 的动态链接库查找路径中，否则会报类似错误：</p>
-<pre><code>luajit: ffimyc.lua:3: libffimyc.so: cannot open shared object file: No such file or directory
-</code></pre><p> 引入方法：</p>
-<pre><code> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:your_lib_path
-
-在 Linux 下，库函数名的查找与 C 程序查找动态链接库相同，如上面我生成的动态链接库文件为 libffimyc.so，我在 ffi.load 中的 name 为 ffimyc
-</code></pre><p> 调用自己的函数，可以直接使用 ffi.load 返回的变量调用，下面我们看一个简单的例子：</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-myc = ffi.load(&apos;ffimyc&apos;)
-
-ffi.cdef[[
-    int add(int x, int y);
-]]
-
-ret = myc.add(1, 20)
-print(ret)
-</code></pre><p>输出结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffimyc.lua
-21
-</code></pre></li>
-<li><p>使用 ffi.C 调用自定义的 C 函数</p>
-<p> 上面的例子中，是不能直接使用 ffi.C 来调用 add 函数的，那么怎么用 ffi.C 来调用 add 函数，对，就是 ffi.load 时，第二个参数置为 true，将库加载为全局命名空间。示例：</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-
-ffi.load(&apos;ffimyc&apos;, true)
-
-ffi.cdef[[
-    int add(int x, int y);
-]]
-
-ret = ffi.C.add(1, 10)
-print(ret)
-</code></pre><p> 输出结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffimyc.lua
-11
-</code></pre><p>本节小结</p>
-<p>在 lua 中调用 C 函数，需要使用 ffi.cdef 对 C 函数进行声明</p>
-<p>对于 C 标准库函数，已在全局命名空间，直接可以使用 ffi.C.函数名(函数参数…) 来调用函数</p>
-<p>对于自定义的 C 函数，需要将其先编译成链接库，并将链接库所在路径加入到 LD_LIBRARY_PATH 中，需要使用 ffi.load 载入链接库</p>
-<p>如果 ffi.load 第二个参数不填写，链接库以私有空间方式链入 Lua 脚本，使用时需要用 ffi.load 的返回值对函数进行调用</p>
-<p>如果 ffi.load 第二个参数设置为 true，可以使用 ffi.C 直接调用，调用方法同 C 标准库函数的调用</p>
-</li>
-</ol>
-</li>
+        <h1 id="0X00-起因"><a href="#0X00-起因" class="headerlink" title="0X00. 起因"></a>0X00. 起因</h1><p>最近在升级php7, php7的opcache的一个选项opcache.revalidate_freq的默认值是60，之前线上php5.5.6中opcache的opcache.revalidate_freq设置的为2。然后在上线代码的时候总是会出现php的error, 这种情况被称为”瞬报”。 当上线的文件较多的时候，这种错误可能会持续很长时间，但是op也不太care, 总觉得无所谓，所以一直也没处理，只需要在上线的时候在群里通报一声：”我在上线，有php-error的话属于瞬报，无视即可”。好尴尬，哈哈。</p>
+<h1 id="0X01-现象"><a href="#0X01-现象" class="headerlink" title="0X01. 现象"></a>0X01. 现象</h1><p>上线的时候，收到php-error后，通常都很紧张，这尼玛难道有问题，要回滚啊！！！赶紧看看php-error是什么造成的。打开一看尼玛A文件的a方法调用B文件中的b方法是出错，说B文件中不存在b这个方法，怎么可能我tmd这次上线新加的b方法啊，连水都没顾得上喝，赶紧去打开B文件看，果然B文件里面有b方法。</p>
+<h1 id="0X02-思考原因"><a href="#0X02-思考原因" class="headerlink" title="0X02. 思考原因"></a>0X02. 思考原因</h1><p>出现这种问题的原因是什么呢？罪魁祸首是什么呢？当然最根本的原因就是上线是非原子的。所谓上线代码的原子性即你上线的文件要同时生效不能存在你上线的A文件调用的是上线之前版本的B文件，这样导致最终的结果是跟预期相悖的，也是不可预测的。</p>
+<p>那么导致这个问题出现的原因有几种呢？</p>
+<ul>
+<li>opcache缓存问题</li>
+<li>php文件cache问题</li>
 </ul>
-<p>Lua 处理 cdata 对象</p>
-<p>上面对 Lua 如何调用 C 函数进行了小结，但是光能调用 C 函数是远远不够的，我们还需要对 C 的变量，变量类型进行处理。本节将对这部分进行探讨。</p>
-<p>C 类型转化为 Lua 中的 ctype</p>
-<p>C 类型转化为 Lua ctype，使用 ffi.typeof，该函数返回一个 ctype 变量类型</p>
-<pre><code>ctype = ffi.typeof(ct)
-</code></pre><p>示例：</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-
-ffi.cdef[[
-    struct s1 {
-        int a;
-         int b;
-    };
-    typedef struct {
-        int c;
-            int d;
-    } s2;
-    union u {
-           int a;
-        long b;
-        float c;
-    };
-    enum e {
-            Male,
-        Female
-    };
-]]
-
-print(ffi.typeof(&quot;int8_t&quot;))
-print(ffi.typeof(&quot;uint8_t&quot;))
-print(ffi.typeof(&quot;int16_t&quot;))
-print(ffi.typeof(&quot;uint16_t&quot;))
-print(ffi.typeof(&quot;int32_t&quot;))
-print(ffi.typeof(&quot;uint32_t&quot;))
-print(ffi.typeof(&quot;int64_t&quot;))
-print(ffi.typeof(&quot;uint64_t&quot;))
-print(ffi.typeof(&quot;double&quot;))
-print(ffi.typeof(&quot;float&quot;))
-print(ffi.typeof(&quot;bool&quot;))
-print(ffi.typeof(&quot;struct s1&quot;))
-print(ffi.typeof(&quot;s2&quot;))
-print(ffi.typeof(&quot;union u&quot;))
-print(ffi.typeof(&quot;enum e&quot;))
-print(ffi.typeof(&quot;struct s1*&quot;))
-print(ffi.typeof(&quot;struct s1[]&quot;))
-</code></pre><p>  输出：</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-ctype&lt;char&gt;
-ctype&lt;unsigned char&gt;
-ctype&lt;short&gt;
-ctype&lt;unsigned short&gt;
-ctype&lt;int&gt;
-ctype&lt;unsigned int&gt;
-ctype&lt;int64_t&gt;
-ctype&lt;uint64_t&gt;
-ctype&lt;double&gt;
-ctype&lt;float&gt;
-ctype&lt;bool&gt;
-ctype&lt;struct s1&gt;
-ctype&lt;struct 98&gt;
-ctype&lt;union u&gt;
-ctype&lt;enum e&gt;
-ctype&lt;struct s1 *&gt;
-ctype&lt;struct s1 []&gt;
-</code></pre><p>  创建并初始化 cdata 对象</p>
-<p>  使用 ctype 有以下两种构造 Lua C 对象的方法</p>
-<pre><code>cdata = ffi.new(ct [,nelem] [,init...])
-cdata = ctype([nelem,] [init...])
-</code></pre><p>  基本类型 cdata 对象</p>
-<p>  首先是一个 C 的函数，我们使用构造的 cadata 对象来调用该函数：</p>
-<pre><code>int add(int x, int y)
-{
-    return x+y;
-}
-</code></pre><p>  直接调用</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    int add(int x, int y);
-]]
-
-print(t.add(10, 11))
-</code></pre><p>  执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-21
-</code></pre><p>  这种方法仅限于基本类型，lua 会将其基本类型转换为 cdata 的基本类型</p>
-<p>  使用 ffi.new 构造</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    int add(int x, int y);
-]]
-
-ti = ffi.typeof(&quot;int&quot;)
-a = ffi.new(ti, 10)
-b = ffi.new(&quot;int&quot;, 11)
-print(type(a), type(b))
-print(t.add(a, b))
-</code></pre><p>  执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-cdata   cdata
-21
-</code></pre><p>  这里如果执行 print(ffi.typeof(“int”))，结果就是 ctype，因此这里 ffi.new 的第一个参数直接填为 “int” 与传入一个 ctype 的类型对象是等价的</p>
-<p>  使用类型对象构造</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    int add(int x, int y);
-]]
-
-ti = ffi.typeof(&quot;int&quot;)
-a = ti(10)
-b = ti(11)
-print(t.add(a, b))
-</code></pre><p>  执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-21
-</code></pre><p>  基本类型指针 cdata 对象</p>
-<p>  首先是一个 C 的函数，我们使用构造的 cadata 对象来调用该函数：</p>
-<pre><code>int addp(int *x, int *y)
-{
-    return *x+*y;
-}
-</code></pre><p>  这里构造指针对象可以使用 ffi.new 和 类型构造两种方法，下面只以一种进行举例，其它举一反三</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    int add(int x, int y);
-    int addp(int *x, int *y);
-]]
-
-a = ffi.new(&quot;int[1]&quot;, {10})
-b = ffi.new(&quot;int[1]&quot;, {10})
-print(t.addp(a, b))
-</code></pre><p>  执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-21
-</code></pre><p>  没有将 Lua 原生类型直接转换为指针类型的方法(至少我没找到)，这里使用的是将 Lua 的 table 转为只有一个元素的数组，并将数组当作指针类型参数传入addp中。</p>
-<p>结构类型 cdata 对象</p>
-<p>首先是一个 C 程序，我们使用构造的 cadata 对象来调用该函数：</p>
-<pre><code>#include &lt;stdio.h&gt;
-
-struct constr_t {
-    int a;
-    int b;
-    struct innerstr {
-        int x;
-        int y;
-    } c;
-};
-
-void print_constr_t(struct constr_t t)
-{
-    printf(&quot;a:%d\n&quot;, t.a);
-    printf(&quot;b:%d\n&quot;, t.b);
-    printf(&quot;c.x:%d\n&quot;, t.c.x);
-    printf(&quot;c.y:%d\n&quot;, t.c.y);
-}
-</code></pre><p>Lua 程序</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    struct constr_t {
-        int a;
-        int b;
-        struct innerstr {
-            int x;
-            int y;
-        } c;
-    };
-    void print_constr_t(struct constr_t t);
-]]
-
-a = ffi.new(&quot;struct constr_t&quot;, {1, 2, {10, 11}})
-t.print_constr_t(a)
-</code></pre><p>执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-a:1
-b:2
-c.x:10
-c.y:11
-</code></pre><p>这里我们看到构造一个 C 的结构类型与基本类型的方法基本类似，唯一区别就是需要使用 table 来进行构造，table 的层次结构与 C 的结构的层次必须符合</p>
-<p>结构类型指针 cdata 对象</p>
-<p>在日常使用中，对于结构体，我们更常使用的是指针。和基本类型指针 cdata 对象不同，可以直接使用与结构类型 cdata 对象相同的方式来构造结构类型指针的 cdata 对象</p>
-<p>C 程序</p>
-<pre><code>#include &lt;stdio.h&gt;
-
-struct constr_t {
-    int a;
-    int b;
-    struct innerstr {
-        int x;
-        int y;
-    } c;
-};
-
-void print_pconstr_t(struct constr_t *t)
-{
-    printf(&quot;a:%d\n&quot;, t-&gt;a);
-    printf(&quot;b:%d\n&quot;, t-&gt;b);
-    printf(&quot;c.x:%d\n&quot;, t-&gt;c.x);
-    printf(&quot;c.y:%d\n&quot;, t-&gt;c.y);
-}
-</code></pre><p>Lua 程序</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    struct constr_t {
-        int a;
-        int b;
-        struct innerstr {
-            int x;
-            int y;
-        } c;
-    };
-    void print_pconstr_t(struct constr_t *t);
-]]
-
-a = ffi.new(&quot;struct constr_t&quot;, {1, 2, {10, 11}})
-t.print_pconstr_t(a)
-</code></pre><p>执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-a:1
-b:2
-c.x:10
-c.y:11
-</code></pre><p>字符串 cdata 对象</p>
-<p>可以使用 Lua string 对象来初始化字符串 cdata 对象</p>
-<p>C 程序</p>
-<pre><code>void print(const char *s)
-{
-    printf(&quot;%s\n&quot;, s);
-}
-</code></pre><p>Lua 程序</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    void print(const char *s);
-]]
-
-a = ffi.new(&quot;const char*&quot;, &quot;Hello World&quot;)
-t.print(a)
-</code></pre><p>执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-Hello World
-</code></pre><p>注意对字符串，ffi.new 第一个参数只能是 const char <em>、const char[size] 或 char[size]，不能是 char </em>，const char[?] 等类型</p>
-<p>使用 cdata 对象</p>
-<p>本节将探讨在 Lua 中怎么使用 cdata 对象</p>
-<p>C 程序</p>
-<pre><code>#include &lt;stdio.h&gt;
-
-struct constr_t {
-    int a;
-    int b;
-    struct innerstr {
-        int x;
-        int y;
-    } c;
-};
-
-void print_pconstr_t(struct constr_t *t)
-{
-    printf(&quot;a:%d\n&quot;, t-&gt;a);
-    printf(&quot;b:%d\n&quot;, t-&gt;b);
-    printf(&quot;c.x:%d\n&quot;, t-&gt;c.x);
-    printf(&quot;c.y:%d\n&quot;, t-&gt;c.y);
-}
-
-int print_i(int x)
-{
-    printf(&quot;x: %d\n&quot;, x);
-}
-
-int print_pi(int *px)
-{
-    printf(&quot;px: %d\n&quot;, *px);
-}
-
-void print(const char *s)
-{
-    printf(&quot;%s\n&quot;, s);
-}
-</code></pre><p>Lua 程序</p>
-<pre><code>local ffi = require(&apos;ffi&apos;)
-local t = ffi.load(&quot;t&quot;, true)
-
-ffi.cdef[[
-    struct constr_t {
-        int a;
-        int b;
-        struct innerstr {
-            int x;
-            int y;
-        } c;
-    };
-    void print_pconstr_t(struct constr_t *t);
-    int print_i(int x);
-    int print_pi(int *px);
-    void print(const char *s);
-]]
-
-ti = ffi.new(&quot;int&quot;, 10)
-tpi = ffi.new(&quot;int[1]&quot;, {20})
-
-ts = ffi.new(&quot;struct constr_t&quot;, {1, 2, {3, 4}})
-
-tcstr = ffi.new(&quot;const char*&quot;, &quot;Hello World&quot;)
-tstr = ffi.new(&quot;char[11]&quot;, &quot;Hello World&quot;)
-
-t.print_i(ti)
---t.print_pi(ti) --luajit: ffit.lua:29: bad argument #1 to &apos;print_pi&apos; (cannot convert &apos;int&apos; to &apos;int *&apos;)
-
---t.print_i(tpi) --luajit: ffit.lua:31: bad argument #1 to &apos;print_i&apos; (cannot convert &apos;int [1]&apos; to &apos;int&apos;)
-t.print_pi(tpi)
-
-t.print_pconstr_t(ts)
-
-t.print(tcstr)
-t.print(tstr)
-</code></pre><p>–对基本类型操作</p>
-<pre><code>ti = 100 --change tpi to number
-tpi[0] = 21
---tpi=22 --change tpi to number
---tpi[1] = 2000 --luajit: ffit.lua:44: attempt to index global &apos;tpi&apos; (a number value)
-print(type(ti), type(tpi))
-t.print_i(ti)
-t.print_pi(tpi)
-</code></pre><p>–对 struct 类型操作</p>
-<pre><code>ts.b = 100
-ts.c.y = 1000
-print(type(ts))
-t.print_pconstr_t(ts)
-</code></pre><p>–对字符串类型操作</p>
-<pre><code>--tcstr[2] = 32 --luajit: ffit.lua:54: attempt to write to constant location
-tstr[2] = 32
-t.print(tstr)
-
-t.print(&quot;Hello Lua&quot;)
-</code></pre><p>执行结果</p>
-<pre><code>[root@AlexWoo-CentOS lua]# luajit ffit.lua 
-x: 10
-px: 20
-a:1
-b:2
-c.x:3
-c.y:4
-Hello World
-Hello World
-number  cdata
-x: 100
-px: 21
-cdata    
-a:1
-b:100
-c.x:3
-c.y:1000
-Hello World
-Hello Lua
-</code></pre><p>从上面的例子可以看出，对基本类型，实际上不需要将其转为 cdata 类型；对于基本类型指针，操作方式与数组类似，在 Lua 中可当作 table 数组进行处理；对结构类型，在 Lua 中可当作 table 字典进行处理；对字符串，在 Lua 中可当作 table 数组进行处理</p>
-<p>本节小结</p>
-<p>Lua 可以使用 ffi.new 初始化一个 cdata 对象，也可以使用 ffi.typeof 生成的类型来初始化一个 cdata 对象</p>
-<p>对于基本类型和字符串类型，没有必要将其转为 cdata 对象，其可以作为参数传入 C 函数中。也可以接收 C 函数的返回值</p>
-<p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
-<p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
-<p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
+<h1 id="0X03-opcache缓存问题"><a href="#0X03-opcache缓存问题" class="headerlink" title="0X03. opcache缓存问题"></a>0X03. opcache缓存问题</h1><p>说到opcache，目前最常用的有后面几种apc、 eaccelerator、 <a href="http://bikong0411.github.io/2016/09/21/zend-opcache-best-setting.html">ZendOpcache</a>，apc 的 bug 很多，比如开启了<a href="http://php.net/manual/en/apc.configuration.php#ini.apc.enable-cli" target="_blank" rel="external">apc.enable_cli</a> 配置后就会有很多<a href="https://github.com/composer/composer/issues/264" target="_blank" rel="external">灵异问题</a>。随着ZendOpcache被内置到官方的PHP版本中，ZendOpcache使用也越来越广泛，当然效果也是非常好的。所以还是使用ZendOpcache吧。此外apc和ZendOpcache对文件的缓存键也不同，apc按照文件的inode，Zendopcache选择了文件的path。</p>
+<p>接上面，如果A的opcache先过期，B的后过期，就可能导致上面说的那种非”原子发布”导致不可预知的问题。</p>
+<h1 id="0X04-php文件cache问题"><a href="#0X04-php文件cache问题" class="headerlink" title="0X04. php文件cache问题"></a>0X04. php文件cache问题</h1><p>这里说的不是普通的文件缓存，说的是realpath缓存，php在include或者requrire文件的时候并不是每次都去通过stat系统调用判断文件是否存在，如果存在就加载进内存，加载过之后php对文件会进行一个优化，PHP会根据文件的path去缓存该文件的stats信息，通过如下代码可以验证</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$f = @file_get_contents(<span class="string">'/tmp/bar.php'</span>);</div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">"hello"</span>;</div><div class="line"></div><div class="line">var_dump(realpath_cache_get());</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">hello</div><div class="line"><span class="keyword">array</span>(<span class="number">5</span>) &#123;</div><div class="line">  [<span class="string">"/home/julien.pauli/www/realpath_example.php"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    float(<span class="number">1.7251638834424E+19</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">false</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">43</span>) <span class="string">"/home/julien.pauli/www/realpath_example.php"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/home"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    int(<span class="number">4353355791257440477</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">5</span>) <span class="string">"/home"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/home/julien.pauli"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    int(<span class="number">159282770203332178</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">18</span>) <span class="string">"/home/julien.pauli"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/tmp"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    float(<span class="number">1.6709564980243E+19</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">4</span>) <span class="string">"/tmp"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div><div class="line">  &#125;</div><div class="line">  [<span class="string">"/home/julien.pauli/www"</span>]=&gt;</div><div class="line">  <span class="keyword">array</span>(<span class="number">4</span>) &#123;</div><div class="line">    [<span class="string">"key"</span>]=&gt;</div><div class="line">    int(<span class="number">5178407966190555102</span>)</div><div class="line">    [<span class="string">"is_dir"</span>]=&gt;</div><div class="line">    bool(<span class="keyword">true</span>)</div><div class="line">    [<span class="string">"realpath"</span>]=&gt;</div><div class="line">    string(<span class="number">22</span>) <span class="string">"/home/julien.pauli/www"</span></div><div class="line">    [<span class="string">"expires"</span>]=&gt;</div><div class="line">    int(<span class="number">1404137986</span>)</div></pre></td></tr></table></figure>
+<p>你可以使用clearstatcache(true)清空这个array,强制PHP去通过stat()系统调用获取文件的信息，尽管之前已经被访问过。另外realpath是进程级别的，非共享内存级别。更多reaplpath cache相关的东西可以参考 <a href="http://jpauli.github.io/2014/06/30/realpath-cache.html" target="_blank" rel="external">http://jpauli.github.io/2014/06/30/realpath-cache.html</a>。</p>
+<p>这块主要是影响那些通过修改软链接形式的上线系统，因为realpath cache的存在可能导致代码不生效。</p>
+<h1 id="0X05-解决方案"><a href="#0X05-解决方案" class="headerlink" title="0X05. 解决方案"></a>0X05. 解决方案</h1><p>以上两种问题都需要考虑如何解决，如果是通过修改软链接的形式上线的，需要同时处理realpath cache、opcache的缓存，否则只需要处理opcache缓存即可。</p>
+<p>当然方案都是两种一种是自动过期、一种是手动过期。</p>
+<ul>
+<li>realpath cache</li>
+</ul>
+<p>自动过期</p>
+<p>可以通过修改php.ini里 realpath_cache_size、realpath_cache_ttl实现。</p>
+<p>当然如果你使用的nginx + php-fpm的形式，你可以通过修改nginx的fastcgi_params实现，配置如下:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">fastcgi_param</span> SCRIPT_FILENAME <span class="variable">$realpath_root</span> <span class="variable">$fastcgi_script_name</span>;</div><div class="line"><span class="attribute">fastcgi_param</span> DOCUMENT_ROOT <span class="variable">$realpath_root</span>;</div></pre></td></tr></table></figure>
+<p>这样当你修改网站目录的软链时，nginx会自己判断你网站根目录的真实路径，当然代价还是stat的系统调用，只不过把php的stat转移到了nginx。</p>
+<p>软链的方法推荐使用ln -sfn处理。</p>
+<p>手动过期<br>可以通过调用clearstatcache(true)去清除</p>
+<ul>
+<li>opcache</li>
+</ul>
+<p>自动过期</p>
+<p>如果你使用的是ZendOpcache 你可以设置opcache.validate_timestamps=1，opcache.revalidate_freq=0 当然代价是每次请求都回去检查文件的最后修改时间，无谓增加一堆stat系统调用，性能可想而知。</p>
+<p>手动过期</p>
+<p>可以通过设置opcache.validate_timestamps=0去关闭ZendOpcache的自动检测文件是否更新操作，上线完毕后手工调用opcache_reset()或者opcache_invalidate(string $script [, boolean $force = FALSE ] )，需要注意的是opcache_reset是重置所有的opcache,或者opcache_invalidate可以针对单个文件。当然最粗暴的方法就是重启fpm进行（Kill SIGUSR2强制也可以），性能会有些许损失，还是建议通过清楚opcache的方式去处理。</p>
+<p>BTW：如果需要手动重置 opcode cache，需要注意的是因为它是基于 SAPI 的概念，所以不能直接在命令行下调用 apc_clear_cache 或者 opcache_reset 方法来重置缓存，当然办法总是有的，那就是使用 <a href="http://gordalina.github.io/cachetool/" target="_blank" rel="external">CacheTool</a> 在命令行下模拟 fastcgi 请求。</p>
+<h1 id="0X06-总结"><a href="#0X06-总结" class="headerlink" title="0X06. 总结"></a>0X06. 总结</h1><p>把opcache、realpath尽可能的设置的时间长一些或者永不自动过期，通过手动清除的方式清楚去清除。</p>
 
       
     </div>
@@ -831,22 +415,24 @@ Hello Lua
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag">#php</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/31/lua-ffi.html" rel="next" title="luajit ffi 应用之sleep实现">
-                <i class="fa fa-chevron-left"></i> luajit ffi 应用之sleep实现
+              <a href="/2016/09/21/zend-opcache-best-setting.html" rel="next" title="最好的Zend Opcache配置">
+                <i class="fa fa-chevron-left"></i> 最好的Zend Opcache配置
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/19/openresty-note.html" rel="prev" title="openresty学习笔记">
-                openresty学习笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -872,8 +458,8 @@ Hello Lua
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/31/lua-ffi-summary.html"
-           data-title="luajit ffi 总结 <转载>" data-url="http://bikong0411.github.io/2016/05/31/lua-ffi-summary.html">
+      <div class="ds-thread" data-thread-key="2016/09/21/关于上线系统的一些想法.html"
+           data-title="关于上线系统的一些想法 (for php)" data-url="http://bikong0411.github.io/2016/09/21/关于上线系统的一些想法.html">
       </div>
     
   </div>
@@ -1011,7 +597,7 @@ Hello Lua
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0X00-起因"><span class="nav-number">1.</span> <span class="nav-text">0X00. 起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X01-现象"><span class="nav-number">2.</span> <span class="nav-text">0X01. 现象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X02-思考原因"><span class="nav-number">3.</span> <span class="nav-text">0X02. 思考原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X03-opcache缓存问题"><span class="nav-number">4.</span> <span class="nav-text">0X03. opcache缓存问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X04-php文件cache问题"><span class="nav-number">5.</span> <span class="nav-text">0X04. php文件cache问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X05-解决方案"><span class="nav-number">6.</span> <span class="nav-text">0X05. 解决方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0X06-总结"><span class="nav-number">7.</span> <span class="nav-text">0X06. 总结</span></a></li></ol></div>
             
           </div>
         </section>
