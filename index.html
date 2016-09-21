@@ -365,13 +365,13 @@
       
         
           
-            <p>很多人都在使用ZendOptimizer了，但是很多人都不知道怎么去设置。</p>
+            <p>很多人都在使用ZendOpcache了，但是很多人都不知道怎么去设置。</p>
 <p>你是否注意到你是如何在没有范例或者一个真实线上存在的实例供学习花费的情况下花几个小时去读文档，但是还是不知道如何去设置这些选项？</p>
 <p>比如，你懂得<span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.memory_consumption</span>意味着什么，但是谁知道它应该设置多少？32是不是太大了或许太小了?Google半天什么都发现，只能根据自己的直觉去设置，谁设置过谁知道。</p>
 <p>但是，如果你的直接是错误的呢？你愿意通过你的猜测去赌一把吗？</p>
 <p>我不是这样的。</p>
 <p>在研究方面我有一个很可怕的像狂人一样的坏习惯，我会用Google搜索一些奇怪的设置并且我会花三个小时去从PHP的源码中进行挖掘。</p>
-<p>与其让这些知识浪费，我更想与你分享。我不得不花时间搞清楚了Zend Optimizer的真实生产环境的最佳设置。</p>
+<p>与其让这些知识浪费，我更想与你分享。我不得不花时间搞清楚了Zend Opcache的真实生产环境的最佳设置。</p>
 <p>这些设置是从我众多APP中的一个每天访问量1.17亿HTTP请求的APP的php.ini中直接拿出来的。我将解释每一个选项是干嘛的还有为什么这么设置，你可以根据你自己的情况进行调整。</p>
 <p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.revalidate_freq</span> - 简单的说，多久（单位是秒）检查一次你的代码缓存(opcache)是否过期。0代表每一个请求都回去检查你的PHP代码（代价比较大，每次请求会添加很多stat的系统调用去检查文件的最后修改时间,而每次每次系统调用都涉及到内核的中断还有上下文的切换，代价比较大)。在开发环境可以直接设置为0，生产环境下设置跟下一个设置项有关。</p>
 <p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.validate_timestamps</span> - 当这个选项开启的时候，PHP将每隔（你设置的opcache.revalidate_freq 的值）秒去检查文件的最后修改时间。</p>
@@ -383,6 +383,7 @@
 <p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.interned_strings_buffer</span> - 关于这个选项的文档数基本是0，PHP使用了一个叫做内部字符串技术来提升性能，比如在你代码里面使用了1000次foobar字符串，PHP内部只存储foobar这个字符串一次不可变字符串，另外的999次使用指针去指向内部字符串，更深层次的说，这个设置并不是为每个php-fpm进程设置一个不可变的字符串的池，而是所有的php-fpm进程共享的，它节省内存，提高性能，在大的应用中效果更显著。</p>
 <p>它的值单位是M，所以”16”代表16MB，默认值比较小4MB。</p>
 <p><span style="background:#F9F2F4;color:#C7254E;padding:0 5px;">opcache.fast_shutdown</span> - 另外一个有趣的但没有用文档的选项，”允许快速关闭”，哦，好的，就像解释的这样，它实际上做的是提供一个快速调用你代码中析构函数的机制加速一个单个请求的相应，加速php worker的回收进行更快的准备处理下一个请求。设置为1代表打开它。</p>
+<p>另外在缺省情况下 opcache.revalidate_path 是关闭的，此时会缓存符号链接的值，这会导致即便软链接指向修改了，也永远无法生效，所以在使用 zend opcode 的时候，如果使用了软链接，视情况可能需要把 opcache.revalidate_path 激活。</p>
 <p>php.ini中设置如下</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">opcache.revalidate_freq=<span class="number">0</span></div><div class="line">opcache.validate_timestamps=<span class="number">0</span> (comment this out in your dev environment)</div><div class="line">opcache.max_accelerated_files=<span class="number">7963</span></div><div class="line">opcache.memory_consumption=<span class="number">192</span></div><div class="line">opcache.interned_strings_buffer=<span class="number">16</span></div><div class="line">opcache.fast_shutdown=<span class="number">1</span></div></pre></td></tr></table></figure>
 <p>原文: <a href="https://www.scalingphpbook.com/blog/2014/02/14/best-zend-opcache-settings.html" target="_blank" rel="external">https://www.scalingphpbook.com/blog/2014/02/14/best-zend-opcache-settings.html</a></p>
@@ -1211,6 +1212,153 @@ Here the args table will always look like
             
               
                 
+                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
+                  luajit ffi 应用之sleep实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
+              2016-05-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
+<ul>
+<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
+<pre><code> local ffi=require(&apos;ffi&apos;)
+ ffi.cdef[[
+      void Sleep(int ms);
+      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
+ ]]
+
+ local sleep
+ if ffi.os == &quot;Windows&quot; then
+     function sleep(s)
+         ffi.C.Sleep(s*1000)
+     end
+ else
+     function sleep(s)
+          ffi.C.poll(nil, 0, s*1000)
+     end
+ end
+
+for i=1, 2 do
+     ngx.say(&quot;.&quot;)
+     ngx.flush()
+     sleep(1)
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
+<pre><code>local ffi=require(&apos;ffi&apos;)
+ffi.cdef[[
+    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
+    struct timespec { long    tv_sec;  long tv_nsec;  };
+]]
+local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
+ffi.C.select(1,nil,nil,nil,time)
+ngx.say(&quot;sleep finish&quot;)
+</code></pre></li>
+</ul>
+<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
+<p>参考: </p>
+<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
+<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/31/lua-ffi-summary.html" itemprop="url">
                   luajit ffi 总结 <转载>
                 </a>
@@ -1735,153 +1883,6 @@ Hello Lua
 <p>对于基本类型指针对象，可以使用单元素数组进行初始化，可以使用数组元素赋值的方式改变其中的值</p>
 <p>对于结构类型，可以传入 C 指针参数，也可以传入 C 普通参数。对结构类型的操作，与 table 的字典操作类似</p>
 <p>原文出自: <a href="http://blog.csdn.net/alexwoo0501/article/details/50636785" target="_blank" rel="external">http://blog.csdn.net/alexwoo0501/article/details/50636785</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
-                  luajit ffi 应用之sleep实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
-              2016-05-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
-<ul>
-<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
-<pre><code> local ffi=require(&apos;ffi&apos;)
- ffi.cdef[[
-      void Sleep(int ms);
-      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
- ]]
-
- local sleep
- if ffi.os == &quot;Windows&quot; then
-     function sleep(s)
-         ffi.C.Sleep(s*1000)
-     end
- else
-     function sleep(s)
-          ffi.C.poll(nil, 0, s*1000)
-     end
- end
-
-for i=1, 2 do
-     ngx.say(&quot;.&quot;)
-     ngx.flush()
-     sleep(1)
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
-<pre><code>local ffi=require(&apos;ffi&apos;)
-ffi.cdef[[
-    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
-    struct timespec { long    tv_sec;  long tv_nsec;  };
-]]
-local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
-ffi.C.select(1,nil,nil,nil,time)
-ngx.say(&quot;sleep finish&quot;)
-</code></pre></li>
-</ul>
-<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
-<p>参考: </p>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
-<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
 
           
         
