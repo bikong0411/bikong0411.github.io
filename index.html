@@ -291,6 +291,133 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/29/dmesg-format-time.html" itemprop="url">
+                  dmesg格式化时间
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-29T11:47:51+08:00" content="2016-09-29">
+              2016-09-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/系统/" itemprop="url" rel="index">
+                    <span itemprop="name">系统</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/29/dmesg-format-time.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/29/dmesg-format-time.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/09/29/dmesg-format-time.html"class="leancloud_visitors" data-flag-title="dmesg格式化时间">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>系统突然重启，需要排查原因，就想到dmesg和/var/log/message,打开dmesg没发现时间，没时间这可怎么查问题？</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>遇到这类问题首先想到的就是G一下，网上肯定有人问这种问题，你所遇到的问题肯定是别人之前已经遇到过的，所以，放马去搜索吧。所有问题都这样，原来dmesg里面第一列的浮点数是跟uptime有一定的关系，利用date命令可以转换，这里写了个脚本记录一下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cat getTime.sh </div><div class="line">uptime=$(cat /proc/uptime|cut <span class="_">-f</span> 1 <span class="_">-d</span><span class="string">' '</span>)</div><div class="line">dmesg |<span class="keyword">while</span> <span class="built_in">read</span> line; <span class="keyword">do</span></div><div class="line">    ftime=$(<span class="built_in">echo</span> <span class="variable">$line</span>|awk -F<span class="string">'[][]'</span> <span class="string">'&#123;print $2&#125;'</span>)</div><div class="line">    t=$(date <span class="_">-d</span> <span class="string">"1970-01-01 UTC <span class="variable">$(echo "$(date +%s)</span>-<span class="variable">$uptime</span>+<span class="variable">$ftime</span>"</span>|bc) seconds<span class="string">")</span></div><div class="line">    echo <span class="variable">$&#123;line/ $ftime/$t&#125;</span></div><div class="line">done</div></pre></td></tr></table></figure>
+<p>很简单，几行代码就搞定！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/21/关于上线系统的一些想法.html" itemprop="url">
                   关于上线系统的一些想法 (for php)
                 </a>
@@ -1372,6 +1499,153 @@ Here the args table will always look like
             
               
                 
+                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
+                  luajit ffi 应用之sleep实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
+              2016-05-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+            &nbsp; | &nbsp;
+            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
+                     &nbsp;阅读次数
+                    </span>
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
+<ul>
+<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
+<pre><code> local ffi=require(&apos;ffi&apos;)
+ ffi.cdef[[
+      void Sleep(int ms);
+      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
+ ]]
+
+ local sleep
+ if ffi.os == &quot;Windows&quot; then
+     function sleep(s)
+         ffi.C.Sleep(s*1000)
+     end
+ else
+     function sleep(s)
+          ffi.C.poll(nil, 0, s*1000)
+     end
+ end
+
+for i=1, 2 do
+     ngx.say(&quot;.&quot;)
+     ngx.flush()
+     sleep(1)
+end
+</code></pre></li>
+</ul>
+<ul>
+<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
+<pre><code>local ffi=require(&apos;ffi&apos;)
+ffi.cdef[[
+    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
+    struct timespec { long    tv_sec;  long tv_nsec;  };
+]]
+local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
+ffi.C.select(1,nil,nil,nil,time)
+ngx.say(&quot;sleep finish&quot;)
+</code></pre></li>
+</ul>
+<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
+<p>参考: </p>
+<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
+<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/31/lua-ffi-summary.html" itemprop="url">
                   luajit ffi 总结 <转载>
                 </a>
@@ -1945,153 +2219,6 @@ Hello Lua
             
               
                 
-                <a class="post-title-link" href="/2016/05/31/lua-ffi.html" itemprop="url">
-                  luajit ffi 应用之sleep实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-31T00:00:00+08:00" content="2016-05-31">
-              2016-05-31
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/31/lua-ffi.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/31/lua-ffi.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2016/05/31/lua-ffi.html"class="leancloud_visitors" data-flag-title="luajit ffi 应用之sleep实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们知道原生lua如果我们想使用sleep方法，只能借助于os这个模块，这种就不再多说。下面采用luajit的ffi模块去实现sleep。下面介绍两种方法，大题上都是一样的通过luajit的ffi模块去调用C的方法。</p>
-<ul>
-<li><p>借助C里的poll方法(如果你不熟悉poll方法，可以通过man 2 去查看帮助文档)</p>
-<pre><code> local ffi=require(&apos;ffi&apos;)
- ffi.cdef[[
-      void Sleep(int ms);
-      int poll(struct pollfd *fds, unsigned long nfds, int timeout);
- ]]
-
- local sleep
- if ffi.os == &quot;Windows&quot; then
-     function sleep(s)
-         ffi.C.Sleep(s*1000)
-     end
- else
-     function sleep(s)
-          ffi.C.poll(nil, 0, s*1000)
-     end
- end
-
-for i=1, 2 do
-     ngx.say(&quot;.&quot;)
-     ngx.flush()
-     sleep(1)
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>借助C的select方法(如果你不熟悉select方法，可以通过man 2 select去查看帮助文档)，此方法可以精确到纳秒</p>
-<pre><code>local ffi=require(&apos;ffi&apos;)
-ffi.cdef[[
-    int select(int nfds, struct fd_set *readfds, struct fd_set *writefds, struct fd_set *exceptfds, const struct timespec *timeout);
-    struct timespec { long    tv_sec;  long tv_nsec;  };
-]]
-local time = ffi.new(&quot;struct timespec&quot;, {5, 200000})
-ffi.C.select(1,nil,nil,nil,time)
-ngx.say(&quot;sleep finish&quot;)
-</code></pre></li>
-</ul>
-<p>需要注意的是: ffi.cdef的时候如果定义struct，不要使用typedef的方式，如果使用这种方式，将不能使用ffi.new</p>
-<p>参考: </p>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/FFI.html" target="_blank" rel="external">OpenResty最佳实践FFI</a></p>
-<p><a href="http://luajit.org/ext_ffi_tutorial.html" target="_blank" rel="external">ffi官方手册</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2015/11/18/5-performance-tips-for-node-application.html" itemprop="url">
                   5个提高性能的Node.JS应用Tips
                 </a>
@@ -2455,233 +2582,6 @@ Location: http://127.1/lua
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/22/lua-oop.html" itemprop="url">
-                  lua 面向对象实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-10-22T00:00:00+08:00" content="2015-10-22">
-              2015-10-22
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/22/lua-oop.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/22/lua-oop.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-            &nbsp; | &nbsp;
-            <span id="/2015/10/22/lua-oop.html"class="leancloud_visitors" data-flag-title="lua 面向对象实现">
-                     &nbsp;阅读次数
-                    </span>
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> 虽然lua是一门小巧的胶水语言，但是它也是可以进行面向对象编程的，我们可以实现多继承和单继承，继承都是靠lua的setmetatable实现的。</p>
-<ul>
-<li><p>类</p>
-<pre><code>Name = {}
-   function Name:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
- end
-
- function Name:setName(name)
-    self.name = name
- end
-
- function Name:getName()
-    return self.Name
-end
-
--- 在lua中A:b()等价于A.b(self),像标准库中string.len 等价于&quot;xxx&quot;:len, 但是为了兼容性更倾向于写作string.len(&quot;xxx&quot;)
-</code></pre></li>
-<li><p>单继承</p>
-<pre><code>--定义继承
-SpecName = Name:New({age=25})
-function SpecName:setNewName(name)
-      if self.getAge() &gt; 9 then
-          self:setName(name)
-      else
-          error(&quot;You must give an age!&quot;)
-      end
-end
-
-function SpecName:getAge()
-       return self.age
-end
-</code></pre></li>
-</ul>
-<ul>
-<li><p>多继承</p>
-<pre><code>function search(k, plist)
-    for i=1,#plist do
-         if plist[i][k] ~= nil then return plist[i][k] end
-     end
-end
-
-function createClass(...)
-    local args = {...}
-    local c = {}
-    setmetatable(c, {__index = function(self, k) 
-        return search(k, args) 
-    end})
-
-    c.__index = c
-    function c:new(o) 
-        o = o or {}
-        setmetatable(o, c)
-        return o
-    end
-    return c 
-end
-
-Balance = {balance= 10}
-function Balance:new(o) 
-    o = o or {}
-    setmetatable(o, {__index = self})
-    return o
-end
-
-function Balance:despoit(v)
-    self.balance = self.balance + v
-end
-
-function Balance:withDraw(v)
-    if self.balance &lt; v then
-         error(&quot;Bad case&quot;)
-    else
-        self.balance = self.balance - v
-    end
-end
-
-Name={}
-function Name:new(o) 
-     o = o or {}
-     setmetatable(o, {__index = self})
-     return o
-end
-
-function Name:setName(name)
-    self.name = name
-end
-
-function Name:getName()
-    return self.name
-end
-
-c = createClass(Balance, Name)
-c:despoit(100)
-c:withDraw(10)
-print(c.balance)  --&gt; 100
-c:setName(&quot;wbz&quot;)
-print(c:getName()) --&gt; wbz
-</code></pre></li>
-<li><p>隐藏私有变量</p>
-<pre><code> function newAccount(initBalance)
-    local self = {balance=initBalance}
-    local withdraw = function(v)
-        self.balance = self.balance - v 
-    end                    
-
-    local deposit = function (v) 
-           self.balance = self.balance + v 
-    end                    
-
-    local getBalance = function()
-           return self.balance
-    end                    
-    return {               
-        withdraw=withdraw, 
-        deposit = deposit, 
-        getBalance = getBalance,    
-     }
-end 
-</code></pre></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2727,7 +2627,7 @@ end
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2735,7 +2635,7 @@ end
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2744,7 +2644,7 @@ end
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
